@@ -15,7 +15,7 @@ class Wines(models.Model):
     ID = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
-        return f'{self.ID} | {self.Name} | {self.Year} | {self.Country} | {self.Qty} '
+        return f'{self.ID} | {self.Name} | {self.Year} | {self.Price} | {self.Qty} '
 
 class Spirits(models.Model):
     Type = models.CharField(max_length=100, default = '')
