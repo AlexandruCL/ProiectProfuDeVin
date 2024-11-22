@@ -9,7 +9,7 @@ from django.contrib import messages
 @login_required
 def add_to_cart(request, wine_id):
     wine = get_object_or_404(Wines, ID=wine_id)
-    quantity = int(request.POST.get('quantity', 1))
+    quantity = int(request.POST.get('Qty', 1))
     
     if wine.quantity < quantity:
         # Handle the case where there is not enough stock
