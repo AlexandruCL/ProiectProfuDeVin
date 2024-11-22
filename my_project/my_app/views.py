@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Wines, Cart, CartItem
+from .models import Wines, Cart, CartItem, Spirits
 from django.contrib import messages
 
 

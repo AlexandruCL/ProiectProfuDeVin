@@ -18,7 +18,7 @@ class Wines(models.Model):
 class Spirits(models.Model):
     Type = models.CharField(max_length=100, default = '')
     Name = models.CharField(max_length=100)
-    Style = models.CharField(max_length=100, default = '')
+    Style = models.CharField(max_length=100, default = '-')
     AlcLvl = models.DecimalField(max_digits=4, decimal_places=2)
     Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     Qty = models.IntegerField(null=True)
