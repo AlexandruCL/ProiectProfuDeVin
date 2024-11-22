@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Wines, Cart, CartItem
 from django.contrib import messages
 
+
 @login_required
 def add_to_cart(request, wine_id):
     wine = get_object_or_404(Wines, ID=wine_id)
