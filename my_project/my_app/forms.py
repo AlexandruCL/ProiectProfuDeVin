@@ -2,13 +2,33 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    username = forms.CharField(required=True)
 
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+
+        if not email:
+            raise forms.ValidationError("This field is required.")
+        
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already in use.")
+        
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise forms.ValidationError("This email is invalid.")
+        
+        return email
+    
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
