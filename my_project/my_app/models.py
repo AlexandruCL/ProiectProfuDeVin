@@ -15,6 +15,17 @@ class Wines(models.Model):
     def __str__(self):
         return f'{self.name} | {self.year} | {self.grapes} | {self.country} | {self.region} | {self.description} | {self.quantity} | {self.price} | {self.ID}'
 
+class Spirits(models.Model):
+    Type = models.CharField(max_length=100, default = '')
+    Name = models.CharField(max_length=100)
+    Style = models.CharField(max_length=100, default = '')
+    AlcLvl = models.DecimalField(max_digits=4, decimal_places=2)
+    Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    Qty = models.IntegerField(null=True)
+    ID = models.AutoField(primary_key=True, editable=False)
+    def __str__(self):
+        return f'{self.Type} | {self.Name} | {self.Style} | {self.AlcLvl} | {self.Price} | {self.Qty} | {self.ID}'
+    
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Enforce unique constraint
     created_at = models.DateTimeField(default=timezone.now)
