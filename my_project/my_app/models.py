@@ -15,7 +15,7 @@ class Wines(models.Model):
     ID = models.AutoField(primary_key=True, editable=False)
 
     def __str__(self):
-        return f'{self.Name} | {self.Year} | {self.Grapes} | {self.Country} | {self.Region} | {self.Description} | {self.Qty} | {self.Price} | {self.ID}'
+        return f'{self.ID} | {self.Name} | {self.Year} | {self.Country} | {self.Qty} '
 
 class Spirits(models.Model):
     Type = models.CharField(max_length=100, default = '')
@@ -26,7 +26,7 @@ class Spirits(models.Model):
     Qty = models.IntegerField(null=True)
     ID = models.AutoField(primary_key=True, editable=False)
     def __str__(self):
-        return f'{self.Type} | {self.Name} | {self.Style} | {self.AlcLvl} | {self.Price} | {self.Qty} | {self.ID}'
+        return f'{self.ID} | {self.Type} | {self.Name} | {self.Qty}'
     
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Enforce unique constraint
