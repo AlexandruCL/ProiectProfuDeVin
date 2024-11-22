@@ -3,17 +3,19 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 class Wines(models.Model):
-    name = models.CharField(max_length=100)
-    year = models.IntegerField()
-    grapes = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    description = models.TextField()
-    quantity = models.IntegerField(null=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    Name = models.CharField(max_length=100)
+    Type = models.CharField(max_length=100)
+    Year = models.IntegerField(default=None, null=True)  # Changed to allow NULL or default value
+    Grapes = models.CharField(max_length=100, default='')
+    Country = models.CharField(max_length=100)
+    Region = models.CharField(max_length=100, default='')
+    Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    Description = models.TextField()
+    Qty = models.IntegerField(null=True)  # Kept as is, can be set to default if needed
     ID = models.AutoField(primary_key=True, editable=False)
+
     def __str__(self):
-        return f'{self.name} | {self.year} | {self.grapes} | {self.country} | {self.region} | {self.description} | {self.quantity} | {self.price} | {self.ID}'
+        return f'{self.Name} | {self.Year} | {self.Grapes} | {self.Country} | {self.Region} | {self.Description} | {self.Qty} | {self.Price} | {self.ID}'
 
 class Spirits(models.Model):
     Type = models.CharField(max_length=100, default = '')

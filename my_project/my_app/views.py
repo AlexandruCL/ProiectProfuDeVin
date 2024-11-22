@@ -11,7 +11,7 @@ def add_to_cart(request, wine_id):
     wine = get_object_or_404(Wines, ID=wine_id)
     quantity = int(request.POST.get('quantity', 1))
     
-    if wine.quantity < quantity:
+    if wine.Qty < quantity:
         # Handle the case where there is not enough stock
         return redirect('wine_list')  # Redirect to the wine list view or any other view with an error message
         messages.error(request, 'Not enough stock available.')
@@ -28,7 +28,7 @@ def add_to_cart(request, wine_id):
     cart_item.save()
 
     # Decrease the quantity of the wine in stock
-    wine.quantity -= quantity
+    wine.Qty -= quantity
     wine.save()
 
     return redirect('wine_list')
