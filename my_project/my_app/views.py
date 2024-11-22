@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Wines, Cart, CartItem, Spirits
 from django.contrib import messages
+from .forms import CustomUserCreationForm
 
 
 @login_required
@@ -53,11 +54,13 @@ def login_view(request):
 
 def signup_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('wine_list')
+        else:
+            print(form.errors)  # Print form errors to the console for debugging
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'my_app/signup.html', {'form': form})
