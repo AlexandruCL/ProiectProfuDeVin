@@ -10,7 +10,7 @@ class Wines(models.Model):
     region = models.CharField(max_length=100)
     description = models.TextField()
     quantity = models.IntegerField(null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     ID = models.AutoField(primary_key=True, editable=False)
     def __str__(self):
         return f'{self.name} | {self.year} | {self.grapes} | {self.country} | {self.region} | {self.description} | {self.quantity} | {self.price} | {self.ID}'
