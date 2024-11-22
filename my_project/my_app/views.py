@@ -1,16 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Wines, Cart, CartItem, Spirits
 from django.contrib import messages
-from .forms import CustomUserCreationForm
 
 
 @login_required
 def add_to_cart(request, wine_id):
     wine = get_object_or_404(Wines, ID=wine_id)
-    quantity = int(request.POST.get('Qty', 1))
+    quantity = int(request.POST.get('quantity', 1))
     
     if wine.Qty < quantity:
         # Handle the case where there is not enough stock
@@ -28,7 +27,7 @@ def add_to_cart(request, wine_id):
         cart_item.quantity += quantity
     cart_item.save()
 
-    # Decrease the quantity of the wine in stock (we should change this once we make Order table and decrement only when an order is placed)
+    # Decrease the quantity of the wine in stock
     wine.Qty -= quantity
     wine.save()
 
@@ -42,9 +41,9 @@ def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('username')
+            username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('wine_list')
@@ -54,13 +53,11 @@ def login_view(request):
 
 def signup_view(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('wine_list')
-        else:
-            print(form.errors)  # Print form errors to the console for debugging
     else:
-        form = CustomUserCreationForm()
+        form = UserCreationForm()
     return render(request, 'my_app/signup.html', {'form': form})

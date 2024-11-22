@@ -7,7 +7,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Path to the Excel file
-        file_path =  'D:\\ProiectProfuDeVin\\spirits.xlsx'
+        file_path =  'C:\\Users\\Patri\\AN2_sem1\\DB\\spirits.xlsx'
 
         # Read the Excel file into a pandas DataFrame
         df = pd.read_excel(file_path)

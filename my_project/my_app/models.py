@@ -4,14 +4,16 @@ from django.contrib.auth.models import User
 
 class Wines(models.Model):
     Name = models.CharField(max_length=100)
-    Year = models.IntegerField(null=True)
-    Grapes = models.CharField(max_length=100)
+    Type = models.CharField(max_length=100)
+    Year = models.IntegerField(default=None, null=True)  # Changed to allow NULL or default value
+    Grapes = models.CharField(max_length=100, default='')
     Country = models.CharField(max_length=100)
-    Region = models.CharField(max_length=100)
-    Description = models.TextField()
-    Qty = models.IntegerField(null=True)
+    Region = models.CharField(max_length=100, default='')
     Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
+    Description = models.TextField()
+    Qty = models.IntegerField(null=True)  # Kept as is, can be set to default if needed
     ID = models.AutoField(primary_key=True, editable=False)
+
     def __str__(self):
         return f'{self.Name} | {self.Year} | {self.Grapes} | {self.Country} | {self.Region} | {self.Description} | {self.Qty} | {self.Price} | {self.ID}'
 
