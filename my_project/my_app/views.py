@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Wines, Cart, CartItem, Spirits
 from django.contrib import messages
+from .forms import CustomUserCreationForm
 
 
 @login_required
@@ -11,7 +12,7 @@ def add_to_cart(request, wine_id):
     wine = get_object_or_404(Wines, ID=wine_id)
     quantity = int(request.POST.get('Qty', 1))
     
-    if wine.quantity < quantity:
+    if wine.Qty < quantity:
         # Handle the case where there is not enough stock
         return redirect('wine_list')  # Redirect to the wine list view or any other view with an error message
         messages.error(request, 'Not enough stock available.')
@@ -27,8 +28,8 @@ def add_to_cart(request, wine_id):
         cart_item.quantity += quantity
     cart_item.save()
 
-    # Decrease the quantity of the wine in stock
-    wine.quantity -= quantity
+    # Decrease the quantity of the wine in stock (we should change this once we make Order table and decrement only when an order is placed)
+    wine.Qty -= quantity
     wine.save()
 
     return redirect('wine_list')
@@ -41,9 +42,9 @@ def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
+            user = authenticate(request, username=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('wine_list')
@@ -53,11 +54,13 @@ def login_view(request):
 
 def signup_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('wine_list')
+        else:
+            print(form.errors)  # Print form errors to the console for debugging
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'my_app/signup.html', {'form': form})
