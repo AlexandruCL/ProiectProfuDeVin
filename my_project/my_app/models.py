@@ -10,8 +10,13 @@ class Wines(models.Model):
     country = models.CharField(max_length=100)
     region = models.CharField(max_length=100, null=True)
     description = models.TextField()
+<<<<<<< HEAD
     price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     quantity = models.IntegerField(null=True)
+=======
+    quantity = models.IntegerField(null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+>>>>>>> parent of aefb0b1 (asda)
     ID = models.AutoField(primary_key=True, editable=False)
     def __str__(self):
         return f'{self.name} | {self.type} | {self.year} | {self.grapes} | {self.country} | {self.region} | {self.description} | {self.price} | {self.quantity} | {self.ID}'
