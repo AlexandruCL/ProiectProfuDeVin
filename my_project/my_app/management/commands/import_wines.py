@@ -23,6 +23,7 @@ class Command(BaseCommand):
                 Name = row['Name'],
                 Type = row['Type'],
                 Year = row['Year'],
+                Grapes = row['Grapes'],
                 Country = row['Country'],
                 Region = row['Region'],
                 Price = row['Price'],
