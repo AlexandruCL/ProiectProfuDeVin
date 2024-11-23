@@ -7,14 +7,15 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <style>
-    body {
+    .body{
         overflow: hidden;
         background-image: url('https://i.ibb.co/DYv61T8/pozaback-finaljpg.jpg');
         background-size: cover;
         background-repeat: no-repeat;
         background-position: center;
+        background-attachment: fixed;
     } 
-    .login-from-signup {
+    .login-from-signup{
         color: #546277;
         transition: color 0.2s, text-decoration 0.25s;
     }
@@ -73,7 +74,7 @@
         background-color: #4f0f2b;
     }
 </style>
-<body>
+<body class="body">
     <section class="section">
         <div class="relative max-w-md mx-auto mt-4 md:mt-6">
             <div class="title-container">
@@ -82,7 +83,7 @@
 
             <div class="relative max-w-md mx-auto mt-4 md:mt-6">
                 <div class="midcontainer">
-                    <div class="px-4 py-6 sm:px-8 sm:py-7">
+                    <div class="px-4 py-4 sm:px-8 sm:py-7">
                         <form method="POST">
                             {% csrf_token %}
                             <div class="space-y-4">
