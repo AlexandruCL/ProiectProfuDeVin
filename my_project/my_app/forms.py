@@ -26,7 +26,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get("email")
-    
+
         if not email:
             raise forms.ValidationError("This field is required.")
         
