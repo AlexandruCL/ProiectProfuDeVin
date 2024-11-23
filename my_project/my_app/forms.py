@@ -13,6 +13,17 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ("username", "email", "password1", "password2")
 
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+
+        if not username:
+            raise forms.ValidationError("This field is required.")
+        
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Username already in use.")
+        
+        return username
+
     def clean_email(self):
         email = self.cleaned_data.get("email")
 
@@ -39,11 +50,11 @@ class CustomUserCreationForm(UserCreationForm):
 
         # Custom password validation
         if len(password1) < 5:
-            raise forms.ValidationError("This password is too short. It must contain at least 8 characters.")
+            raise forms.ValidationError("Password is too short.")
         if password1.isdigit():
-            raise forms.ValidationError("This password is entirely numeric.")
+            raise forms.ValidationError("Password is entirely numeric.")
         if password1.lower() in ['password', '12345678', 'qwerty']:
-            raise forms.ValidationError("This password is too common.")
+            raise forms.ValidationError("Password is too common.")
 
         return password2
 

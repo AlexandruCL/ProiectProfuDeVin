@@ -5,81 +5,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .body {
+            overflow: hidden;
+            background-image: url('https://i.ibb.co/DYv61T8/pozaback-finaljpg.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .login-from-signup {
+            color: #546277;
+            transition: color 0.2s, text-decoration 0.25s;
+        }
+        .login-from-signup:hover {
+            color: #4f0f2b;
+            text-decoration: underline;
+        }
+        .title {
+            text-align: center;
+            margin: 2px auto 10px auto;
+            font-weight: bold;
+            color: #6b1842;
+            font-size: 35px;
+        }
+        .section {
+            padding: 25px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .title-container {
+            background-color: white;
+            opacity: 0.85;
+            border-radius: 10px;
+            padding: 1px 50px 1px 50px;
+            width: 100%;
+            display: flex;
+            text-align: center;
+        }
+        .midcontainer {
+            background-color: white;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            opacity: 0.85;
+        }
+        .submitbutton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 12px 12px 12px;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 600;
+            color: white;
+            transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            background-color: #6b1842;
+            border-width: 1px;
+            border-color: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .submitbutton:hover {
+            background-color: #4f0f2b;
+        }
+        .label-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
 </head>
-<style>
-    .body{
-        overflow: hidden;
-        background-image: url('https://i.ibb.co/DYv61T8/pozaback-finaljpg.jpg');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-attachment: fixed;
-    } 
-    .login-from-signup{
-        color: #546277;
-        transition: color 0.2s, text-decoration 0.25s;
-    }
-    .login-from-signup:hover{
-        color: #4f0f2b;
-        text-decoration: underline;
-    }
-    .title{
-        text-align: center;
-        margin: 2px auto 10px auto;
-        font-weight: bold;
-        color: #6b1842;
-        font-size: 35px;
-    }
-    .section{
-        padding: 25px;
-        margin: 0 auto;
-        width: 100%;
-        max-width: 1200px;
-        display: flex;
-        justify-content: row;
-        justify-content: center;
-        min-height: 100vh;
-    }
-    .form{
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-    }
-    .title-container {
-    background-color: white;
-    opacity: 0.85;
-    border-radius: 10px;
-    padding: 1px 50px 1px 50px;
-    width: 100%; /* Matches the form width */
-    text-align: center;
-    }
-    .midcontainer{
-        background-color: white;
-        border-radius: 0.375rem;
-        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        opacity: 0.85;
-    }
-    .submitbutton{
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 12px 12px 12px 12px;
-        font-size: 16px;
-        line-height: 20px;
-        font-weight: 600;
-        color: white;
-        transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-        background-color: #6b1842;
-        border-width: 1px;
-        border-color: transparent;
-        border-radius: 6px;
-        cursor: pointer;
-    }
-    .submitbutton:hover{
-        background-color: #4f0f2b;
-    }
-</style>
 <body class="body">
     <section class="section">
         <div class="relative max-w-md mx-auto mt-4 md:mt-6">
@@ -94,7 +100,12 @@
                             {% csrf_token %}
                             <div class="space-y-4">
                                 <div>
+                                    <div class="label-container">
                                     <label for="username" class="text-base font-medium text-gray-900"> Username </label>
+                                    {% if form.username.errors %}
+                                        <div class="text-red-600">{{ form.username.errors }}</div>
+                                    {% endif %}
+                                    </div>
                                     <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -112,7 +123,12 @@
                                 </div>
 
                                 <div>
-                                    <label for="email" class="text-base font-medium text-gray-900"> Email address </label>
+                                    <div class="label-container">
+                                        <label for="email" class="text-base font-medium text-gray-900"> Email address </label>
+                                        {% if form.email.errors %}
+                                            <div class="text-red-600 ml-2">{{ form.email.errors }}</div>
+                                        {% endif %}
+                                    </div>
                                     <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,13 +143,15 @@
                                             class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
                                         />
                                     </div>
-                                    {% if form.email.errors %}
-                                    <div class="text-red-600">{{ form.email.errors }}</div>
-                                    {% endif %}
                                 </div>
 
                                 <div>
+                                    <div class="label-container">
                                     <label for="password1" class="text-base font-medium text-gray-900"> Password </label>
+                                        {% if form.password2.errors %}
+                                            <div class="text-red-600">{{ form.password2.errors }}</div>
+                                        {% endif %}
+                                    </div>
                                     <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
                                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -166,10 +184,8 @@
                                             class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
                                         />
                                     </div>
-                                         {% if form.password2.errors %}
-                                    <div class="text-red-600">{{ form.password2.errors }}</div>
-                                        {% endif %}
-                                    </div>
+                                </div>
+
                                 <div>
                                     <button type="submit" class="submitbutton">
                                         Sign Up
