@@ -19,14 +19,14 @@ class Wines(models.Model):
 
 class Spirits(models.Model):
     Type = models.CharField(max_length=100, default = '')
-    Name = models.CharField(max_length=100)
+    Name = models.CharField(max_length=100, default='')
     Style = models.CharField(max_length=100, default = '-')
-    AlcLvl = models.DecimalField(max_digits=4, decimal_places=2)
+    AlcLvl = models.IntegerField(default=0)
     Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     Qty = models.IntegerField(null=True)
     ID = models.AutoField(primary_key=True, editable=False)
     def __str__(self):
-        return f'{self.ID} | {self.Type} | {self.Name} | {self.Qty}'
+        return f'{self.ID} | {self.Type} | {self.Name} | {self.Price} | {self.Qty}'
     
 class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Enforce unique constraint
@@ -36,7 +36,8 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    wine = models.ForeignKey(Wines, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
+    wine = models.ForeignKey(Wines, null=True, blank=True, on_delete=models.CASCADE)
+    spirit = models.ForeignKey(Spirits, null=True, blank=True, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
     def __str__(self):
-        return f'{self.wine} | {self.quantity}'
+        return f'{self.wine or self.spirit} | {self.quantity}'

@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
         # Read the Excel file into a pandas DataFrame
         df = pd.read_excel(file_path)
-        df['Style'].fillna('-', inplace=True)
+        df['Style'] = df['Style'].fillna('-')
 
         # Loop through the rows and create Spirits entries
         for _, row in df.iterrows():
