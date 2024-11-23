@@ -1,166 +1,182 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sign Up</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    </head>
-    <style>
-        body {
-            overflow: hidden;
-
-        }
-        .login-from-signup {
-            color: #546277;
-            transition: color 0.2s, text-decoration 0.25s;
-        }
-        .login-from-signup:hover{
-            color: #0c3ba1;
-            text-decoration: underline;
-        }
-        .title{
-            text-align: center;
-            margin: 2px auto 10px auto;
-            font-weight: bold;
-            color: #6b1842;
-            font-size: 35px;
-        }
-        .section {
-            height: 100vh; 
-            width: 100%; 
-            background-image: url('https://i.ibb.co/sVWS8Zd/pozamagazin.jpg');
-            background-size: cover; 
-            background-repeat: no-repeat;
-            background-position: center;
-            display: flex; /* Ensure section fills space properly */
-            align-items: center; /* Centers the content vertically if needed */
-            justify-content: center; /* Centers content horizontally if needed */
-}
-        .form{
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .title-container {
-        background-color: white;
-        opacity: 0.87;
-        border-radius: 10px;
-        padding: 5px;
-        width: 100%; /* Matches the form width */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+    body {
+        overflow: hidden;
+        background-image: url('https://i.ibb.co/DYv61T8/pozaback-finaljpg.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .login-from-signup {
+        color: #546277;
+        transition: color 0.2s, text-decoration 0.25s;
+    }
+    .login-from-signup:hover{
+        color: #4f0f2b;
+        text-decoration: underline;
+    }
+    .title{
         text-align: center;
-        }
-        .midcontainer{
-            background-color: white;
-            border-radius: 0.375rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            opacity: 0.87;
-        }
-    </style>
-    <body>
-        <section class="section">
+        margin: 2px auto 10px auto;
+        font-weight: bold;
+        color: #6b1842;
+        font-size: 35px;
+    }
+    .section{
+        padding: 25px;
+        margin: 0px auto 0px auto;
+    }
+    .form{
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+    .title-container {
+    background-color: white;
+    opacity: 0.85;
+    border-radius: 10px;
+    padding: 1px;
+    width: 100%; /* Matches the form width */
+    text-align: center;
+    }
+    .midcontainer{
+        background-color: white;
+        border-radius: 0.375rem;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        opacity: 0.85;
+    }
+    .submitbutton{
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px 12px 12px 12px;
+        font-size: 16px;
+        line-height: 20px;
+        font-weight: 600;
+        color: white;
+        transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        background-color: #6b1842;
+        border-width: 1px;
+        border-color: transparent;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .submitbutton:hover{
+        background-color: #4f0f2b;
+    }
+</style>
+<body>
+    <section class="section">
+        <div class="relative max-w-md mx-auto mt-4 md:mt-6">
+            <div class="title-container">
+                <h2 class="title">Create free account</h2>
+            </div>
+
             <div class="relative max-w-md mx-auto mt-4 md:mt-6">
-                <div class="title-container">
-                    <h2 class="title">Let's create an account!</h2>
-                </div>
-
-                <div class="relative max-w-md mx-auto mt-4 md:mt-6">
-                    <div class="midcontainer">
-                        <div class="px-4 py-6 sm:px-8 sm:py-7">
-                            <form method="POST">
-                                {% csrf_token %}
-                                <div class="space-y-4">
-                                    <div>
-                                        <label for="username" class="text-base font-medium text-gray-900"> Username </label>
-                                        <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                                </svg>
-                                            </div>
-                                            <input
-                                                type="text"
-                                                name="username"
-                                                id="username"
-                                                placeholder="Enter your username"
-                                                class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
-                                            />
+                <div class="midcontainer">
+                    <div class="px-4 py-6 sm:px-8 sm:py-7">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="username" class="text-base font-medium text-gray-900"> Username </label>
+                                    <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            </svg>
                                         </div>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            id="username"
+                                            placeholder="Enter your username"
+                                            class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                                        />
                                     </div>
+                                </div>
 
-                                    <div>
-                                        <label for="email" class="text-base font-medium text-gray-900"> Email address </label>
-                                        <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                                                </svg>
-                                            </div>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                id="email"
-                                                placeholder="Enter your email"
-                                                class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
-                                            />
+                                <div>
+                                    <label for="email" class="text-base font-medium text-gray-900"> Email address </label>
+                                    <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                            </svg>
                                         </div>
-                                        {% if form.email.errors %}
-                                        <div class="text-red-600">{{ form.email.errors }}</div>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            placeholder="Enter your email"
+                                            class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                                        />
+                                    </div>
+                                    {% if form.email.errors %}
+                                    <div class="text-red-600">{{ form.email.errors }}</div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <label for="password1" class="text-base font-medium text-gray-900"> Password </label>
+                                    <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zm-6 0c0-1.1.9-2 2-2s2 .9 2 2v1H6v-1zm12 0c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zM6 16v-1h12v1c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2z" />
+                                            </svg>
+                                        </div>
+                                        <input
+                                            type="password"
+                                            name="password1"
+                                            id="password1"
+                                            placeholder="Enter your password"
+                                            class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label for="password2" class="text-base font-medium text-gray-900"> Confirm Password </label>
+                                    <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zm-6 0c0-1.1.9-2 2-2s2 .9 2 2v1H6v-1zm12 0c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zM6 16v-1h12v1c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2z" />
+                                            </svg>
+                                        </div>
+                                        <input
+                                            type="password"
+                                            name="password2"
+                                            id="password2"
+                                            placeholder="Confirm your password"
+                                            class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
+                                        />
+                                    </div>
+                                         {% if form.password2.errors %}
+                                    <div class="text-red-600">{{ form.password2.errors }}</div>
                                         {% endif %}
                                     </div>
-
-                                    <div>
-                                        <label for="password1" class="text-base font-medium text-gray-900"> Password </label>
-                                        <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zm-6 0c0-1.1.9-2 2-2s2 .9 2 2v1H6v-1zm12 0c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zM6 16v-1h12v1c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2z" />
-                                                </svg>
-                                            </div>
-                                            <input
-                                                type="password"
-                                                name="password1"
-                                                id="password1"
-                                                placeholder="Enter your password"
-                                                class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label for="password2" class="text-base font-medium text-gray-900"> Confirm Password </label>
-                                        <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
-                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zm-6 0c0-1.1.9-2 2-2s2 .9 2 2v1H6v-1zm12 0c0-1.1.9-2 2-2s2 .9 2 2v1h-4v-1zM6 16v-1h12v1c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2z" />
-                                                </svg>
-                                            </div>
-                                            <input
-                                                type="password"
-                                                name="password2"
-                                                id="password2"
-                                                placeholder="Confirm your password"
-                                                class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
-                                            />
-                                        </div>
-                                            {% if form.password2.errors %}
-                                        <div class="text-red-600">{{ form.password2.errors }}</div>
-                                            {% endif %}
-                                        </div>
-                                    <div>
-                                        <button type="submit" class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">
-                                            Sign Up
-                                        </button>
-                                    </div>
-                                    <p class="login-from-signup">
-                                        <a href="{% url 'login' %}">Already have an account? Login</a>
-                                    </p>
+                                <div>
+                                    <button type="submit" class="submitbutton">
+                                        Sign Up
+                                    </button>
                                 </div>
-                            </form>
-                        </div>
+                                <p class="login-from-signup">
+                                    <a href="{% url 'login' %}">Already have an account? Login</a>
+                                </p>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </section>
-    </body>
-    </html>
+        </div>
+    </section>
+</body>
+</html>
