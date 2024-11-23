@@ -45,18 +45,27 @@ class CustomUserCreationForm(UserCreationForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
 
+        if not password1 :
+            raise forms.ValidationError("This field is required.")
+        
+        if not password2:
+            raise forms.ValidationError("Verify password.")
+
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Your passwords must match")
-
-        # Custom password validation
-        if len(password1) < 5:
-            raise forms.ValidationError("Password is too short.")
-        if password1.isdigit():
-            raise forms.ValidationError("Password is entirely numeric.")
-        if password1.lower() in ['password', '12345678', 'qwerty']:
-            raise forms.ValidationError("Password is too common.")
-
+            raise forms.ValidationError("Your passwords must match")    
+        
+        if(len(password1) < 5):
+            raise forms.ValidationError("Password too short")
+        
+        if(len(password1) > 20):
+            raise forms.ValidationError("Password too long")
+        
         return password2
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        self.clean_password2()
+        return cleaned_data
 
     def save(self, commit=True):
         user = super().save(commit=False)
