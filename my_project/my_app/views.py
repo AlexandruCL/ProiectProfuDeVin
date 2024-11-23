@@ -8,35 +8,48 @@ from .forms import CustomUserCreationForm
 
 
 @login_required
-def add_to_cart(request, wine_id):
-    wine = get_object_or_404(Wines, ID=wine_id)
+def add_to_cart(request, item_id, item_type):
+    if item_type == 'wine':
+        item = get_object_or_404(Wines, ID=item_id)
+    elif item_type == 'spirit':
+        item = get_object_or_404(Spirits, ID=item_id)
+    else:
+        messages.error(request, 'Invalid item type.')
+        return redirect('drinks_list')
+
     quantity = int(request.POST.get('quantity', 1))
     
-    if wine.Qty < quantity:
-        # Handle the case where there is not enough stock
-        return redirect('wine_list')  # Redirect to the wine list view or any other view with an error message
+    if item.Qty < quantity:
         messages.error(request, 'Not enough stock available.')
+        return redirect('drinks_list')
 
     # Get or create a cart for the user
     cart, created = Cart.objects.get_or_create(user=request.user)
     
-    # Get or create a cart item for the wine
-    cart_item, created = CartItem.objects.get_or_create(cart=cart, wine=wine)
+    # Get or create a cart item for the item
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        wine=item if item_type == 'wine' else None,
+        spirit=item if item_type == 'spirit' else None
+    )
     if created:
         cart_item.quantity = quantity
     else:
         cart_item.quantity += quantity
     cart_item.save()
 
-    # Decrease the quantity of the wine in stock
-    wine.Qty -= quantity
-    wine.save()
+    # Decrease the quantity of the item in stock
+    item.Qty -= quantity
+    item.save()
 
-    return redirect('wine_list')
+    return redirect('drinks_list')
 
-def wine_list(request):
+
+
+def drinks_list(request):
     wines = Wines.objects.all()
-    return render(request, 'my_app/wine_list.html', {'wines': wines})
+    spirits = Spirits.objects.all()
+    return render(request, 'my_app/drinks_list.html', {'wines': wines, 'spirits': spirits})
 
 def login_view(request):
     if request.method == 'POST':
@@ -47,7 +60,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('wine_list')
+                return redirect('drinks_list')
     else:
         form = AuthenticationForm()
     return render(request, 'my_app/login.html', {'form': form})
@@ -58,7 +71,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('wine_list')
+            return redirect('drinks_list')
         else:
             print(form.errors)  # Print form errors to the console for debugging
     else:
