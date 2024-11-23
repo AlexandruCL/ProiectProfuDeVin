@@ -1,7 +1,7 @@
 # my_app/forms.py
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
@@ -65,3 +65,11 @@ class CustomUserCreationForm(UserCreationForm):
             user.set_password(self.cleaned_data["password1"])
             user.save()
         return user
+    
+class CustomAuthenticationForm(AuthenticationForm):
+    username = forms.CharField(required=True)
+    password = forms.CharField(required=True, widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ("username", "password")
