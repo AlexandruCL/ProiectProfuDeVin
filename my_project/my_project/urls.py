@@ -20,7 +20,7 @@ from my_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('home', views.drinks_list, name='drinks_list'),
+    path('', views.drinks_list, name='drinks_list'),
     path('add_to_cart/<str:item_type><int:item_id>/', views.add_to_cart, name='add_to_cart'),
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),
