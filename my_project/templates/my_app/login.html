@@ -1,19 +1,105 @@
 <!DOCTYPE html>
-<head></head>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign Up</title>
+<title>Log In</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% load static %}
+<style>
+    .body{
+        background-image: url("{% static 'images/pozaloginfinal.jpg' %}");
+        margin-top: 80px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    .loginbutton{
+        color: white;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 16px 16px 16px 16px;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 600;
+        background-color: #6b1842;
+        border-width: 1px;
+        border-color: transparent;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+    }
+    .loginbutton:hover{
+        background-color: #4f0f2b;
+        outline:none;
+
+    }
+    .section {
+            padding: 25px;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    .signup-from-login{
+        color: #546277;
+        transition: color 0.2s, text-decoration 0.25s;
+        display: inline;
+        margin-top: 5px;
+        display: inline-block;
+    }
+    .signup-from-login:hover{
+        color: #4f0f2b;
+        text-decoration: underline;
+    }
+    .welcomeback{
+        font-size: 40px;
+        line-height: 1.25;
+        margin: 2px auto 10px auto;
+
+        font-weight: bold;
+        color: #6b1842;
+
+    }
+    .loginacc{
+        font-size: 20px;
+        line-height: 1.25;
+        margin: 2px auto 10px auto;
+        font-weight: bold;
+        color: #6b1842;
+    }
+    .welcombackcontainer{
+        background-color: white;
+        opacity: 0.85;
+        border-radius: 10px;
+        max-width: 672px;
+        padding-bottom: 2px;
+        margin-left:auto;
+        margin-right:auto;
+        text-align: center;
+    }
+    .formcontainer{
+        background-color: white;
+        opacity: 0.85;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+    /*overflow-hidden bg-white rounded-md shadow-md*/
+</style>
 </head>
-    <section class="py-10 bg-gray-50 sm:py-16 lg:py-24">
+<body class="body">
+    <section class="section">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="max-w-2xl mx-auto text-center">
-                <h2 class="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-5xl">Welcome Back!</h2>
-                <p class="max-w-xl mx-auto mt-4 text-base leading-relaxed text-gray-600">Login to your account</p>
+            <div class="welcombackcontainer">
+                <h2 class="welcomeback">Welcome Back!</h2>
+                <p class="loginacc">Login to your account</p>
             </div>
     
             <div class="relative max-w-md mx-auto mt-8 md:mt-16">
-                <div class="overflow-hidden bg-white rounded-md shadow-md">
+                <div class="formcontainer">
                     <div class="px-4 py-6 sm:px-8 sm:py-7">
                         <form method="POST">
                             {% csrf_token %}
@@ -67,13 +153,13 @@
                                 </div>
     
                                 <div>
-                                    <button type="submit" class="inline-flex items-center justify-center w-full px-4 py-4 text-base font-semibold text-white transition-all duration-200 bg-blue-600 border border-transparent rounded-md focus:outline-none hover:bg-blue-700 focus:bg-blue-700">
-                                        Log in
+                                    <button type="submit" class="loginbutton">
+                                        Log In
                                     </button>
                                 </div>
     
-                                <div class="text-center">
-                                    <p class="text-base text-gray-600">Don’t have an account? <a href="#" title="" class="font-medium text-orange-500 transition-all duration-200 hover:text-orange-600 hover:underline">Create a free account</a></p>
+                                <div class="signup-from-login">
+                                    <a href="{% url 'signup' %}">Don't have an account? <a href="{% url 'signup' %}">Create an account</a></a>
                                 </div>
                             </div>
                         </form>
@@ -82,6 +168,5 @@
             </div>
         </div>
     </section>
-    
 </body>
 </html>

@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    {% load static %}
     <style>
         .body {
             overflow: hidden;
-            background-image: url('https://i.ibb.co/DYv61T8/pozaback-finaljpg.jpg');
+            background-image: url("{% static 'images/pozasignupfinal.jpg' %}");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
@@ -72,7 +73,7 @@
             line-height: 20px;
             font-weight: 600;
             color: white;
-            transition: color 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            transition: background-color 0.2s;
             background-color: #6b1842;
             border-width: 1px;
             border-color: transparent;
@@ -195,7 +196,7 @@
                                     </button>
                                 </div>
                                 <p class="login-from-signup">
-                                    <a href="{% url 'login' %}">Already have an account? Login</a>
+                                    <a href="{% url 'login' %}">Already have an account? <a href="{% url 'login' %}">Login</a></a>
                                 </p>
                             </div>
                         </form>
