@@ -88,15 +88,18 @@ class CustomAuthenticationForm(AuthenticationForm):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
 
-        if username and password:
-            user = authenticate(username=username, password=password)
-            if not user:
-                try:
-                    user_temp = User.objects.get(email=username)
-                    user = authenticate(username=user_temp.username, password=password)
-                    if not user:
-                        raise forms.ValidationError("Invalid login credentials")
-                except User.DoesNotExist:
-                    raise forms.ValidationError("Invalid login credentials")
-            self.user_cache = user
+        if not username or not password:
+            raise forms.ValidationError("Both fields required.")
+
+        user = authenticate(username=username, password=password)
+        if not user:
+            try:
+                user_temp = User.objects.get(email=username)
+                user = authenticate(username=user_temp.username, password=password)
+                if not user:
+                    raise forms.ValidationError("Invalid credentials")
+            except User.DoesNotExist:
+                raise forms.ValidationError("Invalid credentials")
+
+        self.user_cache = user
         return self.cleaned_data
