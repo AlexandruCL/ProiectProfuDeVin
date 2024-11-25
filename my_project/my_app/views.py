@@ -5,7 +5,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Wines, Cart, CartItem, Spirits
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from django.contrib.auth import logout
 
+def logout_view(request):
+    logout(request)
+    return redirect('drinks_list')
 
 @login_required
 def add_to_cart(request, item_id, item_type):
@@ -39,12 +43,10 @@ def add_to_cart(request, item_id, item_type):
     cart_item.save()
 
     # Decrease the quantity of the item in stock
-    item.Qty -= quantity
+    #item.Qty -= quantity #Quantity should decrese only after a order is placed
     item.save()
 
     return redirect('drinks_list')
-
-
 
 def drinks_list(request):
     wines = Wines.objects.all()
@@ -60,7 +62,6 @@ def login_view(request):
     else:
         form = CustomAuthenticationForm()
     return render(request, 'my_app/login.html', {'form': form})
-
 
 def signup_view(request):
     if request.method == 'POST':
