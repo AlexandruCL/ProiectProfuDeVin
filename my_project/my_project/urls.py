@@ -21,7 +21,9 @@ from my_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.logout_view, name='logout_view'),
-    path('home/', views.drinks_list, name='drinks_list'),
+    path('home/', views.home, name='home'),
+    path('wines/', views.wine_list, name='wine_list'),
+    path('spirits/', views.spirit_list, name='spirit_list'),
     path('add_to_cart/<str:item_type>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
     path('login/', views.login_view, name='login'),
     path('signup/', views.signup_view, name='signup'),

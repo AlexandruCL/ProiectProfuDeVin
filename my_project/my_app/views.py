@@ -9,7 +9,7 @@ from django.contrib.auth import logout
 
 def logout_view(request):
     logout(request)
-    return redirect('drinks_list')
+    return redirect('home')
 
 @login_required
 def add_to_cart(request, item_id, item_type):
@@ -19,13 +19,13 @@ def add_to_cart(request, item_id, item_type):
         item = get_object_or_404(Spirits, ID=item_id)
     else:
         messages.error(request, 'Invalid item type.')
-        return redirect('drinks_list')
+        return redirect('home')
 
     quantity = int(request.POST.get('quantity', 1))
     
     if item.Qty < quantity:
         messages.error(request, 'Not enough stock available.')
-        return redirect('drinks_list')
+        return redirect('home')
 
     # Get or create a cart for the user
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -45,20 +45,30 @@ def add_to_cart(request, item_id, item_type):
     # Decrease the quantity of the item in stock
     item.Qty -= quantity #Quantity should decrese only after a order is placed, we will change this later
     item.save()
+    if(item_type == 'wine'):
+        return redirect('wine_list')
+    elif(item_type == 'spirit'):
+        return redirect('spirit_list')
+    else:
+        return redirect('home')
 
-    return redirect('drinks_list')
-
-def drinks_list(request):
+def wine_list(request):
     wines = Wines.objects.all()
+    return render(request, 'my_app/wine_list.html', {'wines': wines})
+
+def spirit_list(request):
     spirits = Spirits.objects.all()
-    return render(request, 'my_app/drinks_list.html', {'wines': wines, 'spirits': spirits})
+    return render(request, 'my_app/spirit_list.html', {'spirits': spirits})
+
+def home(request):
+    return render(request, 'my_app/home.html')
 
 def login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect('drinks_list')
+            return redirect('home')
     else:
         form = CustomAuthenticationForm()
     return render(request, 'my_app/login.html', {'form': form})
@@ -69,7 +79,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('drinks_list')
+            return redirect('home')
         else:
             print(form.errors)  # Print form errors to the console for debugging
     else:

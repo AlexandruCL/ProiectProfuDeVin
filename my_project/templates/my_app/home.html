@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+ <style>
+     .loginandsignup{
+        font-size: 50px;
+        font-weight: 700;
+    }
+</style>
+<body>
+    <a class="loginandsignup" href="{% url 'login' %}"> LOGIN</a>
+    <a class="loginandsignup" href="{% url 'signup' %}"> SIGN UP</a>
+    <a class="loginandsignup" href="{% url 'logout_view' %}"> LOGOUT</a>
+    <a class="loginandsignup" href="{% url 'wine_list' %}"> WINES</a>
+    <a class="loginandsignup" href="{% url 'spirit_list' %}"> SPIRITS</a>
+</body>
+</html>
