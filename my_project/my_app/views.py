@@ -43,7 +43,7 @@ def add_to_cart(request, item_id, item_type):
     cart_item.save()
 
     # Decrease the quantity of the item in stock
-    #item.Qty -= quantity #Quantity should decrese only after a order is placed
+    item.Qty -= quantity #Quantity should decrese only after a order is placed, we will change this later
     item.save()
 
     return redirect('drinks_list')
