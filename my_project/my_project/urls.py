@@ -22,7 +22,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.logout_view, name='logout_view'),
     path('home/', views.home, name='home'),
-    path('wines/', views.wine_list, name='wine_list'),
+    path('home/contact/', views.contact, name='contact'),
+    path('home/product_list', views.product_list, name='product_list'),
+    path('home/wines/', views.wine_list, name='wine_list'), # de test, o sa se schimbe url ul mai tz
     path('spirits/', views.spirit_list, name='spirit_list'),
     path('add_to_cart/<str:item_type>/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
     path('login/', views.login_view, name='login'),

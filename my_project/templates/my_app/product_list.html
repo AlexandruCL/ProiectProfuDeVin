@@ -25,6 +25,9 @@
     .headerlinks:hover{
         color: #ac1c64;
     }
+    .test{
+        font-size: 70px;
+    }
 </style>
 <body>
     {% load static %}
@@ -34,8 +37,8 @@
             <nav class="flex items-center justify-between relative">
                 <!-- Left Navigation Links -->
                 <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-ml-14">
-                    <a href="/home" title="" class="headerlinks"> Home </a>
-                    <a href="contact" title="" class="headerlinks"> Contact </a>
+                    <a href="/" title="" class="headerlinks"> Home </a>
+                    <a href="/home/contact" title="" class="headerlinks"> Contact </a>
                     <a href="product_list" title="" class="headerlinks"> Product List </a>
                 </div>
 
@@ -58,6 +61,12 @@
     <!-- Page Content -->
     <div class="content">
         <!-- Your page content goes here -->
+         <div class="test">
+            <a href="{% url 'wine_list' %}">Wine List</a>
+         </div>
+         <div class="test">
+            <a href="{% url 'spirit_list' %}">Spirits List</a>
+         </div>
     </div>
 </body>
 </html>

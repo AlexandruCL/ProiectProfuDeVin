@@ -67,6 +67,12 @@ def spirit_list(request):
 def home(request):
     return render(request, 'my_app/home.html')
 
+def product_list(request):
+    return render(request, 'my_app/product_list.html')
+
+def contact(request):
+    return render(request, 'my_app/contact.html')
+
 def login_view(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
