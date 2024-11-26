@@ -5,10 +5,19 @@
 </head>
 <body>
     <h1>Wine List</h1>
+    
+    <!-- Filter Form -->
+    <form method="get" action="">
+        <label for="year">Filter by Year:</label>
+        <input type="number" id="year" name="year" min="1900" max="2100">
+        <button type="submit">Filter</button>
+    </form>
+    <a href="{%url 'wine_list' %}"> RESET FILTERS</a>
+    
     <ul>
         {% for wine in wines %}
             <li>
-                <h2>Name: {{ wine.Name }}</h2>
+                <h2>{{ wine.Name }}</h2>
                 <p>Year: {{ wine.Year }}</p>
                 <p>Grapes: {{ wine.Grapes }}</p>
                 <p>Country: {{ wine.Country }}</p>
