@@ -1,0 +1,32 @@
+{% load static %}
+    <!-- Header Component -->
+    <header class="header">
+        <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+            <nav class="flex items-center justify-between relative">
+                <!-- Left Navigation Links -->
+                <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-ml-14">
+                    <a href="/home" title="" class="headerlinks"> Home </a>
+                    <a href="/home/contact" title="" class="headerlinks"> Contact </a>
+                    <a href="/home/product_list" title="" class="headerlinks"> Product List </a>
+                </div>
+
+                <!-- Center Logo -->
+                <div class="absolute left-1/2 transform -translate-x-1/2">
+                    <a>
+                        <img class="w-auto h-12" src="{% static 'images/logo.png' %}" alt="Logo" />
+                    </a>
+                </div>
+
+                <!-- Right Navigation Links -->
+                <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-mr-14">
+                    {% if user.is_authenticated %}
+                        <span class="headerloggedin">Welcome, {{ user.username }}</span>
+                        <a href="{% url 'logout_view' %}" title="" class="headerlinks"> Log out </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" title="" class="headerlinks"> Log in </a>
+                        <a href="{% url 'signup' %}" title="" class="headerlinks"> Sign up </a>
+                    {% endif %}
+                </div>
+            </nav>
+        </div>
+    </header>
