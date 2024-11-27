@@ -6,6 +6,7 @@ from .models import Wines, Cart, CartItem, Spirits
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
 from django.contrib.auth import logout
+from django.views.decorators.http import require_POST
 
 def logout_view(request):
     logout(request)
@@ -95,3 +96,24 @@ def signup_view(request):
     else:
         form = CustomUserCreationForm()
     return render(request, 'my_app/signup.html', {'form': form})
+
+login_required
+def cart_view(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    return render(request, 'my_app/cart.html', {'cart_items': cart_items})
+
+@require_POST
+@login_required
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    quantity_to_remove = int(request.POST.get('quantity', 1))
+
+    if quantity_to_remove >= cart_item.quantity:
+        cart_item.delete()
+    else:
+        cart_item.quantity -= quantity_to_remove
+        cart_item.save()
+
+    messages.success(request, 'Item removed from cart.')
+    return redirect('cart_view')

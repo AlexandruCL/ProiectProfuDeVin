@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+</head>
+<body>
+    <h1>{{ user.username }}'s Cart</h1>
+    <ul>
+        {% for item in cart_items %}
+            <li>
+                {% if item.wine %}
+                    {{ item.wine.Name }}
+                {% else %}
+                    {{ item.spirit.Name }}
+                {% endif %}
+                - {{ item.quantity }}
+                <form method="post" action="{% url 'remove_from_cart' item.id %}">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" min="1" max="{{ item.quantity }}" value="1">
+                    <button type="submit">Remove</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>Your cart is empty.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

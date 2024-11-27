@@ -21,6 +21,7 @@
                 <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-mr-14">
                     {% if user.is_authenticated %}
                         <span class="headerloggedin">Welcome, {{ user.username }}</span>
+                        <a href="{% url 'cart_view' %}" title="" class="headerlinks"> Cart </a>
                         <a href="{% url 'logout_view' %}" title="" class="headerlinks"> Log out </a>
                     {% else %}
                         <a href="{% url 'login' %}" title="" class="headerlinks"> Log in </a>
