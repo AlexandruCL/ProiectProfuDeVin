@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
+</head>
+<style>
+    .header {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        background-color: #6b1842;
+    }
+    .headerlinks{
+        font-size: 1rem;
+        line-height: 1.5rem; 
+        font-weight: 500; 
+        color: #ffffff; 
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms; 
+        transition-duration: 200ms; 
+    }
+    .headerlinks:hover{
+        color: #ac1c64;
+    }
+    .headerloggedin{
+        font-size: 1rem;
+        line-height: 1.5rem; 
+        font-weight: 500; 
+        color: #ffffff; 
+    }
+    .content{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 180px); /* Adjust based on header height */
+    }
+    .imagesize{
+        width: 1000px;
+        height: auto;
+        margin-top: 0;
+    }
+    .locationtext{
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        font-weight: 500;
+        color: #000000;
+        height: calc(100vh - 180px); /* Adjust based on header height */
+    }
+</style>
+<body>
+    {% load static %}
+    <!-- Header Component -->
+    {%  include 'my_app/header.html' %}
+
+    <!-- Page Content -->
+    <div class="content">
+        <!-- Your page content goes here -->
+        <div class="locationtext">
+            <p>Our location:</p>
+        <div class="content">
+            <a target="_blank" href="https://www.google.com/maps/place/Profu%E2%80%99+de+Vin/@46.1706371,21.3157913,570m/data=!3m1!1e3!4m6!3m5!1s0x4745997f80e7b9b3:0x7e8ac4a3a8c21bde!8m2!3d46.1698067!4d21.3155628!16s%2Fg%2F11wr3m7rf5?entry=ttu&g_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D">
+                <img src="{% static 'images/locatie.png' %}" alt="Location" class="imagesize">
+            </a>
+        </div>
+    </div>
+</body>
+</html>
