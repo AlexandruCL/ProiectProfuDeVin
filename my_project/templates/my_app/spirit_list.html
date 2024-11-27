@@ -4,22 +4,33 @@
     <title>Spirit List</title>
 </head>
 <body>
+    <a href="{% url 'product_list' %}">Back to Product List</a>
     <h1>Spirit List</h1>
     <ul>
         {% for spirit in spirits %}
             <li>
-                <h2>Name: {{ spirit.Name }}</h2>
-                <p>Type: {{ spirit.Type }}</p>
-                <p>Style: {{ spirit.Style }}</p>
-                <p>Alcohol Level: {{ spirit.AlcLvl }}</p>
-                <p>Quantity available: {{ spirit.Qty }} bottles</p>
-                <p>Price: {{ spirit.Price }} RON</p>
-                <form action="{% url 'add_to_cart' 'spirit' spirit.ID %}" method="post">
-                    {% csrf_token %}
-                    <label for="quantity">Quantity to order:</label>
-                    <input type="number" id="quantity" name="quantity" min="1" value="1">
-                    <button type="submit">Add to Cart</button>
-                </form>
+                {% if user.is_authenticated %}
+                    <h2>Name: {{ spirit.Name }}</h2>
+                    <p>Type: {{ spirit.Type }}</p>
+                    <p>Style: {{ spirit.Style }}</p>
+                    <p>Alcohol Level: {{ spirit.AlcLvl }}</p>
+                    <p>Quantity available: {{ spirit.Qty }} bottles</p>
+                    <p>Price: {{ spirit.Price }} RON</p>
+                    <form action="{% url 'add_to_cart' 'spirit' spirit.ID %}" method="post">
+                        {% csrf_token %}
+                        <label for="quantity">Quantity to order:</label>
+                        <input type="number" id="quantity" name="quantity" min="1" value="1">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                {% else %}
+                    <h2>Name: {{ spirit.Name }}</h2>
+                    <p>Type: {{ spirit.Type }}</p>
+                    <p>Style: {{ spirit.Style }}</p>
+                    <p>Alcohol Level: {{ spirit.AlcLvl }}</p>
+                    <p>Quantity available: {{ spirit.Qty }} bottles</p>
+                    <p>Price: {{ spirit.Price }} RON</p>
+                    <p>Log in to add to cart</p>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
