@@ -41,3 +41,5 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     def __str__(self):
         return f'{self.wine or self.spirit} | {self.quantity}'
+    
+#Order database to come...
