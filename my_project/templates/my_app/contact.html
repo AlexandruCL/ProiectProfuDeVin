@@ -6,13 +6,50 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
 </head>
+{% load static %}
 <style>
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateY(0);
+        }
+        40% {
+            transform: translateY(-30px);
+        }
+        60% {
+            transform: translateY(-15px);
+        }
+    }
+    .bounce {
+        animation: bounce 1s;
+    }
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Hide the scrollbar */
+        background-image: url("{% static 'images/contact/contactbackground4.jpg' %}");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+    }
+    body {
+        overflow-y: scroll; /* Enable vertical scrolling */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    body::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, and Opera */
+    }
     .header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
         padding-top: 24px;
         padding-bottom: 24px;
         background-color: #6b1842;
+        border-radius: 0px 0px 5px 5px;
     }
-    .headerlinks{
+    .headerlinks {
         font-size: 1rem;
         line-height: 1.5rem; 
         font-weight: 500; 
@@ -22,50 +59,128 @@
         transition-duration: 300ms; 
         transition-duration: 200ms; 
     }
-    .headerlinks:hover{
+    .headerlinks:hover {
         color: #ac1c64;
     }
-    .headerloggedin{
+    .headerloggedin {
         font-size: 1rem;
         line-height: 1.5rem; 
         font-weight: 500; 
         color: #ffffff; 
     }
-    .content{
+    .content {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: calc(100vh - 180px); /* Adjust based on header height */
+        flex-direction: column;
+        min-height: calc(100vh - 48px); /* Adjust based on header height */
+        padding-top: 60px; /* Add padding to avoid content being hidden behind the fixed header */
     }
-    .imagesize{
-        width: 1000px;
+    .imagesize {
+        width: 800px;
         height: auto;
         margin-top: 0;
+        border: #6b1842;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
     }
-    .locationtext{
+    .locationtext {
+        font-family: 'Roboto', sans-serif;
+        font-size: 2.9rem;
+        line-height: 4rem;
+        font-weight: 500;
+        color: rgb(219, 213, 213);
+        text-align: center;
+        font-variant: small-caps;
+        font-style: italic;
+        text-decoration: underline;
+    }
+    .working-hours {
+        margin-top: 20px;
+        font-family: 'Roboto', sans-serif;
         font-size: 1.5rem;
         line-height: 2rem;
         font-weight: 500;
-        color: #000000;
+        color: #ffffff;
         text-align: center;
-        height: calc(100vh - 180px); /* Adjust based on header height */
+    }
+    .social-links {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        color: #ffffff;
+        font-size: 1.5rem;
+        margin-right: 10px;
+    }
+    .social-links:hover {
+        color: #ac1c64;
+    }
+    .social-link span{
+        color: inherit;
+    }
+    .social-icon {
+    width: 35px; /* Adjust the width as needed */
+    height: auto; /* Maintain aspect ratio */
+    background-color: white;
+    border-radius: 35px;
+    margin-right: 5px;
+    margin-left: 10px;
     }
 </style>
 <body>
-    {% load static %}
-    <!-- Header Component -->
     {%  include 'my_app/header.html' %}
 
     <!-- Page Content -->
     <div class="content">
-        <!-- Your page content goes here -->
         <div class="locationtext">
-            <p>Our location:</p>
-        <div class="content">
-            <a target="_blank" href="https://www.google.com/maps/place/Profu%E2%80%99+de+Vin/@46.1697592,21.3151055,806m/data=!3m1!1e3!4m6!3m5!1s0x4745997f80e7b9b3:0x7e8ac4a3a8c21bde!8m2!3d46.1698067!4d21.3155628!16s%2Fg%2F11wr3m7rf5?entry=ttu&g_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D">
-                <img src="{% static 'images/locatiefinal2.png' %}" alt="Location" class="imagesize">
-            </a>
+            <p class="py-1">Location</p>
+            <div class="imagesize">
+                <a target="_blank" href="https://www.google.com/maps/place/Profu%E2%80%99+de+Vin/@46.1701967,21.3145664,1162m/data=!3m1!1e3!4m6!3m5!1s0x4745997f80e7b9b3:0x7e8ac4a3a8c21bde!8m2!3d46.1698067!4d21.3155628!16s%2Fg%2F11wr3m7rf5?hl=en&entry=ttu&g_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D">
+                    <img src="{% static 'images/location/locationfinal.png' %}" alt="Location" class="imagesize">
+                </a>
+            </div>
         </div>
-    </div>
+        <div class="working-hours">
+            <p>Working Hours:</p>
+            <p>Monday: 16:00 - 21:00</p>
+            <p>Tuesday - Saturday: 12:00 - 21:00</p>
+            <p>Sunday: Closed</p>
+        </div>
+        <div class="social-links">
+            <div class="social-link-container">
+                <a href="https://www.instagram.com/profudevin/?hl=ro" target="_blank" class="social-links">
+                    <img src="{% static 'images/contact/instagram.png' %}" alt="Instagram" class="social-icon">
+                    <span class="bounce-text">Instagram</span>
+                </a>
+            </div>
+            <div class="social-link-container">
+                <a href="https://www.facebook.com/profile.php?id=61560956272852" target="_blank" class="social-links">
+                    <img src="{% static 'images/contact/facebook.png' %}" alt="Instagram" class="social-icon">
+                    <span class="bounce-text">Facebook</span>
+                </a>
+            </div>
+        </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const socialLinkContainers = document.querySelectorAll('.social-link-container');
+        
+                socialLinkContainers.forEach(container => {
+                    container.addEventListener('mouseover', function() {
+                        container.querySelector('.social-icon').classList.add('bounce');
+                        container.querySelector('.bounce-text').classList.add('bounce');
+                    });
+        
+                    container.addEventListener('mouseout', function() {
+                        container.querySelector('.social-icon').classList.remove('bounce');
+                        container.querySelector('.bounce-text').classList.remove('bounce');
+                    });
+                });
+            });
+        </script>
 </body>
 </html>
