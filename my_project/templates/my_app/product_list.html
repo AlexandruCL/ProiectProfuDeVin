@@ -6,7 +6,14 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
 </head>
+{% load static %}
 <style>
+    body{
+        overflow: hidden;
+        background-image: url("{% static 'images/contact/contactbackground5.jpg' %}");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
     .header {
         padding-top: 24px;
         padding-bottom: 24px;
@@ -29,32 +36,97 @@
     }
     .headerlinks:hover{
         color: #ac1c64;
+        text-decoration: underline;
     }
     .test{
         padding-top: 60px;
         font-size: 70px;
     }
-        .headerloggedin{
+    .headerloggedin{
         font-size: 1rem;
         line-height: 1.5rem; 
         font-weight: 500; 
         color: #ffffff; 
     }
+    .content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        min-height: calc(100vh - 48px); /* Adjust based on header height */
+        padding-top: 100px; /* Adjust based on header height */
+    }
+    .imagesize {
+        width: 430px;
+        height: 250px;
+        margin: 0;
+        padding: 0;
+        border: #6b1842;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
+        position: relative;
+        transition: transform 0.25s ease-in-out;
+    }    
+    .imagesize:hover .text-overlay {
+        text-decoration: underline;
+    }
+    .imagesize.enlarge{
+        transform: scale(1.05);
+    }
+    .content2 {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 45px;
+        padding: 0;
+    }
+    .text-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 35px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px #000000;
+    }
 </style>
 <body>
-    {% load static %}
     <!-- Header Component -->
     {% include 'my_app/header.html' %}
 
     <!-- Page Content -->
     <div class="content">
-        <!-- Your page content goes here -->
-         <div class="test">
-            <a href="{% url 'wine_list' %}">Wine List</a>
-         </div>
-         <div class="test">
-            <a href="{% url 'spirit_list' %}">Spirits List</a>
-         </div>
+        <div class="imagesize">
+            <a href="{%url 'wine_list' %}">
+                <img src="{% static 'images/productlist/wine.jpg' %}" alt="Wines" class="imagesize">
+                <div class="text-overlay">Wines</div>
+            </a>
+        </div>
+        <div class="content2">
+            <div class="imagesize">
+                <a href="{%url 'spirit_list' %}">
+                    <img src="{% static 'images/productlist/spirits.jpg' %}" alt="Spirits" class="imagesize">
+                    <div class="text-overlay">Spirits</div>
+                </a>
+            </div>
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.imagesize');
+    
+            images.forEach(image => {
+                image.addEventListener('mouseover', function() {
+                    image.classList.add('enlarge');
+                });
+    
+                image.addEventListener('mouseout', function() {
+                    image.classList.remove('enlarge');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

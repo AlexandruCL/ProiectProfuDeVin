@@ -61,6 +61,7 @@
     }
     .headerlinks:hover {
         color: #ac1c64;
+        text-decoration: underline;
     }
     .headerloggedin {
         font-size: 1rem;
@@ -85,6 +86,10 @@
         border-width: 1px;
         border-radius: 20px;
         box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
+        transition: transform 0.25s ease-in-out;
+    }
+    .imagesize.enlarge{
+        transform: scale(1.02);
     }
     .locationtext {
         font-family: 'Roboto', sans-serif;
@@ -181,6 +186,20 @@
                     });
                 });
             });
+
+            document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.imagesize');
+    
+            images.forEach(image => {
+                image.addEventListener('mouseover', function() {
+                    image.classList.add('enlarge');
+                });
+    
+                image.addEventListener('mouseout', function() {
+                    image.classList.remove('enlarge');
+                });
+            });
+        });
         </script>
 </body>
 </html>
