@@ -54,12 +54,22 @@ def add_to_cart(request, item_id, item_type):
         return redirect('home')
 
 def wine_list(request):
-    year = request.GET.get('year')
-    if year:
-        wines = Wines.objects.filter(Year=year)
-    else:
-        wines = Wines.objects.all()
-    return render(request, 'my_app/wine_list.html', {'wines': wines})
+    wines = Wines.objects.all()
+    search_query = request.GET.get('search', '')
+    year_filter = request.GET.get('year', '')
+
+    if search_query:
+        wines = wines.filter(Name__icontains=search_query)
+    
+    if year_filter:
+        wines = wines.filter(Year=year_filter)
+
+    context = {
+        'wines': wines,
+        'search_query': search_query,
+        'year_filter': year_filter,
+    }
+    return render(request, 'my_app/wine_list.html', context)
 
 def spirit_list(request):
     spirits = Spirits.objects.all()
