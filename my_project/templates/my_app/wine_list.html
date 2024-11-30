@@ -55,6 +55,9 @@
                         <p>Description: {{ wine.Description }}</p>
                         <p>Quantity available: {{ wine.Qty }} bottles</p>
                         <p>Price: {{ wine.Price }} RON</p>
+                        {% if wine.image %}
+                            <img src="{{ wine.image.url }}" alt="{{ wine.Name }}" style="max-width: 100px;">
+                        {% endif %}
                         {% if user.is_authenticated %}
                             <form action="{% url 'add_to_cart' 'wine' wine.ID %}" method="post">
                                 {% csrf_token %}

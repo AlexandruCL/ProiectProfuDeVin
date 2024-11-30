@@ -8,8 +8,13 @@ class CartItemInline(admin.TabularInline):
 class CartAdmin(admin.ModelAdmin):
     inlines = [CartItemInline]
 
-admin.site.register(Wines)
+class WinesAdmin(admin.ModelAdmin):
+    list_display = ('ID', 'Name', 'Type', 'Year', 'Price', 'Qty', 'image')  # Add 'image' here
+
+class SpiritsAdmin(admin.ModelAdmin):
+    list_display = ('ID', 'Name', 'Type', 'Price', 'Qty', 'image')  # Add 'image' here
+
+admin.site.register(Wines, WinesAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem)
-admin.site.register(Spirits)
-# Register your models here.
+admin.site.register(Spirits, SpiritsAdmin)

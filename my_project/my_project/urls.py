@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from my_app import views
 
 urlpatterns = [
@@ -32,4 +34,4 @@ urlpatterns = [
     path('home/cart/', views.cart_view, name='cart_view'),
      path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     # other URL patterns
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

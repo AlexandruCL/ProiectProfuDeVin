@@ -13,6 +13,7 @@ class Wines(models.Model):
     Description = models.TextField()
     Qty = models.IntegerField(null=True)  # Kept as is, can be set to default if needed
     ID = models.AutoField(primary_key=True, editable=False)
+    image = models.ImageField(upload_to='wines/', null=True, blank=True)  # Add this line
 
     def __str__(self):
         return f'{self.ID} | {self.Name} | {self.Year} | {self.Price} | {self.Qty} '
@@ -25,6 +26,7 @@ class Spirits(models.Model):
     Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     Qty = models.IntegerField(null=True)
     ID = models.AutoField(primary_key=True, editable=False)
+    image = models.ImageField(upload_to='spirits/', null=True, blank=True)  # Add this line
     def __str__(self):
         return f'{self.ID} | {self.Type} | {self.Name} | {self.Price} | {self.Qty}'
     
