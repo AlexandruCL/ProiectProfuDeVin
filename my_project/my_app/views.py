@@ -26,7 +26,7 @@ def add_to_cart(request, item_id, item_type):
     
     if item.Qty < quantity:
         messages.error(request, 'Not enough stock available.')
-        return redirect('home')
+        return redirect('/home/product_list')
 
     # Get or create a cart for the user
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -120,8 +120,22 @@ def remove_from_cart(request, item_id):
     quantity_to_remove = int(request.POST.get('quantity', 1))
 
     if quantity_to_remove >= cart_item.quantity:
+        # Add the entire quantity back to stock
+        if cart_item.wine:
+            cart_item.wine.Qty += cart_item.quantity
+            cart_item.wine.save()
+        elif cart_item.spirit:
+            cart_item.spirit.Qty += cart_item.quantity
+            cart_item.spirit.save()
         cart_item.delete()
     else:
+        # Add the removed quantity back to stock
+        if cart_item.wine:
+            cart_item.wine.Qty += quantity_to_remove
+            cart_item.wine.save()
+        elif cart_item.spirit:
+            cart_item.spirit.Qty += quantity_to_remove
+            cart_item.spirit.save()
         cart_item.quantity -= quantity_to_remove
         cart_item.save()
 

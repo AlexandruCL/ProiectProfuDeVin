@@ -11,12 +11,16 @@
     <ul>
         {% for item in cart_items %}
             <li>
-                {% if item.wine %}
+                <div>{% if item.wine %}
                     {{ item.wine.Name }}
                 {% else %}
                     {{ item.spirit.Name }}
                 {% endif %}
                 - {{ item.quantity }}
+                </div>
+                    {% if item.wine.image %}
+                        <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" style="max-width: 100px;">
+                    {% endif %}
                 <form method="post" action="{% url 'remove_from_cart' item.id %}">
                     {% csrf_token %}
                     <input type="number" name="quantity" min="1" max="{{ item.quantity }}" value="1">
