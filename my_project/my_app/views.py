@@ -25,8 +25,11 @@ def add_to_cart(request, item_id, item_type):
     quantity = int(request.POST.get('quantity', 1))
     
     if item.Qty < quantity:
-        messages.error(request, 'Not enough stock available.')
-        return redirect('/home/product_list')
+        messages.error(request, 'Not enough stock available.', extra_tags='cartadd-error')
+        if(item_type == 'wine'):
+            return redirect('wine_list')
+        else:
+            return redirect('spirit_list')
 
     # Get or create a cart for the user
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -37,14 +40,20 @@ def add_to_cart(request, item_id, item_type):
         wine=item if item_type == 'wine' else None,
         spirit=item if item_type == 'spirit' else None
     )
+
+    if not created and cart_item.quantity + quantity > item.Qty:
+        messages.error(request, 'Cannot add more items than available in stock. Check your cart.', extra_tags='cartadd-error')
+        if(item_type == 'wine'):
+            return redirect('wine_list')
+        else:
+            return redirect('spirit_list')
+    
     if created:
         cart_item.quantity = quantity
     else:
         cart_item.quantity += quantity
     cart_item.save()
 
-    # Decrease the quantity of the item in stock
-    item.Qty -= quantity #Quantity should decrese only after a order is placed, we will change this later
     item.save()
     if(item_type == 'wine'):
         return redirect('wine_list')
@@ -120,24 +129,10 @@ def remove_from_cart(request, item_id):
     quantity_to_remove = int(request.POST.get('quantity', 1))
 
     if quantity_to_remove >= cart_item.quantity:
-        # Add the entire quantity back to stock
-        if cart_item.wine:
-            cart_item.wine.Qty += cart_item.quantity
-            cart_item.wine.save()
-        elif cart_item.spirit:
-            cart_item.spirit.Qty += cart_item.quantity
-            cart_item.spirit.save()
         cart_item.delete()
     else:
-        # Add the removed quantity back to stock
-        if cart_item.wine:
-            cart_item.wine.Qty += quantity_to_remove
-            cart_item.wine.save()
-        elif cart_item.spirit:
-            cart_item.spirit.Qty += quantity_to_remove
-            cart_item.spirit.save()
         cart_item.quantity -= quantity_to_remove
         cart_item.save()
 
-    messages.success(request, 'Item removed from cart.')
+    messages.success(request, 'Item removed from cart.', extra_tags='cartrmv-success')
     return redirect('cart_view')

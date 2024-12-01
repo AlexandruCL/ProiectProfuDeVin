@@ -21,6 +21,9 @@
                     {% if item.wine.image %}
                         <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" style="max-width: 100px;">
                     {% endif %}
+                    {% if item.spirit.image %}
+                        <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}" style="max-width: 100px;">
+                    {% endif %}
                 <form method="post" action="{% url 'remove_from_cart' item.id %}">
                     {% csrf_token %}
                     <input type="number" name="quantity" min="1" max="{{ item.quantity }}" value="1">
