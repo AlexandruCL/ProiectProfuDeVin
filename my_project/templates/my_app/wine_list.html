@@ -213,9 +213,13 @@
                         <h2>{{ wine.Name }}</h2>
                         <p>Type: {{ wine.Type }}</p>
                         <p>Year: {{ wine.Year }}</p>
-                        <p>Grapes: {{ wine.Grapes }}</p>
+                        {% if wine.Grapes %}
+                            <p>Grapes: {{ wine.Grapes }}</p>
+                        {% endif %}
                         <p>Country: {{ wine.Country }}</p>
-                        <p>Region: {{ wine.Region }}</p>
+                        {% if wine.Region %}
+                            <p>Region: {{ wine.Region }}</p>
+                        {% endif %}
                         <div class="description">
                             <p>Description: {{ wine.Description }}</p>
                         </div>

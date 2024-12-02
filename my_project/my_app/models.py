@@ -6,9 +6,9 @@ class Wines(models.Model):
     Name = models.CharField(max_length=100)
     Type = models.CharField(max_length=100)
     Year = models.IntegerField(default=None, null=True)  # Changed to allow NULL or default value
-    Grapes = models.CharField(max_length=100, default='')
+    Grapes = models.CharField(max_length=100, null=True)  # Changed to allow NULL
     Country = models.CharField(max_length=100)
-    Region = models.CharField(max_length=100, default='')
+    Region = models.CharField(max_length=100, null=True)  # Changed to allow NULL
     Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     Description = models.TextField()
     Qty = models.IntegerField(null=True)  # Kept as is, can be set to default if needed
@@ -21,7 +21,7 @@ class Wines(models.Model):
 class Spirits(models.Model):
     Type = models.CharField(max_length=100, default = '')
     Name = models.CharField(max_length=100, default='')
-    Style = models.CharField(max_length=100, default = '-')
+    Style = models.CharField(max_length=100, null=True)
     AlcLvl = models.IntegerField(default=0)
     Price = models.DecimalField(max_digits=6, decimal_places=2, null=True)
     Qty = models.IntegerField(null=True)

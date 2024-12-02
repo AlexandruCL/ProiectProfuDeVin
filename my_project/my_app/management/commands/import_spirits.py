@@ -14,14 +14,16 @@ class Command(BaseCommand):
 
         # Read the Excel file into a pandas DataFrame
         df = pd.read_excel(file_path)
-        df['Style'] = df['Style'].fillna('-')
+        df['Style'] = df['Style'].fillna(' ')
 
         # Loop through the rows and create Spirits entries
         for _, row in df.iterrows():
+            style = row['Style'] if row['Style'] != ' ' else None
+
             spirit = Spirits(
                 Type=row['Type'],
                 Name=row['Name'],
-                Style=row['Style'],
+                Style=style,
                 AlcLvl=row['AlcLvl'],
                 Price=row['Price'],
                 Qty=row['Qty']
