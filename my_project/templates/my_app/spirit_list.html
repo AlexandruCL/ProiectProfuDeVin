@@ -109,7 +109,7 @@
     }
 </style>
 <body>
-    {%  include 'my_app/header.html' %}
+    {%  include 'my_app/headerproduct.html' %}
     <div class="content">
         {% if messages %}
         <div class="messages" id="message-box">
@@ -142,7 +142,7 @@
                             <button type="submit">Add to Cart</button>
                         </form>
                         {% else %}
-                        <p>Login to add to cart</p>
+                        <p style="font-weight: bold;">Login to add to cart</p>
                         {% endif %}
                     </div>
                     {% if spirit.image %}
