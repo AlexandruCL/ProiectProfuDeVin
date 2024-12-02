@@ -74,10 +74,13 @@ def wine_list(request):
     if year_filter:
         wines = wines.filter(Year=year_filter)
 
+    year_choices = Wines.objects.values_list('Year', flat=True).distinct()
+
     context = {
         'wines': wines,
         'search_query': search_query,
         'year_filter': year_filter,
+        'year_choices': year_choices,
     }
     return render(request, 'my_app/wine_list.html', context)
 
