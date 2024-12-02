@@ -67,6 +67,11 @@ def wine_list(request):
     wines = Wines.objects.all()
     search_query = request.GET.get('search', '')
     year_filter = request.GET.get('year', '')
+    type_filter = request.GET.get('type', '')
+    country_filter = request.GET.get('country', '')
+    region_filter = request.GET.get('region', '')
+    grapes_filter = request.GET.get('grapes', '')
+    sort_by = request.GET.get('sort_by', '')
 
     if search_query:
         wines = wines.filter(Name__icontains=search_query)
@@ -74,19 +79,57 @@ def wine_list(request):
     if year_filter:
         wines = wines.filter(Year=year_filter)
 
+    if type_filter:
+        wines = wines.filter(Type__icontains=type_filter)
+    
+    if country_filter:
+        wines = wines.filter(Country__icontains=country_filter)
+    
+    if region_filter:
+        wines = wines.filter(Region__icontains=region_filter)
+    
+    if grapes_filter:
+        wines = wines.filter(Grapes__icontains=grapes_filter)
+    
+    if sort_by == 'price_asc':
+        wines = wines.order_by('Price')
+    elif sort_by == 'price_desc':
+        wines = wines.order_by('-Price')
+
     year_choices = Wines.objects.values_list('Year', flat=True).distinct().order_by('-Year')
+    type_choices = Wines.objects.values_list('Type', flat=True).distinct().order_by('Type')
+    country_choices = Wines.objects.values_list('Country', flat=True).distinct().order_by('Country')
+    region_choices = Wines.objects.exclude(Region__isnull = True).exclude(Region__exact='').values_list('Region', flat=True).distinct().order_by('Region')
+    grapes_choices = Wines.objects.exclude(Grapes__isnull=True).exclude(Grapes__exact='').values_list('Grapes', flat=True).distinct().order_by('Grapes')
+
 
     context = {
         'wines': wines,
         'search_query': search_query,
         'year_filter': year_filter,
+        'type_filter': type_filter,
+        'country_filter': country_filter,
+        'region_filter': region_filter,
+        'grapes_filter': grapes_filter,
+        'sort_by': sort_by,
         'year_choices': year_choices,
+        'type_choices': type_choices,
+        'country_choices': country_choices,
+        'region_choices': region_choices,
+        'grapes_choices': grapes_choices,
     }
     return render(request, 'my_app/wine_list.html', context)
 
 def spirit_list(request):
     spirits = Spirits.objects.all()
-    return render(request, 'my_app/spirit_list.html', {'spirits': spirits})
+    search_query = request.GET.get('search', '')
+    if search_query:
+        spirits = spirits.filter(Name__icontains=search_query)
+    context = {
+        'spirits': spirits,
+        'search_query': search_query,
+    }
+    return render(request, 'my_app/spirit_list.html', context)
 
 def home(request):
     return render(request, 'my_app/home.html')
