@@ -74,7 +74,7 @@ def wine_list(request):
     if year_filter:
         wines = wines.filter(Year=year_filter)
 
-    year_choices = Wines.objects.values_list('Year', flat=True).distinct()
+    year_choices = Wines.objects.values_list('Year', flat=True).distinct().order_by('-Year')
 
     context = {
         'wines': wines,
