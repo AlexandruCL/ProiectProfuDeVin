@@ -22,10 +22,10 @@
                     {% if user.is_authenticated %}
                         <span class="headerloggedin">Welcome, {{ user.username }}</span>
                         <a href="{% url 'cart_view' %}" title="" class="headerlinks"> Cart </a>
-                        <a href="{% url 'logout_view' %}" title="" class="headerlinks"> Log out </a>
+                        <a href="{% url 'logout_view' %}?next={{ request.path }}" title="" class="headerlinks"> Log out </a>
                     {% else %}
-                        <a href="{% url 'login' %}" title="" class="headerlinks"> Log in </a>
-                        <a href="{% url 'signup' %}" title="" class="headerlinks"> Sign up </a>
+                        <a href="{% url 'login' %}?next={{ request.path }}" title="" class="headerlinks"> Log in </a>
+                        <a href="{% url 'signup' %}?next={{ request.path }}" title="" class="headerlinks"> Sign up </a>
                     {% endif %}
                 </div>
             </nav>

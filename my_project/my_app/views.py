@@ -9,8 +9,9 @@ from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
 
 def logout_view(request):
+    next_url = request.GET.get('next', 'home')
     logout(request)
-    return redirect('home')
+    return redirect(next_url)
 
 @login_required
 def add_to_cart(request, item_id, item_type):
@@ -94,27 +95,29 @@ def contact(request):
     return render(request, 'my_app/contact.html')
 
 def login_view(request):
+    next_url = request.GET.get('next', 'home')
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect('home')
+            return redirect(next_url)
     else:
         form = CustomAuthenticationForm()
-    return render(request, 'my_app/login.html', {'form': form})
+    return render(request, 'my_app/login.html', {'form': form, 'next': next_url})
 
 def signup_view(request):
+    next_url = request.GET.get('next', 'home')
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect(next_url)
         else:
             print(form.errors)  # Print form errors to the console for debugging
     else:
         form = CustomUserCreationForm()
-    return render(request, 'my_app/signup.html', {'form': form})
+    return render(request, 'my_app/signup.html', {'form': form, 'next': next_url})
 
 login_required
 def cart_view(request):
