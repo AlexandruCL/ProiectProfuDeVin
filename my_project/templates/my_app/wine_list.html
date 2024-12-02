@@ -78,7 +78,7 @@
     }
     .wine-image {
         margin-left: 20px;
-        max-width: 100px;
+        max-width: 80px;
     }
     .small-input {
         width: 50px; /* Adjust the width as needed */
@@ -163,6 +163,15 @@
     .search-form button:hover {
         background-color: #4f0f2b;
     }
+    .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    }
 </style>
 <body>
     {% include 'my_app/header.html' %}
@@ -207,7 +216,9 @@
                         <p>Grapes: {{ wine.Grapes }}</p>
                         <p>Country: {{ wine.Country }}</p>
                         <p>Region: {{ wine.Region }}</p>
-                        <p>Description: {{ wine.Description }}</p>
+                        <div class="description">
+                            <p>Description: {{ wine.Description }}</p>
+                        </div>
                         <p>Quantity available: {{ wine.Qty }} bottles</p>
                         <p>Price: {{ wine.Price }} RON</p>
                         {% if user.is_authenticated %}
@@ -230,6 +241,21 @@
             {% endfor %}
         </ul>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const descriptions = document.querySelectorAll('.description');
+            descriptions.forEach(description => {
+                description.style.webkitLineClamp = '3'; // Set initial value
+                description.addEventListener('click', function() {
+                    if (this.style.webkitLineClamp === '3') {
+                        this.style.webkitLineClamp = 'unset';
+                    } else {
+                        this.style.webkitLineClamp = '3';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
 
