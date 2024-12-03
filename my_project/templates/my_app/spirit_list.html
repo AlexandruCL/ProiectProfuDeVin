@@ -136,6 +136,33 @@
     .search-form button:hover {
         background-color: #4f0f2b;
     }
+    .filter-form {
+        display: flex;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+        margin-left: 20px;
+    }
+    .filter-form select {
+        margin-right: 10px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    .filter-form button, .reset-button {
+        padding: 5px 10px;
+        background-color: #6b1842;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 10px;
+        transition: background-color 0.25s;
+    }
+    .filter-form button:hover, .reset-button:hover {
+        background-color: #4f0f2b;
+    }
 </style>
 <body>
     {%  include 'my_app/header.html' %}
@@ -156,16 +183,48 @@
             <h1 class="headertext">Spirit List</h1>
             <form method="GET" class="search-form">
                 <input type="text" name="search" placeholder="Search by name" value="{{ search_query }}">
+                <input type="hidden" name="type" value="{{ type_filter }}">
+                <input type="hidden" name="style" value="{{ style_filter }}">
+                <input type="hidden" name="alcohol" value="{{ alcohol_filter }}">
+                <input type="hidden" name="sort_by" value="{{ sort_by }}">
                 <button type="submit">Search</button>
             </form>
         </div>
+        <form method="GET" class="filter-form">
+            <select name="type" onchange="this.form.submit()">
+                <option value="">All Types</option>
+                {% for type in type_choices %}
+                    <option value="{{ type }}" {% if type|stringformat:"s" == type_filter|stringformat:"s" %}selected{% endif %}>{{ type }}</option>
+                {% endfor %}
+            </select>
+            <select name="style" onchange="this.form.submit()">
+                <option value="">All Styles</option>
+                {% for style in style_choices %}
+                    <option value="{{ style }}" {% if style|stringformat:"s" == style_filter|stringformat:"s" %}selected{% endif %}>{{ style }}</option>
+                {% endfor %}
+            </select>
+            <select name="alcohol" onchange="this.form.submit()">
+                <option value="">All Alcohol Levels</option>
+                {% for alcohol in alcohol_choices %}
+                    <option value="{{ alcohol }}" {% if alcohol|stringformat:"s" == alcohol_filter|stringformat:"s" %}selected{% endif %}>{{ alcohol }}%</option>
+                {% endfor %}
+            </select>
+            <select name="sort_by" onchange="this.form.submit()">
+                <option value="">Sort By</option>
+                <option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            </select>
+            <a href="{% url 'spirit_list' %}" class="reset-button">Reset Filters</a>
+        </form>
         <ul class="spirit-container">
             {% for spirit in spirits %}
                 <li class="spirit-item">
                     <div class="spirit-text">
                         <h2 style="font-weight: 700; font-style: italic; text-decoration: underline;">{{ spirit.Name }}</h2>
                         <p>Type: {{ spirit.Type }}</p>
-                        <p>Style: {{ spirit.Style }}</p>
+                        {% if spirit.Style %}
+                            <p>Style: {{ spirit.Style }}</p>
+                        {% endif %}
                         <p>Alcohol Level: {{ spirit.AlcLvl }}%</p>
                         <p>Quantity available: {{ spirit.Qty }} bottles</p>
                         <p>Price: {{ spirit.Price }} RON</p>

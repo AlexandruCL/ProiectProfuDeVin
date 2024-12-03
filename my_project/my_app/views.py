@@ -123,11 +123,47 @@ def wine_list(request):
 def spirit_list(request):
     spirits = Spirits.objects.all()
     search_query = request.GET.get('search', '')
+    type_filter = request.GET.get('type', '')
+    style_filter = request.GET.get('style', '')
+    alcohol_filter = request.GET.get('alcohol', '')
+    sort_by = request.GET.get('sort_by', '')
+
     if search_query:
         spirits = spirits.filter(Name__icontains=search_query)
+    
+    if type_filter:
+        spirits = spirits.filter(Type__icontains=type_filter)
+    
+    if style_filter:
+        spirits = spirits.filter(Style__icontains=style_filter)
+
+    # Validate and filter alcohol_filter
+    if alcohol_filter:
+        try:
+            alcohol_value = int(alcohol_filter)
+            spirits = spirits.filter(AlcLvl=alcohol_value)
+        except ValueError:
+            pass  # Ignore invalid input
+
+    if sort_by == 'price_asc':
+        spirits = spirits.order_by('Price')
+    elif sort_by == 'price_desc':
+        spirits = spirits.order_by('-Price')
+    
+    type_choices = Spirits.objects.values_list('Type', flat=True).distinct().order_by('Type')
+    style_choices = Spirits.objects.exclude(Style__isnull=True).exclude(Style__exact='').values_list('Style', flat=True).distinct().order_by('Style')
+    alcohol_choices = Spirits.objects.exclude(AlcLvl__isnull=True).values_list('AlcLvl', flat=True).distinct().order_by('AlcLvl')
+
     context = {
         'spirits': spirits,
         'search_query': search_query,
+        'sort_by': sort_by,
+        'type_filter': type_filter,
+        'type_choices': type_choices,
+        'style_filter': style_filter,
+        'style_choices': style_choices,
+        'alcohol_filter': alcohol_filter,
+        'alcohol_choices': alcohol_choices,
     }
     return render(request, 'my_app/spirit_list.html', context)
 
