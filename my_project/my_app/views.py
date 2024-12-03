@@ -39,7 +39,8 @@ def add_to_cart(request, item_id, item_type):
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         wine=item if item_type == 'wine' else None,
-        spirit=item if item_type == 'spirit' else None
+        spirit=item if item_type == 'spirit' else None,
+        defaults={'price': item.Price}
     )
 
     if not created and cart_item.quantity + quantity > item.Qty:

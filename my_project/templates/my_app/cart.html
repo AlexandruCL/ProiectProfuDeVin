@@ -9,35 +9,18 @@
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
 </head>
 <style>
-    .header {
-        padding-top: 24px;
-        padding-bottom: 24px;
-        background-color: #6b1842;
-        border-radius: 0px 0px 5px 5px;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Hide the scrollbar */
     }
-    .headerlinks{
-        font-size: 1rem;
-        line-height: 1.5rem; 
-        font-weight: 500; 
-        color: #ffffff; 
-        transition-property: all;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 300ms; 
-        transition-duration: 200ms; 
+    body {
+        overflow-y: scroll; /* Enable vertical scrolling */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
     }
-    .headerlinks:hover{
-        color: #ac1c64;
-        text-decoration: underline;
-    }
-    .headerloggedin{
-        font-size: 1rem;
-        line-height: 1.5rem; 
-        font-weight: 500; 
-        color: #ffffff; 
+    body::-webkit-scrollbar {
+        display: none;  /* Safari and Chrome */
     }
     body {
     font-family: Arial, sans-serif;
@@ -49,14 +32,16 @@
         max-width: 800px;
         margin: 0 auto;
         margin-top: 5rem;
+        margin-bottom: 1rem;
         padding: 1rem;
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 2rem;
     }
     h1 {
-        font-weight: 500;
-        font-size: 30px;
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: 700;
+        font-size: 3rem;
         text-align: center;
         margin-bottom: 1.5rem;
     }
@@ -92,7 +77,7 @@
         color: #555;
         font-weight: 600;
     }
-    .item-price {
+    .item-total-price {
         font-size: 14px;
         color: #000;
         font-weight: 600;
@@ -106,18 +91,21 @@
         margin-right: 0.5rem;
     }
     .remove-form button {
-        background-color: #ff4d4d;
+        background-color: #e00707;
         color: #fff;
         border: none;
         padding: 0.3rem 0.6rem;
         cursor: pointer;
+        border-radius: 0.3rem;
+        transition: background-color 0.3s;
     }
     .remove-form button:hover {
-        background-color: #ff1a1a;
+        background-color: #920d0d;
     }
 </style>
 <body>
     {% include 'my_app/header.html' %}
+    {% load custom_filters %}
     <div class="content">
         <h1>Your Cart</h1>
         <ul class="cart-items">
@@ -142,24 +130,29 @@
                             </div>
                             <div class="item-quantity">
                                 {% if item.quantity > 1 %}
-                                    {{ item.quantity }} bottles
+                                    {{ item.quantity }} bottles - {{ item.price|floatformat:2 }} RON each
                                 {% else %}
                                     {{ item.quantity }} bottle
                                 {% endif %}
                             </div>
-                            <div class="item-price">
-                                {{ item.price }} RON
+                            <div class="item-total-price">
+                                    Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON
                             </div>
                         </div>
                     </div>
                     <form method="post" action="{% url 'remove_from_cart' item.id %}" class="remove-form">
                         {% csrf_token %}
-                        <input type="number" name="quantity" min="1" max="{{ item.quantity }}" value="1">
+                        <p style="font-size: 17px; margin-right: 0.5rem;">Quantity to remove: </p>
+                        <select name="quantity">
+                            {% for i in 1|to:item.quantity %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
                         <button type="submit">Remove</button>
                     </form>
                 </li>
             {% empty %}
-                <li>Your cart is empty.</li>
+                <li style="align-items: center; font-weight: 600;">Your cart is empty.</li>
             {% endfor %}
         </ul>
     </div>

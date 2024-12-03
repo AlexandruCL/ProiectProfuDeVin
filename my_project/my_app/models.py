@@ -41,7 +41,7 @@ class CartItem(models.Model):
     wine = models.ForeignKey(Wines, null=True, blank=True, on_delete=models.CASCADE)
     spirit = models.ForeignKey(Spirits, null=True, blank=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-    Price = models.DecimalField(max_digits=6, decimal_places=2, null=True, default=0.00)
+    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, default=0.00)
     def __str__(self):
         return f'{self.wine or self.spirit} | {self.quantity}'
     
