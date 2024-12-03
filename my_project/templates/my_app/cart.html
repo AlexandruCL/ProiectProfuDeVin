@@ -4,35 +4,164 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
 </head>
+<style>
+    .header {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        background-color: #6b1842;
+        border-radius: 0px 0px 5px 5px;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+    .headerlinks{
+        font-size: 1rem;
+        line-height: 1.5rem; 
+        font-weight: 500; 
+        color: #ffffff; 
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms; 
+        transition-duration: 200ms; 
+    }
+    .headerlinks:hover{
+        color: #ac1c64;
+        text-decoration: underline;
+    }
+    .headerloggedin{
+        font-size: 1rem;
+        line-height: 1.5rem; 
+        font-weight: 500; 
+        color: #ffffff; 
+    }
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    }
+    .content {
+        max-width: 800px;
+        margin: 0 auto;
+        margin-top: 5rem;
+        padding: 1rem;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 2rem;
+    }
+    h1 {
+        font-weight: 500;
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    .cart-items {
+        list-style-type: none;
+        padding: 0;
+    }
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        border-bottom: 1px solid #ddd;
+    }
+    .item-details {
+        display: flex;
+        align-items: center;
+    }
+    .item-image img {
+        max-width: 50px;
+        margin-right: 0.5rem;
+    }
+    .item-info {
+        display: flex;
+        flex-direction: column;
+    }
+    .item-name {
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .item-quantity {
+        font-size: 16px;
+        color: #555;
+        font-weight: 600;
+    }
+    .item-price {
+        font-size: 14px;
+        color: #000;
+        font-weight: 600;
+    }
+    .remove-form {
+        display: flex;
+        align-items: center;
+    }
+    .remove-form input[type="number"] {
+        width: 40px;
+        margin-right: 0.5rem;
+    }
+    .remove-form button {
+        background-color: #ff4d4d;
+        color: #fff;
+        border: none;
+        padding: 0.3rem 0.6rem;
+        cursor: pointer;
+    }
+    .remove-form button:hover {
+        background-color: #ff1a1a;
+    }
+</style>
 <body>
-    <h1>{{ user.username }}'s Cart</h1>
-    <a href="{% url 'product_list' %}">Back to Product List</a>
-    <ul>
-        {% for item in cart_items %}
-            <li>
-                <div>{% if item.wine %}
-                    {{ item.wine.Name }}
-                {% else %}
-                    {{ item.spirit.Name }}
-                {% endif %}
-                - {{ item.quantity }}
-                </div>
-                    {% if item.wine.image %}
-                        <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" style="max-width: 100px;">
-                    {% endif %}
-                    {% if item.spirit.image %}
-                        <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}" style="max-width: 100px;">
-                    {% endif %}
-                <form method="post" action="{% url 'remove_from_cart' item.id %}">
-                    {% csrf_token %}
-                    <input type="number" name="quantity" min="1" max="{{ item.quantity }}" value="1">
-                    <button type="submit">Remove</button>
-                </form>
-            </li>
-        {% empty %}
-            <li>Your cart is empty.</li>
-        {% endfor %}
-    </ul>
+    {% include 'my_app/header.html' %}
+    <div class="content">
+        <h1>Your Cart</h1>
+        <ul class="cart-items">
+            {% for item in cart_items %}
+                <li class="cart-item">
+                    <div class="item-details">
+                        <div class="item-image">
+                            {% if item.wine.image %}
+                                <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}">
+                            {% endif %}
+                            {% if item.spirit.image %}
+                                <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}">
+                            {% endif %}
+                        </div>
+                        <div class="item-info">
+                            <div class="item-name">
+                                {% if item.wine %}
+                                    {{ item.wine.Name }}
+                                {% else %}
+                                    {{ item.spirit.Name }}
+                                {% endif %}
+                            </div>
+                            <div class="item-quantity">
+                                {% if item.quantity > 1 %}
+                                    {{ item.quantity }} bottles
+                                {% else %}
+                                    {{ item.quantity }} bottle
+                                {% endif %}
+                            </div>
+                            <div class="item-price">
+                                {{ item.price }} RON
+                            </div>
+                        </div>
+                    </div>
+                    <form method="post" action="{% url 'remove_from_cart' item.id %}" class="remove-form">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" min="1" max="{{ item.quantity }}" value="1">
+                        <button type="submit">Remove</button>
+                    </form>
+                </li>
+            {% empty %}
+                <li>Your cart is empty.</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
