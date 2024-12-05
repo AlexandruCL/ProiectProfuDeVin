@@ -50,6 +50,8 @@ class Order(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     first_name = models.CharField(max_length=30,default='')
     last_name = models.CharField(max_length=30,default='')
+    email = models.EmailField(max_length=254, default='')
+    phone_number = models.CharField(max_length=15, default='')
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=100)
     county = models.CharField(max_length=100, default='')

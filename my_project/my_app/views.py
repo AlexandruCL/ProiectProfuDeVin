@@ -241,6 +241,12 @@ def checkout(request):
                     quantity=item.quantity,
                     price=item.price
                 )
+                if item.wine:
+                    item.wine.Qty -= item.quantity
+                    item.wine.save()
+                elif item.spirit:
+                    item.spirit.Qty -= item.quantity
+                    item.spirit.save()
             cart_items.delete()
             return redirect('order_success')
     else:

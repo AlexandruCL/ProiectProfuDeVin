@@ -108,4 +108,4 @@ class CustomAuthenticationForm(AuthenticationForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['first_name', 'last_name', 'address', 'city', 'county', 'postal_code']
+        fields = ['first_name', 'last_name','email', 'phone_number', 'address', 'city', 'county', 'postal_code']
