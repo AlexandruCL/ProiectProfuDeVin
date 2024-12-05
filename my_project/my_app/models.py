@@ -58,6 +58,9 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Order {self.id} by {self.user.username}'
+    
+    def get_order_items(self):
+        return OrderItem.objects.filter(order=self)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)

@@ -249,4 +249,5 @@ def checkout(request):
 
 @login_required
 def order_success(request):
-    return render(request, 'my_app/order_succes.html')
+    order = Order.objects.filter(user=request.user).latest('created_at')
+    return render(request, 'my_app/order_succes.html', {'order': order})

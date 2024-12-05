@@ -1,3 +1,4 @@
+<!-- my_app/templates/my_app/order_success.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,9 +9,22 @@
 </head>
 <body>
     {% include 'my_app/header.html' %}
+    {% load custom_filters %}
     <div class="content" style="margin-top:3rem">
         <h1>Order Placed Successfully</h1>
         <p>Thank you for your order! Your order has been placed successfully.</p>
+        <h2>Order Details</h2>
+        <ul>
+            {% for item in order.items.all %}
+                <li>
+                    {% if item.wine %}
+                        {{ item.wine.Name }} - Quantity: {{ item.quantity }} - Price: {{ item.price|floatformat:2|multiply:item.quantity }} RON
+                    {% else %}
+                        {{ item.spirit.Name }} - Quantity: {{ item.quantity }} - Price: {{ item.price|floatformat:2|multiply:item.quantity }} RON
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
         <a href="{% url 'home' %}">Return to Home</a>
     </div>
 </body>
