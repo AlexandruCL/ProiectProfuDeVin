@@ -45,4 +45,26 @@ class CartItem(models.Model):
     def __str__(self):
         return f'{self.wine or self.spirit} | {self.quantity}'
     
-#Order database to come...
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=timezone.now)
+    first_name = models.CharField(max_length=30,default='')
+    last_name = models.CharField(max_length=30,default='')
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    county = models.CharField(max_length=100, default='')
+    postal_code = models.CharField(max_length=20)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f'Order {self.id} by {self.user.username}'
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
+    wine = models.ForeignKey(Wines, null=True, blank=True, on_delete=models.CASCADE)
+    spirit = models.ForeignKey(Spirits, null=True, blank=True, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+
+    def __str__(self):
+        return f'{self.wine or self.spirit} | {self.quantity}'

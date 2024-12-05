@@ -2,9 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Wines, Cart, CartItem, Spirits
+from .models import Wines, Cart, CartItem, Spirits, Order, OrderItem
 from django.contrib import messages
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, OrderForm
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
 
@@ -222,3 +222,31 @@ def remove_from_cart(request, item_id):
 
     messages.success(request, 'Item removed from cart.', extra_tags='cartrmv-success')
     return redirect('cart_view')
+
+@login_required
+def checkout(request):
+    cart_items = CartItem.objects.filter(cart__user=request.user)
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user = request.user
+            order.total_price = sum(item.price * item.quantity for item in cart_items)
+            order.save()
+            for item in cart_items:
+                OrderItem.objects.create(
+                    order=order,
+                    wine=item.wine,
+                    spirit=item.spirit,
+                    quantity=item.quantity,
+                    price=item.price
+                )
+            cart_items.delete()
+            return redirect('order_success')
+    else:
+        form = OrderForm()
+    return render(request, 'my_app/checkout.html', {'form': form, 'cart_items': cart_items})
+
+@login_required
+def order_success(request):
+    return render(request, 'my_app/order_succes.html')

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
+from .models import Order
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -103,3 +104,8 @@ class CustomAuthenticationForm(AuthenticationForm):
 
         self.user_cache = user
         return self.cleaned_data
+    
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['first_name', 'last_name', 'address', 'city', 'county', 'postal_code']

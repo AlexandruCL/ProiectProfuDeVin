@@ -33,5 +33,7 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),
     path('home/cart/', views.cart_view, name='cart_view'),
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('order_success/', views.order_success, name='order_success'),  # Add this line
     # other URL patterns
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

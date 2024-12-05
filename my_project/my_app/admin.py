@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Wines, Cart, CartItem, Spirits
+from .models import Wines, Cart, CartItem, Spirits, Order, OrderItem
 
 class CartItemInline(admin.TabularInline):
     model = CartItem
@@ -18,3 +18,5 @@ admin.site.register(Wines, WinesAdmin)
 admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem)
 admin.site.register(Spirits, SpiritsAdmin)
+admin.site.register(Order)
+admin.site.register(OrderItem)
