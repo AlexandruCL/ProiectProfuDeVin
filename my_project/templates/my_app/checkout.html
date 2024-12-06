@@ -6,15 +6,132 @@
     <title>Checkout</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Hide the scrollbar */
+    }
+    body {
+        overflow-y: scroll; /* Enable vertical scrolling */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    body::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, and Opera */
+    }
+    .custom-button{
+        background-color: #6b1842;
+        transition: background-color 0.2s;
+    }
+    .custom-button:hover{
+        background-color: #540d30;
+    }
+    .sticky-container {
+        position: fixed;
+        top: 5rem;
+        right: 0.5rem;
+        width: 45rem; /* Adjust the width as needed */
+        padding: 20px;
+        box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
+        border-radius: 0.5rem;
+        z-index: 1000; /* Ensure it stays on top */
+    }
+    .custom-input {
+    padding: 0.75rem 1rem; /* Increase padding for height */
+    height: 2rem; /* Set a specific height */
+    border-radius: 0.5rem; /* Round the corners */
+    }
+    .custom-container {
+    max-width: auto; /* Adjust the max-width as needed */
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 5rem;
+    }
+</style>
+<body class="bg-gray-100">
     {% include 'my_app/header.html' %}
-    <div class="content">
-        <h1>Checkout</h1>
-        <form method="post" style="margin-top:3rem">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Place Order</button>
-        </form>
+    {% load custom_filters %}
+    <div class="custom-container mt-10 p-5 bg-white shadow-md rounded-lg" >
+        <h1 class="text-2xl font-bold mb-5">Checkout</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+                <ul class="divide-y divide-gray-200">
+                    {% for item in cart_items %}
+                        <li class="py-4 flex">
+                            <div class="flex-shrink-0">
+                                {% if item.wine and item.wine.image %}
+                                    <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" style="max-width: 2rem;">
+                                {% elif item.spirit and item.spirit.image %}
+                                    <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}" class="h-20 w-20 rounded-md">
+                                {% endif %}
+                            </div>
+                            <div class="ml-4 flex-1 flex flex-col justify-between">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900">
+                                        {% if item.wine %}
+                                            {{ item.wine.Name }}
+                                        {% else %}
+                                            {{ item.spirit.Name }}
+                                        {% endif %}
+                                    </h3>
+                                    <p class="mt-1 text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
+                                    {% if item.quantity > 1 %}
+                                        <p class="mt-1 text-sm text-gray-500">Price: {{ item.price|floatformat:2 }} RON each</p>
+                                    {% else %}
+                                        <p class="mt-1 text-sm text-gray-500">Price: {{ item.price|floatformat:2 }} RON</p>
+                                    {% endif %}
+                                </div>
+                                <div class="mt-2 text-sm font-medium text-gray-900">
+                                    Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="sticky-container">
+                <h2 class="text-xl font-semibold mb-4">Shipping Information</h2>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div class="flex items-center">
+                        <label for="id_first_name" class="block text-sm font-medium text-gray-700 w-1/6">First Name</label>
+                        <input type="text" name="first_name" id="id_first_name" class="mt-1 block w-4/5 shadow-sm sm:text-sm border-gray-300 rounded-md custom-input">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_last_name" class="block text-sm font-medium text-gray-700 w-1/5">Last Name</label>
+                        <input type="text" name="last_name" id="id_last_name" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 custom-input">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_email" class="block text-sm font-medium text-gray-700 w-1/5">Email</label>
+                        <input type="email" name="email" id="id_email" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_phone_number" class="block text-sm font-medium text-gray-700 w-1/5">Phone Number</label>
+                        <input type="text" name="phone_number" id="id_phone_number" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_address" class="block text-sm font-medium text-gray-700 w-1/5">Address</label>
+                        <input type="text" name="address" id="id_address" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input" placeholder="Add all information about the address, including nr. , bl. nr. , floor, ap.">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_city" class="block text-sm font-medium text-gray-700 w-1/5">City</label>
+                        <input type="text" name="city" id="id_city" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_county" class="block text-sm font-medium text-gray-700 w-1/5">County</label>
+                        <input type="text" name="county" id="id_county" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input">
+                    </div>
+                    <div class="flex items-center">
+                        <label for="id_postal_code" class="block text-sm font-medium text-gray-700 w-1/5">Postal Code</label>
+                        <input type="text" name="postal_code" id="id_postal_code" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input">
+                    </div>
+                    <button type="submit" class="w-full text-white py-2 px-4 rounded transition duration-200 custom-button">Place Order</button>
+                </form>
+            </div>
+        </div>
     </div>
 </body>
 </html>
