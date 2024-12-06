@@ -7,14 +7,11 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, OrderForm
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
-from django.urls import reverse
 
 def logout_view(request):
-    current_path = request.path
-    if current_path in [reverse('cart_view'), reverse('checkout')]:
-        next_url = 'home'
-    else:
-        next_url = request.GET.get('next', 'home')
+    next_url = request.GET.get('next', 'home')
+    if next_url == '/home/cart/' or next_url == '/checkout/':
+        next_url = '/home/'
     logout(request)
     return redirect(next_url)
 
