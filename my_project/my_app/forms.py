@@ -56,12 +56,25 @@ class CustomUserCreationForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Your passwords must match")    
         
-        if(len(password1) < 5):
+        if(len(password1) < 8):
             raise forms.ValidationError("Password too short")
         
-        if(len(password1) > 20):
-            raise forms.ValidationError("Password too long")
+        if(password1.count(" ") > 0):
+            raise forms.ValidationError("Invalid password")
         
+        if(password1.isdigit()):
+            raise forms.ValidationError("Invalid password")
+        
+        if(password1.isalpha()):
+            raise forms.ValidationError("Invalid password")
+        
+        if(password1.islower()):
+            raise forms.ValidationError("Invalid password")
+        
+        if not any(char in "@#$%^&*" for char in password1):
+            raise forms.ValidationError("Invalid password")
+        
+
         return password2
     
     def clean(self):
@@ -109,3 +122,78 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['first_name', 'last_name','email', 'phone_number', 'address', 'city', 'county', 'postal_code']
+    
+    def clean_county(self):
+        county = self.cleaned_data.get("county")
+        
+        if not county:
+            raise forms.ValidationError("This field is required.")
+        
+        return county
+    def clean_city(self):
+        city = self.cleaned_data.get("city")
+        
+        if not city:
+            raise forms.ValidationError("This field is required.")
+        
+        return city
+    def clean_postal_code(self):
+        postal_code = self.cleaned_data.get("postal_code")
+        
+        if not postal_code:
+            raise forms.ValidationError("This field is required.")
+        
+        if len(postal_code) < 6:
+            raise forms.ValidationError("Ivalid postal code.")
+        
+        if len(postal_code) > 6:
+            raise forms.ValidationError("Ivalid postal code.")
+        
+        return postal_code
+    def clean_address(self):
+        address = self.cleaned_data.get("address")
+        
+        if not address:
+            raise forms.ValidationError("This field is required.")
+        
+        return address
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get("last_name")
+        
+        if not last_name:
+            raise forms.ValidationError("This field is required.")
+        
+        return last_name
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        
+        if not first_name:
+            raise forms.ValidationError("This field is required.")
+        
+        return first_name
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get("phone_number")
+        
+        if not phone_number:
+            raise forms.ValidationError("This field is required.")
+        
+        if len(phone_number) < 10:
+            raise forms.ValidationError("Ivalid phone number.")
+        
+        if len(phone_number) > 10:
+            raise forms.ValidationError("Ivalid phone number.")
+        
+        return phone_number
+    def clean_emailorder(self):
+        email = self.cleaned_data.get("email")
+    
+        if not email:
+            raise forms.ValidationError("This field is required.")
+        
+        
+        try:
+            validate_email(email)
+        except ValidationError:
+            raise forms.ValidationError("This email is invalid.")
+        
+        return email

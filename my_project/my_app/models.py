@@ -52,10 +52,10 @@ class Order(models.Model):
     last_name = models.CharField(max_length=30,default='')
     email = models.EmailField(max_length=254, default='')
     phone_number = models.CharField(max_length=15, default='')
-    address = models.CharField(max_length=255)
-    city = models.CharField(max_length=100)
+    address = models.CharField(max_length=255 , null=True)
+    city = models.CharField(max_length=100, null=True)
     county = models.CharField(max_length=100, default='')
-    postal_code = models.CharField(max_length=20)
+    postal_code = models.CharField(max_length=6, null=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):

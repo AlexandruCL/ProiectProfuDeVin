@@ -144,6 +144,18 @@
     text-overflow: ellipsis;
     cursor: pointer;
     }
+    .addtocart-button{
+        padding: 0.2rem 0.6rem;
+        background-color: #6b1842;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.25s;
+    }
+    .addtocart-button:hover {
+        background-color: #4f0f2b;
+    }
 </style>
 <body>
     {% include 'my_app/header.html' %}
@@ -217,7 +229,9 @@
                     <div class="wine-text">
                         <h2 style="font-weight: 700; font-style: italic; text-decoration: underline;">{{ wine.Name }}</h2>
                         <p>Type: {{ wine.Type }}</p>
-                        <p>Year: {{ wine.Year }}</p>
+                        {% if wine.Year != 0 %}
+                            <p>Year: {{ wine.Year }}</p>
+                        {% endif %}
                         {% if wine.Grapes %}
                             <p>Grapes: {{ wine.Grapes }}</p>
                         {% endif %}
@@ -235,7 +249,7 @@
                             {% csrf_token %}
                             <label for="quantity">Quantity to order:</label>
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input">
-                            <button type="submit">Add to Cart</button>
+                            <button type="submit" class="addtocart-button">Add to Cart</button>
                         </form>
                         {% else %}
                         <p style="font-weight: bold;">Login to add to cart</p>

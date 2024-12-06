@@ -88,6 +88,27 @@
             align-items: center;
             justify-content: space-between;
         }
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -110px; /* Use half of the width (220/2 = 110), to center it */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip-trigger:hover + .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="body">
@@ -122,6 +143,7 @@
                                             name="username"
                                             id="username"
                                             placeholder="Enter your username"
+                                            value="{% if form.username.errors %}{% else %}{{ form.username.value|default_if_none:'' }}{% endif %}"
                                             class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
                                         />
                                     </div>
@@ -145,6 +167,7 @@
                                             name="email"
                                             id="email"
                                             placeholder="Enter your email"
+                                            value="{% if form.email.errors %}{% else %}{{ form.email.value|default_if_none:'' }}{% endif %}"
                                             class="block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
                                         />
                                     </div>
@@ -152,9 +175,12 @@
 
                                 <div>
                                     <div class="label-container">
-                                    <label for="password1" class="text-base font-medium text-gray-900"> Password </label>
+                                        <label for="password1" class="text-base font-medium text-gray-900"> Password </label>
                                         {% if form.password2.errors %}
-                                            <div class="text-red-600">{{ form.password2.errors }}</div>
+                                            <div class="relative inline-block">
+                                                <span class="text-red-600 cursor-pointer tooltip-trigger">{{ form.password2.errors.0 }}</span>
+                                                <span class="tooltip-text">Password must contain an uppercase letter, a digit, any of @#$%^&* and be at least 8 characters long</span>
+                                            </div>
                                         {% endif %}
                                     </div>
                                     <div class="mt-2 relative text-gray-400 focus-within:text-gray-600">
@@ -168,6 +194,7 @@
                                             name="password1"
                                             id="password1"
                                             placeholder="Enter your password"
+                                            value="{{ form.password1.value|default_if_none:'' }}"
                                             class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
                                         />
                                     </div>
