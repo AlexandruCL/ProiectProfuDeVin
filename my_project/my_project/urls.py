@@ -15,14 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from my_app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.logout_view, name='logout_view'),
+    path('logout/', views.logout_view, name='logout_view'),
     path('home/', views.home, name='home'),
     path('home/contact/', views.contact, name='contact'),
     path('home/product_list/', views.product_list, name='product_list'),
@@ -34,6 +34,6 @@ urlpatterns = [
     path('home/cart/', views.cart_view, name='cart_view'),
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('checkout/', views.checkout, name='checkout'),
-    path('order_success/', views.order_success, name='order_success'),  # Add this line
+    path('order_success/', views.order_success, name='order_success'),
     # other URL patterns
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

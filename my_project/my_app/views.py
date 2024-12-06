@@ -7,9 +7,14 @@ from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, OrderForm
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST
+from django.urls import reverse
 
 def logout_view(request):
-    next_url = request.GET.get('next', 'home')
+    current_path = request.path
+    if current_path in [reverse('cart_view'), reverse('checkout')]:
+        next_url = 'home'
+    else:
+        next_url = request.GET.get('next', 'home')
     logout(request)
     return redirect(next_url)
 
@@ -202,7 +207,7 @@ def signup_view(request):
         form = CustomUserCreationForm()
     return render(request, 'my_app/signup.html', {'form': form, 'next': next_url})
 
-login_required
+@login_required
 def cart_view(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)

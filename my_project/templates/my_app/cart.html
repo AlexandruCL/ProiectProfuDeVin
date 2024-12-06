@@ -182,8 +182,8 @@
             {% endfor %}
         </ul>
         <div class="checkout">
-            <p class="total-value">Total: {{ total_value|floatformat:2 }} RON</p>
             {% if cart_items %}
+                <p class="total-value">Total: {{ total_value|floatformat:2 }} RON</p>
                 <a href="{% url 'checkout' %}" class="checkout-button">Proceed to Checkout</a>
             {% endif %}
         </div>
