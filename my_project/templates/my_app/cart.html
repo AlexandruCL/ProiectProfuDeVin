@@ -102,6 +102,32 @@
     .remove-form button:hover {
         background-color: #920d0d;
     }
+    .checkout{
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        margin-top: 1rem;
+    }
+    .checkout-button{
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem; 
+        padding-left: 1rem;
+        padding-right: 1rem; 
+        border-radius: 0.25rem; 
+        width: 50%; 
+        text-align: center;
+        color: #ffffff; 
+        background-color: #6b1842;
+        transition: background-color 0.2s;
+    }
+    .checkout-button:hover{
+        background-color: #4f0f2b;
+    }
+    .total-value{
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-right: 12rem;
+    }
 </style>
 <body>
     {% include 'my_app/header.html' %}
@@ -155,9 +181,12 @@
                 <li style="align-items: center; font-weight: 600;">Your cart is empty.</li>
             {% endfor %}
         </ul>
-        {% if cart_items %}
-            <a href="{% url 'checkout' %}" class="checkout-button">Proceed to Checkout</a>
-        {% endif %}
+        <div class="checkout">
+            <p class="total-value">Total: {{ total_value|floatformat:2 }} RON</p>
+            {% if cart_items %}
+                <a href="{% url 'checkout' %}" class="checkout-button">Proceed to Checkout</a>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

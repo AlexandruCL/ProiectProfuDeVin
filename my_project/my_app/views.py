@@ -206,7 +206,8 @@ login_required
 def cart_view(request):
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
-    return render(request, 'my_app/cart.html', {'cart_items': cart_items})
+    total_value = sum(item.price * item.quantity for item in cart_items)
+    return render(request, 'my_app/cart.html', {'cart_items': cart_items, 'total_value': total_value})
 
 @require_POST
 @login_required
@@ -226,6 +227,7 @@ def remove_from_cart(request, item_id):
 @login_required
 def checkout(request):
     cart_items = CartItem.objects.filter(cart__user=request.user)
+    total_value = sum(item.price * item.quantity for item in cart_items)
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
@@ -251,7 +253,7 @@ def checkout(request):
             return redirect('order_success')
     else:
         form = OrderForm()
-    return render(request, 'my_app/checkout.html', {'form': form, 'cart_items': cart_items})
+    return render(request, 'my_app/checkout.html', {'form': form, 'cart_items': cart_items, 'total_value': total_value})
 
 @login_required
 def order_success(request):
