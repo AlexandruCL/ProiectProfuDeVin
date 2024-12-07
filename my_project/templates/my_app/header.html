@@ -54,6 +54,9 @@
                 <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-mr-20">
                     {% if user.is_authenticated %}
                         <span class="headerloggedin">Welcome, {{ user.username }}</span>
+                        {% if user.is_staff %}
+                            <a href="/orders/" title="" class="headerlinks"> Orders </a>
+                        {% endif %}
                         <a href="{% url 'cart_view' %}" title="" class="headerlinks"> Cart </a>
                         <a href="{% url 'logout_view' %}?next={{ request.path }}" title="" class="headerlinks"> Log out </a>
                     {% else %}

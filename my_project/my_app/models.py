@@ -70,6 +70,14 @@ class OrderItem(models.Model):
     spirit = models.ForeignKey(Spirits, null=True, blank=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    type = models.CharField(max_length=100, null=True, blank=True)
+    year = models.IntegerField(null=True, blank=True)
+    grapes = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    region = models.CharField(max_length=100, null=True, blank=True)
+    alcohol_level = models.IntegerField(null=True, blank=True)
+    style = models.CharField(max_length=100, null=True, blank=True)
 
     def __str__(self):
-        return f'{self.wine or self.spirit} | {self.quantity}'
+        return f'{self.name} | {self.quantity}'

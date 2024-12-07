@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.admin.views.decorators import staff_member_required
 from my_app import views
 
 urlpatterns = [
@@ -35,5 +36,7 @@ urlpatterns = [
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('checkout/', views.checkout, name='checkout'),
     path('order_success/', views.order_success, name='order_success'),
+    path('orders/', views.orders, name='orders'),
+    path('orders/<int:order_id>/items/', views.order_items, name='order_items'),
     # other URL patterns
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

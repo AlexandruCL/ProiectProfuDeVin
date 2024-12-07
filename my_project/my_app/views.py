@@ -6,11 +6,13 @@ from .models import Wines, Cart, CartItem, Spirits, Order, OrderItem
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, OrderForm
 from django.contrib.auth import logout
+from django.contrib.admin.views.decorators import staff_member_required
+from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
 def logout_view(request):
     next_url = request.GET.get('next', 'home')
-    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/':
+    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/' or next_url == '/orders/':
         next_url = '/home/'
     logout(request)
     return redirect(next_url)
@@ -235,7 +237,7 @@ def checkout(request):
         if form.is_valid():
             order = form.save(commit=False)
             order.user = request.user
-            order.total_price = sum(item.price * item.quantity for item in cart_items)
+            order.total_price = total_value
             order.save()
             for item in cart_items:
                 OrderItem.objects.create(
@@ -243,7 +245,15 @@ def checkout(request):
                     wine=item.wine,
                     spirit=item.spirit,
                     quantity=item.quantity,
-                    price=item.price
+                    price=item.price,
+                    name=item.wine.Name if item.wine else item.spirit.Name,
+                    type=item.wine.Type if item.wine else item.spirit.Type,
+                    year=item.wine.Year if item.wine else None,
+                    grapes=item.wine.Grapes if item.wine else None,
+                    country=item.wine.Country if item.wine else None,
+                    region=item.wine.Region if item.wine else None,
+                    alcohol_level=item.spirit.AlcLvl if item.spirit else None,
+                    style=item.spirit.Style if item.spirit else None
                 )
                 if item.wine:
                     item.wine.Qty -= item.quantity
@@ -261,3 +271,28 @@ def checkout(request):
 def order_success(request):
     order = Order.objects.filter(user=request.user).latest('created_at')
     return render(request, 'my_app/order_succes.html', {'order': order})
+
+@staff_member_required
+def orders(request):
+    orders = Order.objects.all()
+    return render(request, 'my_app/orders.html', {'orders': orders})
+
+@staff_member_required
+def order_items(request, order_id):
+    order = Order.objects.get(id=order_id)
+    items = order.items.all()
+    items_data = [
+        {
+            'name': item.name,
+            'quantity': item.quantity,
+            'price': item.price,
+            'type': item.type,
+            'year': item.year,
+            'grapes': item.grapes,
+            'country': item.country,
+            'region': item.region,
+            'alcohol_level': item.alcohol_level,
+            'style': item.style
+        } for item in items
+    ]
+    return JsonResponse({'items': items_data})

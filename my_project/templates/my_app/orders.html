@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<style>
+    .modal-content {
+        max-height: 80vh; /* Set the maximum height of the modal content */
+        overflow-y: auto; /* Enable vertical scrolling */
+    }
+</style>
+<body>
+    {% include 'my_app/header.html' %}
+    <div class="container mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-5">All Orders</h1>
+        <table class="min-w-full bg-white">
+            <thead>
+                <tr>
+                    <th class="py-2">Order ID</th>
+                    <th class="py-2">User</th>
+                    <th class="py-2">First Name</th>
+                    <th class="py-2">Last Name</th>
+                    <th class="py-2">Email</th>
+                    <th class="py-2">Phone Number</th>
+                    <th class="py-2">Address</th>
+                    <th class="py-2">City</th>
+                    <th class="py-2">County</th>
+                    <th class="py-2">Postal Code</th>
+                    <th class="py-2">Total Price</th>
+                    <th class="py-2">Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td class="border px-4 py-2 order-id cursor-pointer" data-order-id="{{ order.id }}">{{ order.id }}</td>
+                    <td class="border px-4 py-2">{{ order.user.username }}</td>
+                    <td class="border px-4 py-2">{{ order.first_name }}</td>
+                    <td class="border px-4 py-2">{{ order.last_name }}</td>
+                    <td class="border px-4 py-2">{{ order.email }}</td>
+                    <td class="border px-4 py-2">{{ order.phone_number }}</td>
+                    <td class="border px-4 py-2">{{ order.address }}</td>
+                    <td class="border px-4 py-2">{{ order.city }}</td>
+                    <td class="border px-4 py-2">{{ order.county }}</td>
+                    <td class="border px-4 py-2">{{ order.postal_code }}</td>
+                    <td class="border px-4 py-2">{{ order.total_price }}</td>
+                    <td class="border px-4 py-2">{{ order.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="orderModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-5 rounded-lg w-1/2 modal-content">
+            <h2 class="text-xl font-bold mb-4">Order Items - Order ID: #<span id="modalOrderId"></span></h2>
+            
+            <h3 class="text-lg font-bold mb-2">Wines</h3>
+            <table class="min-w-full bg-white mb-4">
+                <thead>
+                    <tr>
+                        <th class="py-2">Name</th>
+                        <th class="py-2">Quantity</th>
+                        <th class="py-2">Price</th>
+                        <th class="py-2">Type</th>
+                        <th class="py-2">Year</th>
+                        <th class="py-2">Grapes</th>
+                        <th class="py-2">Country</th>
+                        <th class="py-2">Region</th>
+                    </tr>
+                </thead>
+                <tbody id="wineItems">
+                    <!-- Wine items will be populated here -->
+                </tbody>
+            </table>
+            
+            <h3 class="text-lg font-bold mb-2">Spirits</h3>
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2">Name</th>
+                        <th class="py-2">Quantity</th>
+                        <th class="py-2">Price</th>
+                        <th class="py-2">Type</th>
+                        <th class="py-2">Alcohol Level</th>
+                        <th class="py-2">Style</th>
+                    </tr>
+                </thead>
+                <tbody id="spiritItems">
+                    <!-- Spirit items will be populated here -->
+                </tbody>
+            </table>
+            
+            <button id="closeModal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('orderModal');
+            const closeModal = document.getElementById('closeModal');
+            const wineItems = document.getElementById('wineItems');
+            const spiritItems = document.getElementById('spiritItems');
+            const modalOrderId = document.getElementById('modalOrderId');
+    
+            document.querySelectorAll('.order-id').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    const orderId = this.dataset.orderId;
+                    modalOrderId.textContent = orderId; // Set the order ID in the modal
+                    fetch(`/orders/${orderId}/items/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Fetched data:', data); // Debugging statement
+                            wineItems.innerHTML = '';
+                            spiritItems.innerHTML = '';
+    
+                            // Separate items into wines and spirits
+                            const wines = data.items.filter(item => 
+                                item.type.toLowerCase() === 'champagne' || 
+                                item.type.toLowerCase() === 'red' || 
+                                item.type.toLowerCase() === 'rosé' || 
+                                item.type.toLowerCase() === 'white' || 
+                                item.type.toLowerCase() === 'sparkling white'
+                            );
+                            const spirits = data.items.filter(item => 
+                                item.type.toLowerCase() === 'armagnac' || 
+                                item.type.toLowerCase() === 'cognac' || 
+                                item.type.toLowerCase() === 'grappa' || 
+                                item.type.toLowerCase() === 'liqueur' || 
+                                item.type.toLowerCase() === 'rum' || 
+                                item.type.toLowerCase() === 'vodka' || 
+                                item.type.toLowerCase() === 'whiskey'
+                            );
+    
+                            console.log('Wines:', wines); // Debugging statement
+                            console.log('Spirits:', spirits); // Debugging statement
+    
+                            // Create wine table rows
+                            wines.forEach(item => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td class="border px-4 py-2">${item.name}</td>
+                                    <td class="border px-4 py-2">${item.quantity}</td>
+                                    <td class="border px-4 py-2">${item.price}</td>
+                                    <td class="border px-4 py-2">${item.type}</td>
+                                    <td class="border px-4 py-2">${item.year}</td>
+                                    <td class="border px-4 py-2">${item.grapes}</td>
+                                    <td class="border px-4 py-2">${item.country}</td>
+                                    <td class="border px-4 py-2">${item.region}</td>
+                                `;
+                                wineItems.appendChild(row);
+                            });
+    
+                            // Create spirit table rows
+                            spirits.forEach(item => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td class="border px-4 py-2">${item.name}</td>
+                                    <td class="border px-4 py-2">${item.quantity}</td>
+                                    <td class="border px-4 py-2">${item.price}</td>
+                                    <td class="border px-4 py-2">${item.type}</td>
+                                    <td class="border px-4 py-2">${item.alcohol_level}</td>
+                                    <td class="border px-4 py-2">${item.style}</td>
+                                `;
+                                spiritItems.appendChild(row);
+                            });
+    
+                            modal.classList.remove('hidden');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching order items:', error); // Debugging statement
+                        });
+                });
+            });
+    
+            closeModal.addEventListener('click', function() {
+                modal.classList.add('hidden');
+            });
+    
+            // Close modal when clicking outside the modal content
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
