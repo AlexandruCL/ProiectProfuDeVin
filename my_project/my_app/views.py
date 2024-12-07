@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 
 def logout_view(request):
     next_url = request.GET.get('next', 'home')
-    if next_url == '/home/cart/' or next_url == '/checkout/':
+    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/':
         next_url = '/home/'
     logout(request)
     return redirect(next_url)
@@ -99,7 +99,7 @@ def wine_list(request):
     elif sort_by == 'price_desc':
         wines = wines.order_by('-Price')
 
-    year_choices = Wines.objects.values_list('Year', flat=True).distinct().order_by('-Year')
+    year_choices = Wines.objects.exclude(Year__exact=0).values_list('Year', flat=True).distinct().order_by('-Year')
     type_choices = Wines.objects.values_list('Type', flat=True).distinct().order_by('Type')
     country_choices = Wines.objects.values_list('Country', flat=True).distinct().order_by('Country')
     region_choices = Wines.objects.exclude(Region__isnull = True).exclude(Region__exact='').values_list('Region', flat=True).distinct().order_by('Region')

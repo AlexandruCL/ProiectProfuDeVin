@@ -1,4 +1,3 @@
-<!-- my_app/templates/my_app/order_success.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,25 +6,61 @@
     <title>Order Success</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; 
+    } 
+     body {
+        overflow-y: scroll; 
+        -ms-overflow-style: none;  
+        scrollbar-width: none;  
+    }
+    body::-webkit-scrollbar { 
+        display: none;  
+    }
+</style>
 <body>
     {% include 'my_app/header.html' %}
     {% load custom_filters %}
-    <div class="content" style="margin-top:3rem">
-        <h1>Order Placed Successfully</h1>
-        <p>Thank you for your order! Your order has been placed successfully.</p>
-        <h2>Order Details</h2>
-        <ul>
-            {% for item in order.items.all %}
-                <li>
-                    {% if item.wine %}
-                        {{ item.wine.Name }} - Quantity: {{ item.quantity }} - Price: {{ item.price|floatformat:2|multiply:item.quantity }} RON
-                    {% else %}
-                        {{ item.spirit.Name }} - Quantity: {{ item.quantity }} - Price: {{ item.price|floatformat:2|multiply:item.quantity }} RON
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-        <a href="{% url 'home' %}">Return to Home</a>
+    <div class="bg-gray-100 flex items-center justify-center" style="margin-top: 3.3rem">
+        <div class="custom-container p-5 bg-white shadow-md rounded-lg">
+            <h1 class="text-2xl font-bold mb-5">Order Placed Successfully - Order ID: #{{ order.id }} </h1>
+            <p class="mb-5">Thank you for your order! Your order has been placed successfully.</p>
+            <h2 class="text-xl font-semibold mb-4">Order Details</h2>
+            <ul class="divide-y divide-gray-200">
+                {% for item in order.items.all %}
+                    <li class="py-4 flex">
+                        <div class="flex-shrink-0">
+                            {% if item.wine and item.wine.image %}
+                                <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" style="max-width: 2rem;">
+                            {% elif item.spirit and item.spirit.image %}
+                                <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}" class="h-20 w-20 rounded-md">
+                            {% endif %}
+                        </div>
+                        <div class="ml-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900">
+                                    {% if item.wine %}
+                                        {{ item.wine.Name }}
+                                    {% else %}
+                                        {{ item.spirit.Name }}
+                                    {% endif %}
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
+                                {% if item.quantity > 1 %}
+                                    <p class="mt-1 text-sm text-gray-500">Price: {{ item.price|floatformat:2 }} RON each</p>
+                                {% endif %}
+                                <div class="mt-1 text-sm font-medium text-gray-900">
+                                    Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 </body>
 </html>

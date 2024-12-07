@@ -49,7 +49,13 @@
         margin-left: 20px;
     }
     .small-input {
-        width: 50px; /* Adjust the width as needed */
+        width: 2.3rem; /* Adjust the width as needed */
+        border-radius: 0.375rem;
+        border: 1px solid black;
+    }
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
     }
     .messages {
         position: fixed;
@@ -208,13 +214,17 @@
                             <p>Style: {{ spirit.Style }}</p>
                         {% endif %}
                         <p>Alcohol Level: {{ spirit.AlcLvl }}%</p>
-                        <p>Quantity available: {{ spirit.Qty }} bottles</p>
+                        {% if spirit.Qty > 1 %}
+                            <p>Quantity available: {{ spirit.Qty }} bottles</p>
+                        {% else %}
+                            <p>Quantity available: {{ spirit.Qty }} bottle</p>
+                        {% endif %}
                         <p>Price: {{ spirit.Price }} RON</p>
                         {% if user.is_authenticated %}
                         <form action="{% url 'add_to_cart' 'spirit' spirit.ID %}" method="post">
                             {% csrf_token %}
                             <label for="quantity">Quantity to order:</label>
-                            <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input">
+                            <input type="number" id="quantity" name="quantity" min="1" value="1" max="{{ spirit.Qty }}" class="small-input text-center">
                             <button type="submit" class="addtocart-button">Add to Cart</button>
                         </form>
                         {% else %}

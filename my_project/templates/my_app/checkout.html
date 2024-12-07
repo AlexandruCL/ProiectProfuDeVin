@@ -87,9 +87,9 @@
                                     {% else %}
                                         <p class="mt-1 text-sm text-gray-500">Price: {{ item.price|floatformat:2 }} RON</p>
                                     {% endif %}
-                                </div>
-                                <div class="mt-2 text-sm font-medium text-gray-900">
-                                    Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON
+                                    <div class="mt-1 text-sm font-medium text-gray-900">
+                                        Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON
+                                    </div>
                                 </div>
                             </div>
                         </li>
