@@ -217,7 +217,12 @@
                         {% if spirit.Qty > 1 %}
                             <p>Quantity available: {{ spirit.Qty }} bottles</p>
                         {% else %}
-                            <p>Quantity available: {{ spirit.Qty }} bottle</p>
+                            {% if spirit.Qty == 1 %}
+                                <p>Quantity available: {{ spirit.Qty }} bottle</p>
+                            {% endif %}
+                        {% endif %}
+                        {% if spirit.Qty == 0 %}
+                            <p style="color: red; font-weight: bold;">Out of stock</p>
                         {% endif %}
                         <p>Price: {{ spirit.Price }} RON</p>
                         {% if user.is_authenticated %}

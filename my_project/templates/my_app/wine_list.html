@@ -248,7 +248,16 @@
                         <div class="description">
                             <p>Description: {{ wine.Description }}</p>
                         </div>
-                        <p>Quantity available: {{ wine.Qty }} bottles</p>
+                        {% if wine.Qty > 1 %}
+                            <p>Quantity available: {{ wine.Qty }} bottles</p>
+                        {% else %}
+                            {% if wine.Qty == 1 %}
+                                <p>Quantity available: {{ wine.Qty }} bottle</p>
+                            {% endif %}
+                        {% endif %}
+                        {% if wine.Qty == 0 %}
+                            <p style="color: red; font-weight: bold;">Out of stock</p>
+                        {% endif %}
                         <p>Price: {{ wine.Price }} RON</p>
                         {% if user.is_authenticated %}
                         <form action="{% url 'add_to_cart' 'wine' wine.ID %}" method="post">
