@@ -1,14 +1,14 @@
 <style>
     .header {
-        padding-top: 24px;
-        padding-bottom: 24px;
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
         background-color: #6b1842;
         /* border-radius: 0px 0px 5px 5px; */
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 1000;
-        box-shadow: 0 4px 2px -1px #4f0f2b;
+        box-shadow: 0 0.25rem 0.125rem -0.063rem #4f0f2b;
     }
     .headerlinks{
         font-size: 1rem;
@@ -30,11 +30,46 @@
         font-weight: 500; 
         color: #ffffff; 
     }
+    .links{
+        padding-left: 1rem;
+        padding-right: 1rem; 
+        max-width: 89.375rem; 
+    }
+    .imageheadersize{
+        width: auto;
+        height: 4rem;
+    }
+    @media (min-width: 640px) {
+        .links{
+            padding-left: 8rem;
+            padding-right: 1.5rem; 
+        }
+        .imageheadersize{
+            width: auto;
+            height: 3.3rem;
+        }
+    }
+
+    @media (min-width: 1920px) { 
+        .links{
+            padding-left: 10rem;
+            padding-right: -1rem; 
+            max-width: 111.5rem;
+        }
+        .headerlinks{
+            font-size: 1.25rem;
+            line-height: 1.75rem; 
+        }
+        .imageheadersize{
+            width: auto;
+            height: 4.5rem;
+        }
+    }
 </style>
 {% load static %}
     <!-- Header Component -->
     <header class="header">
-        <div class="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
+        <div class="links">
             <nav class="flex items-center justify-between relative">
                 <!-- Left Navigation Links -->
                 <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-ml-20">
@@ -46,7 +81,7 @@
                 <!-- Center Logo -->
                 <div class="absolute left-1/2 transform -translate-x-1/2">
                     <a>
-                        <img class="w-auto h-12" src="{% static 'images/logo.png' %}" alt="Logo" />
+                        <img class="imageheadersize" src="{% static 'images/logo.png' %}" alt="Logo" />
                     </a>
                 </div>
 

@@ -44,18 +44,17 @@
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        min-height: calc(100vh - 48px); /* Adjust based on header height */
-        padding-top: 60px; /* Add padding to avoid content being hidden behind the fixed header */
+        padding-top: 5rem; /* Add padding to avoid content being hidden behind the fixed header */
     }
     .imagesize {
-        width: 800px;
+        width: 50rem;
         height: auto;
         margin-top: 0;
         border: #6b1842;
         border-style: solid;
-        border-width: 1px;
-        border-radius: 20px;
-        box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
+        border-width: 0.063rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 0.25rem 0.5rem #6b1842, 0 0.375rem 1.25rem #6b1850;
         transition: transform 0.25s ease-in-out;
     }
     .imagesize.enlarge{
@@ -73,7 +72,7 @@
         text-decoration: underline;
     }
     .working-hours {
-        margin-top: 20px;
+        margin-top: 1.25rem;
         font-family: 'Roboto', sans-serif;
         font-size: 1.5rem;
         line-height: 2rem;
@@ -81,33 +80,53 @@
         color: #ffffff;
         text-align: center;
     }
+    .social-links-container {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+    }
     .social-links {
-        margin-top: 10px;
         display: flex;
         align-items: center;
         text-decoration: none;
         transition: all 0.3s ease;
         color: #ffffff;
         font-size: 1.5rem;
-        margin-right: 10px;
+        margin: 0 0.625rem;
     }
     .social-links:hover {
         color: #ac1c64;
     }
-    .social-link span{
+    .social-link span {
         color: inherit;
     }
     .social-icon {
-    width: 35px; /* Adjust the width as needed */
-    height: auto; /* Maintain aspect ratio */
-    background-color: white;
-    border-radius: 35px;
-    margin-right: 5px;
-    margin-left: 10px;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-right: 0.5rem;
+        background-color: white;
+        border-radius: 2rem;
+    }
+    @media (min-width: 1900px) { 
+        .imagesize{
+            width: 60rem;
+        }
+        .working-hours {
+            margin-top: 4rem;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.2rem;
+            line-height: 2.5rem;
+            font-weight: 500;
+            color: #ffffff;
+            text-align: center;
+        }
     }
 </style>
 <body>
-    {%  include 'my_app/header.html' %}
+    {% include 'my_app/header.html' %}
 
     <!-- Page Content -->
     <div class="content">
@@ -120,55 +139,49 @@
             </div>
         </div>
         <div class="working-hours">
-            <p>Working Hours:</p>
+            <p>Working Hours</p>
             <p>Monday - Saturday: 10:00 - 21:00</p>
             <p>Sunday: Closed</p>
         </div>
-        <div class="social-links">
-            <div class="social-link-container">
-                <a href="https://www.instagram.com/profudevin/?hl=ro" target="_blank" class="social-links">
-                    <img src="{% static 'images/contact/instagram.png' %}" alt="Instagram" class="social-icon">
-                    <span class="bounce-text">Instagram</span>
-                </a>
-            </div>
-            <div class="social-link-container">
-                <a href="https://www.facebook.com/profile.php?id=61560956272852" target="_blank" class="social-links">
-                    <img src="{% static 'images/contact/facebook.png' %}" alt="Instagram" class="social-icon">
-                    <span class="bounce-text">Facebook</span>
-                </a>
-            </div>
-        </div>
-        
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const socialLinkContainers = document.querySelectorAll('.social-link-container');
-        
-                socialLinkContainers.forEach(container => {
-                    container.addEventListener('mouseover', function() {
-                        container.querySelector('.social-icon').classList.add('bounce');
-                        container.querySelector('.bounce-text').classList.add('bounce');
-                    });
-        
-                    container.addEventListener('mouseout', function() {
-                        container.querySelector('.social-icon').classList.remove('bounce');
-                        container.querySelector('.bounce-text').classList.remove('bounce');
-                    });
+    </div>
+    <div class="social-links-container">
+        <a href="https://www.instagram.com/profudevin/?hl=ro" target="_blank" class="social-links">
+            <img src="{% static 'images/contact/instagram.png' %}" alt="Instagram" class="social-icon">
+            <span class="bounce-text">Instagram</span>
+        </a>
+        <a href="https://www.facebook.com/profile.php?id=61560956272852" target="_blank" class="social-links">
+            <img src="{% static 'images/contact/facebook.png' %}" alt="Facebook" class="social-icon">
+            <span class="bounce-text">Facebook</span>
+        </a>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const socialLinks = document.querySelectorAll('.social-links');
+
+            socialLinks.forEach(link => {
+                link.addEventListener('mouseover', function() {
+                    link.querySelector('.social-icon').classList.add('bounce');
+                    link.querySelector('.bounce-text').classList.add('bounce');
+                });
+
+                link.addEventListener('mouseout', function() {
+                    link.querySelector('.social-icon').classList.remove('bounce');
+                    link.querySelector('.bounce-text').classList.remove('bounce');
                 });
             });
 
-            document.addEventListener('DOMContentLoaded', function() {
             const images = document.querySelectorAll('.imagesize');
-    
+
             images.forEach(image => {
                 image.addEventListener('mouseover', function() {
                     image.classList.add('enlarge');
                 });
-    
+
                 image.addEventListener('mouseout', function() {
                     image.classList.remove('enlarge');
                 });
             });
         });
-        </script>
+    </script>
 </body>
 </html>
