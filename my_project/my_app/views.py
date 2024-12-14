@@ -9,10 +9,13 @@ from django.contrib.auth import logout
 from django.contrib.admin.views.decorators import staff_member_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.db.models import Count
+from datetime import datetime, timedelta
+from django.db.models import Sum
 
 def logout_view(request):
     next_url = request.GET.get('next', 'home')
-    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/' or next_url == '/orders/':
+    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/' or next_url == '/orders/' or next_url == '/home/statistics/':
         next_url = '/home/'
     logout(request)
     return redirect(next_url)
@@ -296,3 +299,14 @@ def order_items(request, order_id):
         } for item in items
     ]
     return JsonResponse({'items': items_data})
+
+@staff_member_required
+def statistics_view(request):
+    last_month = datetime.today() - timedelta(days=30)
+    most_sold_wines = OrderItem.objects.filter(order__created_at__gte=last_month, wine__Name__isnull=False).values('wine__Name').annotate(total_sold=Sum('quantity')).filter(total_sold__gt=0).order_by('-total_sold') 
+    # filter used to show the wines that have been sold at least once, and we can change it to any value we want
+
+    context = {
+        'most_sold_wines': most_sold_wines,
+    }
+    return render(request, 'my_app/statistics.html', context)

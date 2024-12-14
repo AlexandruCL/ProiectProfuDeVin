@@ -181,7 +181,7 @@
         <div class="header-container">
             <h1 class="headertext">Wine List</h1>
             <form method="GET" class="search-form">
-                <input type="text" name="search" placeholder="Search by name" value="{{ search_query }}">
+                <input type="text" id="search-bar" name="search" placeholder="Search by name" value="{{ search_query }}">
                 <input type="hidden" name="year" value="{{ year_filter }}">
                 <input type="hidden" name="type" value="{{ type_filter }}">
                 <input type="hidden" name="country" value="{{ country_filter }}">
@@ -291,6 +291,20 @@
                         this.style.webkitLineClamp = '3';
                     }
                 });
+            });
+        });
+
+        document.getElementById('search-bar').addEventListener('input', function() {
+            var filter = this.value.toLowerCase();
+            var wineItems = document.querySelectorAll('.wine-item');
+
+            wineItems.forEach(function(item) {
+                var wineName = item.querySelector('h2').textContent.toLowerCase();
+                if (wineName.includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
             });
         });
     </script>

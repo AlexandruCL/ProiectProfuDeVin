@@ -170,7 +170,7 @@
         <div class="header-container">
             <h1 class="headertext">Spirit List</h1>
             <form method="GET" class="search-form">
-                <input type="text" name="search" placeholder="Search by name" value="{{ search_query }}">
+                <input type="text" id="search-bar" name="search" placeholder="Search by name" value="{{ search_query }}">
                 <input type="hidden" name="type" value="{{ type_filter }}">
                 <input type="hidden" name="style" value="{{ style_filter }}">
                 <input type="hidden" name="alcohol" value="{{ alcohol_filter }}">
@@ -245,5 +245,20 @@
             {% endfor %}
         </ul>
     </div>
+    <script>
+        document.getElementById('search-bar').addEventListener('input', function() {
+            var filter = this.value.toLowerCase();
+            var spiritItems = document.querySelectorAll('.spirit-item');
+        
+            spiritItems.forEach(function(item) {
+                var spiritName = item.querySelector('h2').textContent.toLowerCase();
+                if (spiritName.includes(filter)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

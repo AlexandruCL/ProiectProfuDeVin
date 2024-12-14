@@ -76,6 +76,9 @@
                     <a href="/home" title="" class="headerlinks"> Home </a>
                     <a href="/home/contact" title="" class="headerlinks"> Contact </a>
                     <a href="/home/product_list" title="" class="headerlinks"> Product List </a>
+                    {% if user.is_staff %}
+                        <a href="/home/statistics" title="" class="headerlinks"> Statistics </a>
+                    {% endif %}
                 </div>
 
                 <!-- Center Logo -->
