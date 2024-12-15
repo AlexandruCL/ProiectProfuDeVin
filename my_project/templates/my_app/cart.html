@@ -132,6 +132,7 @@
 <body>
     {% include 'my_app/header.html' %}
     {% load custom_filters %}
+    <main>
     <div class="content">
         <h1>Your Cart</h1>
         <ul class="cart-items">
@@ -188,6 +189,8 @@
             {% endif %}
         </div>
     </div>
+    </main>
+    {% include 'my_app/footer.html' %}
     <script>
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {

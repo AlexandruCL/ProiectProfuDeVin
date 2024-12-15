@@ -4,11 +4,9 @@
         flex-direction: column;
         min-height: 100vh;
     }
-
     main {
         flex: 1;
     }
-
     .footer {
         background-color: #6b1842;
         color: white;
@@ -18,13 +16,20 @@
         bottom: 0;
         width: 100%;
     }
+    .footer-link {
+        color: white;
+        text-decoration: none;
+    }
+    .footer-link:hover {
+        text-decoration: underline;
+    }
 </style>
-<footer class="footer bg-gray-800 text-white py-4 mt-10">
+<footer class="footer bg-gray-800 text-white py-4 mt-10" style="padding-left: 0.7rem; padding-right: 0.7rem;">
     <div class="container mx-auto flex justify-between items-center">
         <div>
-            <a href="{% url 'terms_and_conditions' %}" class="footer-link text-white hover:text-gray-400">Terms and Conditions</a>
+            <a href="{% url 'terms_and_conditions' %}" class="footer-link">Terms and Conditions</a>
             <span class="mx-2">|</span>
-            <a href="{% url 'confidentiality_policy' %}" class="footer-link text-white hover:text-gray-400">Confidentiality Policy</a>
+            <a href="{% url 'confidentiality_policy' %}" class="footer-link">Confidentiality Policy</a>
         </div>
         <div>
             <p class="text-sm">&copy; 2024 Profu De' Vin. All rights reserved.</p>

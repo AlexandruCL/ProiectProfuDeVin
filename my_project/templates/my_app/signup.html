@@ -34,8 +34,8 @@
             font-size: 35px;
         }
         .section {
-            padding: 25px;
-            margin: 0 auto;
+            padding: 1.563rem;
+            margin: auto;
             width: 100%;
             max-width: 1200px;
             display: flex;
@@ -104,16 +104,42 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-
         .tooltip-trigger:hover + .tooltip-text {
             visibility: visible;
             opacity: 1;
+        }
+        .terms:hover{
+            text-decoration: underline;
+        }
+        .custom-checkbox {
+        appearance: none;
+        width: 0.8rem;
+        height: 0.8rem;
+        border: 2px solid #555;
+        border-radius: 3px;
+        position: relative;
+        cursor: pointer;
+        }
+        .custom-checkbox:checked {
+        background-color: #6b1842;
+        border-color: #6b1842;
+        }
+        .custom-checkbox:checked::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: translate(-50%, -50%) rotate(45deg);
         }
     </style>
 </head>
 <body class="body">
     <section class="section">
-        <div class="relative max-w-md mx-auto mt-4 md:mt-6">
+        <div class="relative max-w-md mx-auto">
             <div class="title-container">
                 <h2 class="title">Create account</h2>
             </div>
@@ -217,9 +243,13 @@
                                         />
                                     </div>
                                 </div>
-
+                                
+                                <div class="mt-4 md:mt-6">
+                                    <input type="checkbox" id="termsCheckbox" name="terms" class="custom-checkbox">
+                                    <label for="termsCheckbox">I agree to the <a href="{% url 'terms_and_conditions' %}" class="terms">Terms</a> and <a href="{% url 'confidentiality_policy' %}" class="terms">Privacy</a> policy</label>
+                                </div>
                                 <div>
-                                    <button type="submit" class="submitbutton">
+                                    <button type="submit" class="submitbutton" id="signupButton" disabled>
                                         Sign Up
                                     </button>
                                 </div>
@@ -233,6 +263,11 @@
             </div>
         </div>
     </section>
+    <script>
+        document.getElementById('termsCheckbox').addEventListener('change', function() {
+            document.getElementById('signupButton').disabled = !this.checked;
+        });
+    </script>
     <script>
         window.addEventListener('pageshow', function(event) {
             if (event.persisted) {
