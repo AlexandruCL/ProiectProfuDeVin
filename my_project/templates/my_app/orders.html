@@ -19,7 +19,7 @@
         <table class="min-w-full bg-white">
             <thead>
                 <tr>
-                    <th class="py-2">Order ID</th>
+                    <th class="py-2 cursor-pointer" id="order-id-header">Order ID</th>
                     <th class="py-2">User</th>
                     <th class="py-2">First Name</th>
                     <th class="py-2">Last Name</th>
@@ -29,12 +29,12 @@
                     <th class="py-2">City</th>
                     <th class="py-2">County</th>
                     <th class="py-2">Postal Code</th>
-                    <th class="py-2">Total Price</th>
+                    <th class="py-2 cursor-pointer" id="total-price-header">Total Price</th>
                     <th class="py-2">Created At</th>
-                    <th class="py-2">Status</th>
+                    <th class="py-2 cursor-pointer" id="status-header">Status</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="orders-body">
                 {% for order in orders %}
                 <tr>
                     <td class="border px-4 py-2 order-id cursor-pointer" data-order-id="{{ order.id }}">{{ order.id }}</td>
@@ -111,12 +111,46 @@
             document.querySelectorAll('.order-id').forEach(function(element) {
                 element.addEventListener('click', function() {
                     const orderId = this.dataset.orderId;
+                    console.log('Order ID clicked:', orderId); // Log the order ID
                     modalOrderId.textContent = orderId; // Set the order ID in the modal
                     fetch(`/orders/${orderId}/items/`)
                         .then(response => response.json())
                         .then(data => {
-                            // existing code...
+                            console.log('Fetched data:', data); // Log the fetched data
+                            // Clear existing items
+                            document.getElementById('wineItems').innerHTML = '';
+                            document.getElementById('spiritItems').innerHTML = '';
+                            
+                            // Populate wine items
+                            data.wines.forEach(wine => {
+                                const row = `<tr>
+                                    <td class="py-2">${wine.name}</td>
+                                    <td class="py-2">${wine.quantity}</td>
+                                    <td class="py-2">${wine.price}</td>
+                                    <td class="py-2">${wine.type}</td>
+                                    <td class="py-2">${wine.year}</td>
+                                    <td class="py-2">${wine.grapes}</td>
+                                    <td class="py-2">${wine.country}</td>
+                                    <td class="py-2">${wine.region}</td>
+                                </tr>`;
+                                document.getElementById('wineItems').insertAdjacentHTML('beforeend', row);
+                            });
+    
+                            // Populate spirit items
+                            data.spirits.forEach(spirit => {
+                                const row = `<tr>
+                                    <td class="py-2">${spirit.name}</td>
+                                    <td class="py-2">${spirit.quantity}</td>
+                                    <td class="py-2">${spirit.price}</td>
+                                    <td class="py-2">${spirit.type}</td>
+                                    <td class="py-2">${spirit.alcohol_level}</td>
+                                    <td class="py-2">${spirit.style}</td>
+                                </tr>`;
+                                document.getElementById('spiritItems').insertAdjacentHTML('beforeend', row);
+                            });
+    
                             modal.classList.remove('hidden');
+                            console.log('Modal should be visible now'); // Log when the modal should be visible
                         })
                         .catch(error => {
                             console.error('Error fetching order items:', error);
@@ -178,6 +212,312 @@
                     modal.classList.add('hidden');
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('orderModal');
+            const closeModal = document.getElementById('closeModal');
+            const wineItems = document.getElementById('wineItems');
+            const spiritItems = document.getElementById('spiritItems');
+            const modalOrderId = document.getElementById('modalOrderId');
+    
+            document.querySelectorAll('.order-id').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    const orderId = this.dataset.orderId;
+                    modalOrderId.textContent = orderId; // Set the order ID in the modal
+                    fetch(`/orders/${orderId}/items/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Fetched data:', data); // Debugging statement
+                            wineItems.innerHTML = '';
+                            spiritItems.innerHTML = '';
+    
+                            // Separate items into wines and spirits
+                            const wines = data.items.filter(item => 
+                                item.type.toLowerCase() === 'champagne' || 
+                                item.type.toLowerCase() === 'red' || 
+                                item.type.toLowerCase() === 'rosé' || 
+                                item.type.toLowerCase() === 'white' || 
+                                item.type.toLowerCase() === 'sparkling white'
+                            );
+                            const spirits = data.items.filter(item => 
+                                item.type.toLowerCase() === 'armagnac' || 
+                                item.type.toLowerCase() === 'cognac' || 
+                                item.type.toLowerCase() === 'grappa' || 
+                                item.type.toLowerCase() === 'liqueur' || 
+                                item.type.toLowerCase() === 'rum' || 
+                                item.type.toLowerCase() === 'vodka' || 
+                                item.type.toLowerCase() === 'whiskey'
+                            );
+    
+                            console.log('Wines:', wines); // Debugging statement
+                            console.log('Spirits:', spirits); // Debugging statement
+    
+                            // Create wine table rows
+                            wines.forEach(item => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td class="border px-4 py-2">${item.name}</td>
+                                    <td class="border px-4 py-2">${item.quantity}</td>
+                                    <td class="border px-4 py-2">${item.price}</td>
+                                    <td class="border px-4 py-2">${item.type}</td>
+                                    <td class="border px-4 py-2">${item.year}</td>
+                                    <td class="border px-4 py-2">${item.grapes}</td>
+                                    <td class="border px-4 py-2">${item.country}</td>
+                                    <td class="border px-4 py-2">${item.region}</td>
+                                `;
+                                wineItems.appendChild(row);
+                            });
+    
+                            // Create spirit table rows
+                            spirits.forEach(item => {
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td class="border px-4 py-2">${item.name}</td>
+                                    <td class="border px-4 py-2">${item.quantity}</td>
+                                    <td class="border px-4 py-2">${item.price}</td>
+                                    <td class="border px-4 py-2">${item.type}</td>
+                                    <td class="border px-4 py-2">${item.alcohol_level}</td>
+                                    <td class="border px-4 py-2">${item.style}</td>
+                                `;
+                                spiritItems.appendChild(row);
+                            });
+    
+                            modal.classList.remove('hidden');
+                        })
+                        .catch(error => {
+                            console.error('Error fetching order items:', error); // Debugging statement
+                        });
+                });
+            });
+    
+            closeModal.addEventListener('click', function() {
+                modal.classList.add('hidden');
+            });
+    
+            // Close modal when clicking outside the modal content
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let sortOrder = 'asc'; // Initial sort order
+    
+            document.getElementById('status-header').addEventListener('click', function() {
+                const tableBody = document.getElementById('orders-body');
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                console.log('Rows before sorting:', rows); // Debugging statement
+    
+                const sortedRows = rows.sort((a, b) => {
+                    const statusA = a.querySelector('td:last-child').innerText.trim();
+                    const statusB = b.querySelector('td:last-child').innerText.trim();
+    
+                    if (sortOrder === 'asc') {
+                        if (statusA === 'Pending' && statusB !== 'Pending') {
+                            return -1;
+                        } else if (statusA !== 'Pending' && statusB === 'Pending') {
+                            return 1;
+                        } else {
+                            return statusA.localeCompare(statusB);
+                        }
+                    } else {
+                        if (statusA === 'Pending' && statusB !== 'Pending') {
+                            return 1;
+                        } else if (statusA !== 'Pending' && statusB === 'Pending') {
+                            return -1;
+                        } else {
+                            return statusB.localeCompare(statusA);
+                        }
+                    }
+                });
+    
+                console.log('Rows after sorting:', sortedRows); // Debugging statement
+    
+                tableBody.innerHTML = '';
+                sortedRows.forEach(row => tableBody.appendChild(row));
+                console.log('Table body updated'); // Debugging statement
+    
+                // Toggle the sort order for the next click
+                sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let sortOrderStatus = 'asc'; // Initial sort order for status
+            let sortOrderId = 'asc'; // Initial sort order for order ID
+    
+            document.getElementById('status-header').addEventListener('click', function() {
+                const tableBody = document.getElementById('orders-body');
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                console.log('Rows before sorting:', rows); // Debugging statement
+    
+                const sortedRows = rows.sort((a, b) => {
+                    const statusA = a.querySelector('td:last-child').innerText.trim();
+                    const statusB = b.querySelector('td:last-child').innerText.trim();
+    
+                    if (sortOrderStatus === 'asc') {
+                        if (statusA === 'Pending' && statusB !== 'Pending') {
+                            return -1;
+                        } else if (statusA !== 'Pending' && statusB === 'Pending') {
+                            return 1;
+                        } else {
+                            return statusA.localeCompare(statusB);
+                        }
+                    } else {
+                        if (statusA === 'Pending' && statusB !== 'Pending') {
+                            return 1;
+                        } else if (statusA !== 'Pending' && statusB === 'Pending') {
+                            return -1;
+                        } else {
+                            return statusB.localeCompare(statusA);
+                        }
+                    }
+                });
+    
+                console.log('Rows after sorting:', sortedRows); // Debugging statement
+    
+                tableBody.innerHTML = '';
+                sortedRows.forEach(row => tableBody.appendChild(row));
+                console.log('Table body updated'); // Debugging statement
+    
+                // Toggle the sort order for the next click
+                sortOrderStatus = sortOrderStatus === 'asc' ? 'desc' : 'asc';
+            });
+    
+            document.getElementById('order-id-header').addEventListener('click', function() {
+                const tableBody = document.getElementById('orders-body');
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                console.log('Rows before sorting:', rows); // Debugging statement
+    
+                const sortedRows = rows.sort((a, b) => {
+                    const idA = parseInt(a.querySelector('td:first-child').innerText.trim());
+                    const idB = parseInt(b.querySelector('td:first-child').innerText.trim());
+    
+                    if (sortOrderId === 'asc') {
+                        return idA - idB;
+                    } else {
+                        return idB - idA;
+                    }
+                });
+    
+                console.log('Rows after sorting:', sortedRows); // Debugging statement
+    
+                tableBody.innerHTML = '';
+                sortedRows.forEach(row => tableBody.appendChild(row));
+                console.log('Table body updated'); // Debugging statement
+    
+                // Toggle the sort order for the next click
+                sortOrderId = sortOrderId === 'asc' ? 'desc' : 'asc';
+            });
+    
+            // Initial sort to ensure the first click works as expected
+            document.getElementById('order-id-header').click();
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let sortOrderStatus = 'asc'; // Initial sort order for status
+            let sortOrderId = 'asc'; // Initial sort order for order ID
+            let sortOrderPrice = 'asc'; // Initial sort order for total price
+    
+            document.getElementById('status-header').addEventListener('click', function() {
+                const tableBody = document.getElementById('orders-body');
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                console.log('Rows before sorting:', rows); // Debugging statement
+    
+                const sortedRows = rows.sort((a, b) => {
+                    const statusA = a.querySelector('td:last-child').innerText.trim();
+                    const statusB = b.querySelector('td:last-child').innerText.trim();
+    
+                    if (sortOrderStatus === 'asc') {
+                        if (statusA === 'Pending' && statusB !== 'Pending') {
+                            return -1;
+                        } else if (statusA !== 'Pending' && statusB === 'Pending') {
+                            return 1;
+                        } else {
+                            return statusA.localeCompare(statusB);
+                        }
+                    } else {
+                        if (statusA === 'Pending' && statusB !== 'Pending') {
+                            return 1;
+                        } else if (statusA !== 'Pending' && statusB === 'Pending') {
+                            return -1;
+                        } else {
+                            return statusB.localeCompare(statusA);
+                        }
+                    }
+                });
+    
+                console.log('Rows after sorting:', sortedRows); // Debugging statement
+    
+                tableBody.innerHTML = '';
+                sortedRows.forEach(row => tableBody.appendChild(row));
+                console.log('Table body updated'); // Debugging statement
+    
+                // Toggle the sort order for the next click
+                sortOrderStatus = sortOrderStatus === 'asc' ? 'desc' : 'asc';
+            });
+    
+            document.getElementById('order-id-header').addEventListener('click', function() {
+                const tableBody = document.getElementById('orders-body');
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                console.log('Rows before sorting:', rows); // Debugging statement
+    
+                const sortedRows = rows.sort((a, b) => {
+                    const idA = parseInt(a.querySelector('td:first-child').innerText.trim());
+                    const idB = parseInt(b.querySelector('td:first-child').innerText.trim());
+    
+                    if (sortOrderId === 'asc') {
+                        return idA - idB;
+                    } else {
+                        return idB - idA;
+                    }
+                });
+    
+                console.log('Rows after sorting:', sortedRows); // Debugging statement
+    
+                tableBody.innerHTML = '';
+                sortedRows.forEach(row => tableBody.appendChild(row));
+                console.log('Table body updated'); // Debugging statement
+    
+                // Toggle the sort order for the next click
+                sortOrderId = sortOrderId === 'asc' ? 'desc' : 'asc';
+            });
+    
+            document.getElementById('total-price-header').addEventListener('click', function() {
+                const tableBody = document.getElementById('orders-body');
+                const rows = Array.from(tableBody.querySelectorAll('tr'));
+                console.log('Rows before sorting:', rows); // Debugging statement
+    
+                const sortedRows = rows.sort((a, b) => {
+                    const priceA = parseFloat(a.querySelector('td:nth-child(11)').innerText.trim().replace('$', ''));
+                    const priceB = parseFloat(b.querySelector('td:nth-child(11)').innerText.trim().replace('$', ''));
+    
+                    if (sortOrderPrice === 'asc') {
+                        return priceA - priceB;
+                    } else {
+                        return priceB - priceA;
+                    }
+                });
+    
+                console.log('Rows after sorting:', sortedRows); // Debugging statement
+    
+                tableBody.innerHTML = '';
+                sortedRows.forEach(row => tableBody.appendChild(row));
+                console.log('Table body updated'); // Debugging statement
+    
+                // Toggle the sort order for the next click
+                sortOrderPrice = sortOrderPrice === 'asc' ? 'desc' : 'asc';
+            });
+    
+            // Initial sort to ensure the first click works as expected
+            document.getElementById('order-id-header').click();
         });
     </script>
 </body>

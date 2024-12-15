@@ -7,23 +7,99 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Hide the scrollbar */
+        }
+        body {
+            overflow-y: scroll; /* Enable vertical scrolling */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        body::-webkit-scrollbar {
+            display: none;  /* Chrome, Safari, and Opera */
+        }
+        .chart-container {
+            width: 70rem;
+            height: 50rem;
+            margin: auto;
+            margin-top: 5rem;
+        }
+    </style>
 </head>
-<body style="margin-top: 6rem">
+<body>
     {% include 'my_app/header.html' %}
     <main>
-        <h1>Statistics</h1>
-        <h2>Most Sold Wines in the Last Month</h2>
-        <ul>
-            {% for wine in most_sold_wines %}
-                <li>{{ wine.wine__Name }}: {{ wine.total_sold }} sold</li>
-            {% endfor %}
-        </ul>
-        <h2>Most Sold Spirits in the Last Month</h2>
-        <ul>
-            {% for spirit in most_sold_spirits %}
-                <li>{{ spirit.spirit__Name }}: {{ spirit.total_sold }} sold</li>
-            {% endfor %}
-        </ul>
+        <div class = "chart-container">
+            <canvas id="winesChart"></canvas>
+            <canvas id="spiritsChart"></canvas>
+        </div>
     </main>
+    <script>
+        const winesData = {
+            labels: [{% for wine in most_sold_wines %}"{{ wine.wine__Name }}",{% endfor %}],
+            datasets: [{
+                label: 'Most Sold Wines in the last 30 days',
+                data: [{% for wine in most_sold_wines %}{{ wine.total_sold }},{% endfor %}],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const spiritsData = {
+            labels: [{% for spirit in most_sold_spirits %}"{{ spirit.spirit__Name }}",{% endfor %}],
+            datasets: [{
+                label: 'Most Sold Spirits in the last 30 days',
+                data: [{% for spirit in most_sold_spirits %}{{ spirit.total_sold }},{% endfor %}],
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const configWines = {
+            type: 'bar',
+            data: winesData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        };
+
+        const configSpirits = {
+            type: 'bar',
+            data: spiritsData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        };
+
+        const winesChart = new Chart(
+            document.getElementById('winesChart'),
+            configWines
+        );
+
+        const spiritsChart = new Chart(
+            document.getElementById('spiritsChart'),
+            configSpirits
+        );
+    </script>
 </body>
 </html>
