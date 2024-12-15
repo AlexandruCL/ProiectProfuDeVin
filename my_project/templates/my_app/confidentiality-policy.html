@@ -20,29 +20,12 @@
     body::-webkit-scrollbar {
         display: none;  /* Chrome, Safari, and Opera */
     }
-    .content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        min-height: calc(100vh - 48px); /* Adjust based on header height */
-        padding-top: 60px; /* Add padding to avoid content being hidden behind the fixed header */
-    }
 </style>
 <body>
-    {%  include 'my_app/header.html' %}
-    <!-- Page Content -->
-    <div class="content">
-        <!-- Your page content goes here -->
-        <h1 class="text-3xl font-bold text-center">Idei?</h1>
-    </div>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-{%  include 'my_app/footer.html' %}
+    {% include 'my_app/header.html' %}
+    <main>
+        
+    </main>
+    {% include 'my_app/footer.html' %}
+</body>    
 </html>

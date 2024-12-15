@@ -40,26 +40,26 @@
     </main>
     <script>
         const winesData = {
-            labels: [{% for wine in most_sold_wines %}"{{ wine.wine__Name }}",{% endfor %}],
-            datasets: [{
-                label: 'Most Sold Wines in the last 30 days',
-                data: [{% for wine in most_sold_wines %}{{ wine.total_sold }},{% endfor %}],
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        };
+        labels: [{% for wine in most_sold_wines %}"{{ wine.wine__Name|escapejs }}",{% endfor %}],
+        datasets: [{
+            label: 'Most Sold Wines in the last 30 days',
+            data: [{% for wine in most_sold_wines %}{{ wine.total_sold }},{% endfor %}],
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    };
 
-        const spiritsData = {
-            labels: [{% for spirit in most_sold_spirits %}"{{ spirit.spirit__Name }}",{% endfor %}],
-            datasets: [{
-                label: 'Most Sold Spirits in the last 30 days',
-                data: [{% for spirit in most_sold_spirits %}{{ spirit.total_sold }},{% endfor %}],
-                backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                borderColor: 'rgba(153, 102, 255, 1)',
-                borderWidth: 1
-            }]
-        };
+    const spiritsData = {
+        labels: [{% for spirit in most_sold_spirits %}"{{ spirit.spirit__Name|escapejs }}",{% endfor %}],
+        datasets: [{
+            label: 'Most Sold Spirits in the last 30 days',
+            data: [{% for spirit in most_sold_spirits %}{{ spirit.total_sold }},{% endfor %}],
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1
+        }]
+    };
 
         const configWines = {
             type: 'bar',

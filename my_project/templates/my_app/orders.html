@@ -55,7 +55,7 @@
             </tbody>
         </table>
     </div>
-    <div id="orderModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div id="orderModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" style="margin-top:2rem">
         <div class="bg-white p-5 rounded-lg w-1/2 modal-content">
             <h2 class="text-xl font-bold mb-4">Order Items - Order ID: #<span id="modalOrderId"></span></h2>
             
@@ -96,7 +96,7 @@
             </table>
             
             <button id="closeModal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
-            <button id="markAsDone" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Mark as Done</button>
+            <button id="markAsDone" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Mark as Done / Pending</button>
             <button id="deleteOrder" class="mt-4 bg-red-700 text-white px-4 py-2 rounded">Delete Order</button>
         </div>
     </div>
@@ -107,7 +107,7 @@
             const markAsDone = document.getElementById('markAsDone');
             const deleteOrder = document.getElementById('deleteOrder');
             const modalOrderId = document.getElementById('modalOrderId');
-        
+    
             document.querySelectorAll('.order-id').forEach(function(element) {
                 element.addEventListener('click', function() {
                     const orderId = this.dataset.orderId;
@@ -120,7 +120,7 @@
                             // Clear existing items
                             document.getElementById('wineItems').innerHTML = '';
                             document.getElementById('spiritItems').innerHTML = '';
-                            
+    
                             // Populate wine items
                             data.wines.forEach(wine => {
                                 const row = `<tr>
@@ -157,28 +157,45 @@
                         });
                 });
             });
-        
+    
             markAsDone.addEventListener('click', function() {
                 const orderId = modalOrderId.textContent;
-                fetch(`/orders/${orderId}/mark_as_done/`, {
+                const statusCell = document.querySelector(`.order-id[data-order-id="${orderId}"]`).closest('tr').querySelector('td:last-child');
+                const currentStatus = statusCell.textContent.trim();
+                const newStatus = currentStatus === 'Done' ? 'Pending' : 'Done';
+    
+                console.log(`Current status: ${currentStatus}, New status: ${newStatus}`); // Debugging statement
+    
+                fetch(`/orders/${orderId}/mark_as_${newStatus.toLowerCase()}/`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRFToken': '{{ csrf_token }}'
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.status === 'success') {
-                        const statusCell = document.querySelector(`.order-id[data-order-id="${orderId}"]`).closest('tr').querySelector('td:last-child');
-                        statusCell.textContent = 'Done';
-                        statusCell.classList.remove('text-red-500');
-                        statusCell.classList.add('text-green-500');
+                        statusCell.textContent = newStatus;
+                        if (newStatus === 'Done') {
+                            statusCell.classList.remove('text-red-500');
+                            statusCell.classList.add('text-green-500');
+                        } else {
+                            statusCell.classList.remove('text-green-500');
+                            statusCell.classList.add('text-red-500');
+                        }
                         modal.classList.add('hidden');
+                    } else {
+                        console.error('Failed to update status:', data);
                     }
                 })
                 .catch(error => {
-                    console.error('Error marking order as done:', error);
+                    console.error(`Error marking order as ${newStatus.toLowerCase()}:`, error);
                 });
             });
     
@@ -202,11 +219,11 @@
                     console.error('Error deleting order:', error);
                 });
             });
-        
+    
             closeModal.addEventListener('click', function() {
                 modal.classList.add('hidden');
             });
-        
+    
             modal.addEventListener('click', function(event) {
                 if (event.target === modal) {
                     modal.classList.add('hidden');

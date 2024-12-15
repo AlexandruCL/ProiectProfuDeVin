@@ -8,8 +8,20 @@
 </head>
 {% load static %}
 <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Hide the scrollbar */
+    }
+    body {
+        overflow-y: scroll; /* Enable vertical scrolling */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    body::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, and Opera */
+    }
     body{
-        overflow: hidden;
         background-image: url("{% static 'images/contact/contactbackground5.jpg' %}");
         background-repeat: no-repeat;
         background-size: cover;
@@ -136,4 +148,6 @@
         });
     </script>
 </body>
+{% include 'my_app/footer.html' %}
+
 </html>

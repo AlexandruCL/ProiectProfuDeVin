@@ -22,6 +22,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from my_app import views
 
 urlpatterns = [
+    path('', views.index, name='index'),
     path('admin/', admin.site.urls),
     path('logout/', views.logout_view, name='logout_view'),
     path('home/', views.home, name='home'),
@@ -39,7 +40,10 @@ urlpatterns = [
     path('orders/', views.orders, name='orders'),
     path('orders/<int:order_id>/items/', views.order_items, name='order_items'),
     path('orders/<int:order_id>/mark_as_done/', views.mark_order_as_done, name='mark_order_as_done'),
+    path('orders/<int:order_id>/mark_as_pending/', views.mark_order_as_pending, name='mark_order_as_pending'),
     path('orders/<int:order_id>/delete/', views.delete_order, name='delete_order'),
     path('home/statistics/', views.statistics_view, name='statistics'),
+    path('terms-and-conditions', views.terms, name='terms_and_conditions'),
+    path('confidentiality-policy', views.confidentialitypolicy, name='confidentiality_policy'),
     # other URL patterns
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

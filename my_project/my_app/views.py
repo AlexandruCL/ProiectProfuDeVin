@@ -13,6 +13,9 @@ from django.db.models import Count
 from datetime import datetime, timedelta
 from django.db.models import Sum
 
+def index(request):
+    return redirect('home')
+
 def logout_view(request):
     next_url = request.GET.get('next', 'home')
     if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/' or next_url == '/orders/' or next_url == '/home/statistics/':
@@ -297,6 +300,13 @@ def mark_order_as_done(request, order_id):
     return JsonResponse({'status': 'success'})
 
 @staff_member_required
+def mark_order_as_pending(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.status = 'Pending'
+    order.save()
+    return JsonResponse({'status': 'success'})
+
+@staff_member_required
 def delete_order(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     order.delete()
@@ -314,3 +324,9 @@ def statistics_view(request):
         'most_sold_spirits': most_sold_spirits,
     }
     return render(request, 'my_app/statistics.html', context)
+
+def terms(request):
+    return render(request, 'my_app/terms-and-conditions.html')
+
+def confidentialitypolicy(request):
+    return render(request, 'my_app/confidentiality-policy.html')
