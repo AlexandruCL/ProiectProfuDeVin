@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart</title>
+    <title>Statistics</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistics</title>
 </head>
 <body style="margin-top: 6rem">
     {% include 'my_app/header.html' %}
@@ -21,6 +16,12 @@
         <ul>
             {% for wine in most_sold_wines %}
                 <li>{{ wine.wine__Name }}: {{ wine.total_sold }} sold</li>
+            {% endfor %}
+        </ul>
+        <h2>Most Sold Spirits in the Last Month</h2>
+        <ul>
+            {% for spirit in most_sold_spirits %}
+                <li>{{ spirit.spirit__Name }}: {{ spirit.total_sold }} sold</li>
             {% endfor %}
         </ul>
     </main>

@@ -301,12 +301,27 @@ def order_items(request, order_id):
     return JsonResponse({'items': items_data})
 
 @staff_member_required
+def mark_order_as_done(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.status = 'Done'
+    order.save()
+    return JsonResponse({'status': 'success'})
+
+@staff_member_required
+def delete_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order.delete()
+    return JsonResponse({'status': 'success'})
+
+@staff_member_required
 def statistics_view(request):
     last_month = datetime.today() - timedelta(days=30)
     most_sold_wines = OrderItem.objects.filter(order__created_at__gte=last_month, wine__Name__isnull=False).values('wine__Name').annotate(total_sold=Sum('quantity')).filter(total_sold__gt=0).order_by('-total_sold') 
     # filter used to show the wines that have been sold at least once, and we can change it to any value we want
+    most_sold_spirits = OrderItem.objects.filter(order__created_at__gte=last_month, spirit__Name__isnull=False).values('spirit__Name').annotate(total_sold=Sum('quantity')).filter(total_sold__gt=0).order_by('-total_sold') 
 
     context = {
         'most_sold_wines': most_sold_wines,
+        'most_sold_spirits': most_sold_spirits,
     }
     return render(request, 'my_app/statistics.html', context)

@@ -19,9 +19,9 @@ class OrderItemInline(admin.TabularInline):
     extra = 0  # Do not show extra empty forms
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'created_at', 'first_name', 'last_name','email', 'phone_number', 'address', 'city', 'county', 'postal_code', 'total_price')
+    list_display = ('id', 'user', 'created_at', 'first_name', 'last_name','email', 'phone_number', 'address', 'city', 'county', 'postal_code', 'total_price', 'status')
     search_fields = ('user__username', 'first_name', 'last_name','email', 'phone_number', 'address', 'city', 'county', 'postal_code')
-    list_filter = ('created_at', 'city', 'county')
+    list_filter = ('created_at', 'city', 'county', 'status')
     inlines = [OrderItemInline]
 
 admin.site.register(Wines, WinesAdmin)

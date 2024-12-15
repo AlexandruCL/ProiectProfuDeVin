@@ -31,6 +31,7 @@
                     <th class="py-2">Postal Code</th>
                     <th class="py-2">Total Price</th>
                     <th class="py-2">Created At</th>
+                    <th class="py-2">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -48,6 +49,7 @@
                     <td class="border px-4 py-2">{{ order.postal_code }}</td>
                     <td class="border px-4 py-2">{{ order.total_price }}</td>
                     <td class="border px-4 py-2">{{ order.created_at }}</td>
+                    <td class="border px-4 py-2 {% if order.status == 'Pending' %}text-red-500{% elif order.status == 'Done' %}text-green-500{% endif %}">{{ order.status }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -94,16 +96,18 @@
             </table>
             
             <button id="closeModal" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Close</button>
+            <button id="markAsDone" class="mt-4 bg-green-500 text-white px-4 py-2 rounded">Mark as Done</button>
+            <button id="deleteOrder" class="mt-4 bg-red-700 text-white px-4 py-2 rounded">Delete Order</button>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const modal = document.getElementById('orderModal');
             const closeModal = document.getElementById('closeModal');
-            const wineItems = document.getElementById('wineItems');
-            const spiritItems = document.getElementById('spiritItems');
+            const markAsDone = document.getElementById('markAsDone');
+            const deleteOrder = document.getElementById('deleteOrder');
             const modalOrderId = document.getElementById('modalOrderId');
-    
+        
             document.querySelectorAll('.order-id').forEach(function(element) {
                 element.addEventListener('click', function() {
                     const orderId = this.dataset.orderId;
@@ -111,74 +115,64 @@
                     fetch(`/orders/${orderId}/items/`)
                         .then(response => response.json())
                         .then(data => {
-                            console.log('Fetched data:', data); // Debugging statement
-                            wineItems.innerHTML = '';
-                            spiritItems.innerHTML = '';
-    
-                            // Separate items into wines and spirits
-                            const wines = data.items.filter(item => 
-                                item.type.toLowerCase() === 'champagne' || 
-                                item.type.toLowerCase() === 'red' || 
-                                item.type.toLowerCase() === 'rosé' || 
-                                item.type.toLowerCase() === 'white' || 
-                                item.type.toLowerCase() === 'sparkling white'
-                            );
-                            const spirits = data.items.filter(item => 
-                                item.type.toLowerCase() === 'armagnac' || 
-                                item.type.toLowerCase() === 'cognac' || 
-                                item.type.toLowerCase() === 'grappa' || 
-                                item.type.toLowerCase() === 'liqueur' || 
-                                item.type.toLowerCase() === 'rum' || 
-                                item.type.toLowerCase() === 'vodka' || 
-                                item.type.toLowerCase() === 'whiskey'
-                            );
-    
-                            console.log('Wines:', wines); // Debugging statement
-                            console.log('Spirits:', spirits); // Debugging statement
-    
-                            // Create wine table rows
-                            wines.forEach(item => {
-                                const row = document.createElement('tr');
-                                row.innerHTML = `
-                                    <td class="border px-4 py-2">${item.name}</td>
-                                    <td class="border px-4 py-2">${item.quantity}</td>
-                                    <td class="border px-4 py-2">${item.price}</td>
-                                    <td class="border px-4 py-2">${item.type}</td>
-                                    <td class="border px-4 py-2">${item.year}</td>
-                                    <td class="border px-4 py-2">${item.grapes}</td>
-                                    <td class="border px-4 py-2">${item.country}</td>
-                                    <td class="border px-4 py-2">${item.region}</td>
-                                `;
-                                wineItems.appendChild(row);
-                            });
-    
-                            // Create spirit table rows
-                            spirits.forEach(item => {
-                                const row = document.createElement('tr');
-                                row.innerHTML = `
-                                    <td class="border px-4 py-2">${item.name}</td>
-                                    <td class="border px-4 py-2">${item.quantity}</td>
-                                    <td class="border px-4 py-2">${item.price}</td>
-                                    <td class="border px-4 py-2">${item.type}</td>
-                                    <td class="border px-4 py-2">${item.alcohol_level}</td>
-                                    <td class="border px-4 py-2">${item.style}</td>
-                                `;
-                                spiritItems.appendChild(row);
-                            });
-    
+                            // existing code...
                             modal.classList.remove('hidden');
                         })
                         .catch(error => {
-                            console.error('Error fetching order items:', error); // Debugging statement
+                            console.error('Error fetching order items:', error);
                         });
                 });
             });
+        
+            markAsDone.addEventListener('click', function() {
+                const orderId = modalOrderId.textContent;
+                fetch(`/orders/${orderId}/mark_as_done/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const statusCell = document.querySelector(`.order-id[data-order-id="${orderId}"]`).closest('tr').querySelector('td:last-child');
+                        statusCell.textContent = 'Done';
+                        statusCell.classList.remove('text-red-500');
+                        statusCell.classList.add('text-green-500');
+                        modal.classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error marking order as done:', error);
+                });
+            });
     
+            deleteOrder.addEventListener('click', function() {
+                const orderId = modalOrderId.textContent;
+                fetch(`/orders/${orderId}/delete/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.querySelector(`.order-id[data-order-id="${orderId}"]`).closest('tr').remove();
+                        modal.classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting order:', error);
+                });
+            });
+        
             closeModal.addEventListener('click', function() {
                 modal.classList.add('hidden');
             });
-    
-            // Close modal when clicking outside the modal content
+        
             modal.addEventListener('click', function(event) {
                 if (event.target === modal) {
                     modal.classList.add('hidden');

@@ -11,6 +11,7 @@
         height: 100%;
         margin: 0;
         overflow: hidden; 
+        background-color: #f0f3f8;
     } 
      body {
         overflow-y: scroll; 
@@ -24,7 +25,7 @@
 <body>
     {% include 'my_app/header.html' %}
     {% load custom_filters %}
-    <div class="bg-gray-100 flex items-center justify-center" style="margin-top: 3.3rem">
+    <div class="flex items-center justify-center" style="margin-top: 6rem">
         <div class="custom-container p-5 bg-white shadow-md rounded-lg">
             <h1 class="text-2xl font-bold mb-5">Order Placed Successfully - Order ID: #{{ order.id }} </h1>
             <p class="mb-5">Thank you for your order! Your order has been placed successfully.</p>
