@@ -55,10 +55,21 @@
         display: block;
         transition: transform 0.3s, background-image 0.3s;
     }
-
+    .cart-count {
+        font-size: 0.6rem;
+        line-height: 1rem;
+        font-weight: 500;
+        color: #ffffff;
+        position: center;
+        transition: color 0.3s;
+    }
     .cart-link:hover .cartlogo {
+        color: #ac1c64;
         transform: scale(2.3);
         background-image: url("{% static 'images/cartlogo/cartlogo_hover.png' %}");
+    }
+    .cart-link:hover .cart-count {
+        color: #ac1c64;
     }
     @media (min-width: 640px) {
         .links{
@@ -115,10 +126,10 @@
                         {% if user.is_staff %}
                             <a href="/orders/" title="" class="headerlinks"> Orders </a>
                         {% endif %}
-                        <a href="{% url 'cart_view' %}" title="Cart" class="headerlinks cart-link"> 
-                            <span class="cartlogo"></span>
+                        <a href="{% url 'cart_view' %}" class="headerlinks cart-link"> 
+                            <span class="cartlogo"><span class="cart-count">{{ cart_item_count }}</span></span>
                         </a>
-                        <a href="{% url 'logout_view' %}?next={{ request.path }}" title="" class="headerlinks"> Log out </a>
+                        <a href="{% url 'logout_view' %}?next={{ request.path }}" title="" class="headerlinks" id="logout-link"> Log out </a>
                     {% else %}
                         <a href="{% url 'login' %}?next={{ request.path }}" title="" class="headerlinks"> Log in </a>
                         <a href="{% url 'signup' %}?next={{ request.path }}" title="" class="headerlinks"> Sign up </a>
@@ -127,3 +138,12 @@
             </nav>
         </div>
     </header>
+    <script>
+        document.getElementById('logout-link').addEventListener('click', function(event) {
+            event.preventDefault();
+            var logoutUrl = this.href;
+            if (confirm('Are you sure you want to log out?')) {
+                window.location.href = logoutUrl;
+            }
+        });
+    </script>

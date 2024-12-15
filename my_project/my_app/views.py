@@ -33,11 +33,7 @@ def add_to_cart(request, item_id, item_type):
     quantity = int(request.POST.get('quantity', 1))
     
     if item.Qty < quantity:
-        messages.error(request, 'Not enough stock available.', extra_tags='cartadd-error')
-        if(item_type == 'wine'):
-            return redirect('wine_list')
-        else:
-            return redirect('spirit_list')
+        return JsonResponse({'error': 'Not enough stock available.'}, status=400)
 
     # Get or create a cart for the user
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -51,11 +47,8 @@ def add_to_cart(request, item_id, item_type):
     )
 
     if not created and cart_item.quantity + quantity > item.Qty:
-        messages.error(request, 'Cannot add more items than available in stock. Check your cart.', extra_tags='cartadd-error')
-        if(item_type == 'wine'):
-            return redirect('wine_list')
-        else:
-            return redirect('spirit_list')
+        return JsonResponse({'error': 'Cannot add more items than available in stock. Check your cart.'}, status=400)
+
     
     if created:
         cart_item.quantity = quantity
@@ -63,13 +56,9 @@ def add_to_cart(request, item_id, item_type):
         cart_item.quantity += quantity
     cart_item.save()
 
-    item.save()
-    if(item_type == 'wine'):
-        return redirect('wine_list')
-    elif(item_type == 'spirit'):
-        return redirect('spirit_list')
-    else:
-        return redirect('home')
+    # Return JSON response with updated cart item count
+    cart_item_count = CartItem.objects.filter(cart__user=request.user).count()
+    return JsonResponse({'cart_item_count': cart_item_count})
 
 def wine_list(request):
     wines = Wines.objects.all()
