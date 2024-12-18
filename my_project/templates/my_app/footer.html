@@ -23,9 +23,18 @@
     .footer-link:hover {
         text-decoration: underline;
     }
+    .pads{
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
+    }
+    @media(min-width: 1900px) {
+        .pads{
+            padding-left: 24.375rem;
+        }
+    }
 </style>
-<footer class="footer bg-gray-800 text-white py-4 mt-10" style="padding-left: 0.7rem; padding-right: 0.7rem;">
-    <div class="container mx-auto flex justify-between items-center">
+<footer class="footer bg-gray-800 text-white py-4 mt-10">
+    <div class="container pads">
         <div>
             <a href="{% url 'terms_and_conditions' %}" class="footer-link">Terms and Conditions</a>
             <span class="mx-2">|</span>

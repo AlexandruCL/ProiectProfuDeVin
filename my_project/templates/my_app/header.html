@@ -71,6 +71,24 @@
     .cart-link:hover .cart-count {
         color: #ac1c64;
     }
+    .custom-dialog {
+        position: absolute;
+        top: 100%;
+        left: 82%;
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        border-radius: 1rem;
+        margin-top: 0.5rem;
+    }
+    .custom-dialog.hidden {
+        display: none;
+    }
+    .custom-dialog button {
+        margin: 0.5rem;
+    }
     @media (min-width: 640px) {
         .links{
             padding-left: 8rem;
@@ -95,6 +113,9 @@
         .imageheadersize{
             width: auto;
             height: 4.5rem;
+        }
+        .custom-dialog {
+            left: 85.5%;
         }
     }
 </style>
@@ -137,13 +158,25 @@
                 </div>
             </nav>
         </div>
+        <div id="custom-logout-dialog" class="custom-dialog hidden">
+            <p>Are you sure you want to log out?</p>
+            <button id="confirm-logout">Yes</button>
+            <button id="cancel-logout">No</button>
+        </div>
     </header>
+   
     <script>
         document.getElementById('logout-link').addEventListener('click', function(event) {
             event.preventDefault();
-            var logoutUrl = this.href;
-            if (confirm('Are you sure you want to log out?')) {
-                window.location.href = logoutUrl;
-            }
+            document.getElementById('custom-logout-dialog').classList.remove('hidden');
+        });
+        
+        document.getElementById('confirm-logout').addEventListener('click', function() {
+            var logoutUrl = document.getElementById('logout-link').href;
+            window.location.href = logoutUrl;
+        });
+        
+        document.getElementById('cancel-logout').addEventListener('click', function() {
+            document.getElementById('custom-logout-dialog').classList.add('hidden');
         });
     </script>
