@@ -164,7 +164,9 @@
                 <!-- Right Navigation Links -->
                 <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-mr-20">
                     {% if user.is_authenticated %}
-                        <span class="headerloggedin">Welcome, {{ user.username }}</span>
+                    <a href="/home/profile" title="" class="headerlinks">
+                        <span class="headerlinks">Welcome, {{ user.username }}</span>
+                    </a>
                         {% if user.is_staff %}
                             <a href="/orders/" title="" class="headerlinks"> Orders </a>
                         {% endif %}

@@ -218,3 +218,4 @@ class CustomSetPasswordForm(SetPasswordForm):
         validate_password_strength(password1)
 
         return password2
+    
