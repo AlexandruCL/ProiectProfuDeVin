@@ -205,7 +205,7 @@
                                         {% if form.password2.errors %}
                                             <div class="relative inline-block">
                                                 <span class="text-red-600 cursor-pointer tooltip-trigger">{{ form.password2.errors.0 }}</span>
-                                                <span class="tooltip-text">Password must contain an uppercase letter, a digit, any of @#$%^&* and be at least 8 characters long</span>
+                                                <span class="tooltip-text">Password must contain an uppercase letter, a digit, any special characters ( @#$%^&* ) and be at least 8 characters long.</span>
                                             </div>
                                         {% endif %}
                                     </div>

@@ -7,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from .models import Order
 from django.contrib.auth.forms import SetPasswordForm
+from .validators import validate_password_strength
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -57,23 +58,7 @@ class CustomUserCreationForm(UserCreationForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError("Your passwords must match")    
         
-        if(len(password1) < 8):
-            raise forms.ValidationError("Password too short")
-        
-        if(password1.count(" ") > 0):
-            raise forms.ValidationError("Invalid password")
-        
-        if(password1.isdigit()):
-            raise forms.ValidationError("Invalid password")
-        
-        if(password1.isalpha()):
-            raise forms.ValidationError("Invalid password")
-        
-        if(password1.islower()):
-            raise forms.ValidationError("Invalid password")
-        
-        if not any(char in "@#$%^&*" for char in password1):
-            raise forms.ValidationError("Invalid password")
+        validate_password_strength(password2)
         
 
         return password2
@@ -217,3 +202,19 @@ class CustomSetPasswordForm(SetPasswordForm):
             'placeholder': 'Confirm new password'
         }),
     )    
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get("new_password1")
+        password2 = self.cleaned_data.get("new_password2")
+
+        if not password1:
+            raise forms.ValidationError("This field is required.")
+        
+        if not password2:
+            raise forms.ValidationError("Verify password.")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Your passwords must match")    
+        
+        validate_password_strength(password1)
+
+        return password2
