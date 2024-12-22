@@ -247,9 +247,10 @@
                                 <div class="mt-4 md:mt-6">
                                     <input type="checkbox" id="termsCheckbox" name="terms" class="custom-checkbox">
                                     <label for="termsCheckbox">I agree to the <a href="{% url 'terms_and_conditions' %}" class="terms">Terms</a> and <a href="{% url 'confidentiality_policy' %}" class="terms">Privacy</a> policy</label>
+                                    <p id="checkboxMessage" class="text-red-500 text-sm hidden">You must agree to the terms and privacy policy.</p>
                                 </div>
                                 <div>
-                                    <button type="submit" class="submitbutton" id="signupButton" disabled>
+                                    <button type="submit" class="submitbutton" id="signupButton">
                                         Sign Up
                                     </button>
                                 </div>
@@ -264,8 +265,13 @@
         </div>
     </section>
     <script>
-        document.getElementById('termsCheckbox').addEventListener('change', function() {
-            document.getElementById('signupButton').disabled = !this.checked;
+        document.getElementById('signupButton').addEventListener('click', function(event) {
+            var termsCheckbox = document.getElementById('termsCheckbox');
+            var checkboxMessage = document.getElementById('checkboxMessage');
+            if (!termsCheckbox.checked) {
+                event.preventDefault(); // Prevent form submission
+                checkboxMessage.classList.remove('hidden'); // Show the message
+            }
         });
     </script>
     <script>
