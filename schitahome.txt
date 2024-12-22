@@ -2,3 +2,12 @@ cv about us?
 events?
 statistici aici???
 poza de back din magazin?
+
+
+
+Settings page
+username
+email
+psw
+sa poata sa si le schimbe pe toate?
+poate doar parola si username ul

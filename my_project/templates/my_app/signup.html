@@ -139,7 +139,7 @@
 </head>
 <body class="body">
     <section class="section">
-        <div class="relative max-w-md mx-auto">
+        <div class="max-w-md mx-auto">
             <div class="title-container">
                 <h2 class="title">Create account</h2>
             </div>
@@ -223,6 +223,16 @@
                                             value="{{ form.password1.value|default_if_none:'' }}"
                                             class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600"
                                         />
+                                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-3-9a9 9 0 100 18 9 9 0 000-18z"
+                                                />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
 
@@ -247,7 +257,6 @@
                                 <div class="mt-4 md:mt-6">
                                     <input type="checkbox" id="termsCheckbox" name="terms" class="custom-checkbox">
                                     <label for="termsCheckbox">I agree to the <a href="{% url 'terms_and_conditions' %}" class="terms">Terms</a> and <a href="{% url 'confidentiality_policy' %}" class="terms">Privacy</a> policy</label>
-                                    <p id="checkboxMessage" class="text-red-500 text-sm hidden">You must agree to the terms and privacy policy.</p>
                                 </div>
                                 <div>
                                     <button type="submit" class="submitbutton" id="signupButton">
@@ -265,12 +274,21 @@
         </div>
     </section>
     <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById('password1');
+            var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+        }
+    </script>
+    <script>
         document.getElementById('signupButton').addEventListener('click', function(event) {
             var termsCheckbox = document.getElementById('termsCheckbox');
-            var checkboxMessage = document.getElementById('checkboxMessage');
+            var termsLabel = document.querySelector('label[for="termsCheckbox"]');
             if (!termsCheckbox.checked) {
                 event.preventDefault(); // Prevent form submission
-                checkboxMessage.classList.remove('hidden'); // Show the message
+                termsLabel.classList.add('text-red-500'); // Add the red text class
+            } else {
+                termsLabel.classList.remove('text-red-500'); // Remove the red text class if checked
             }
         });
     </script>
