@@ -6,6 +6,7 @@ from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from .models import Order
+from django.contrib.auth.forms import SetPasswordForm
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -197,3 +198,22 @@ class OrderForm(forms.ModelForm):
             raise forms.ValidationError("This email is invalid.")
         
         return email
+    
+class PasswordResetForm(forms.Form):
+    email = forms.EmailField(label="Email", max_length=254)
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="New password",
+        widget=forms.PasswordInput(attrs={
+            'class': 'block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600',
+            'placeholder': 'Enter new password'
+        }),
+    )
+    new_password2 = forms.CharField(
+        label="Confirm new password",
+        widget=forms.PasswordInput(attrs={
+            'class': 'block w-full py-4 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md focus:outline-none focus:border-blue-600 caret-blue-600',
+            'placeholder': 'Confirm new password'
+        }),
+    )    

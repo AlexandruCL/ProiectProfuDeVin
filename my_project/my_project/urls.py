@@ -20,10 +20,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.admin.views.decorators import staff_member_required
 from my_app import views
+from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),  # Include Django's auth URLs
+    path('password_reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('logout/', views.logout_view, name='logout_view'),
     path('home/', views.home, name='home'),
     path('home/contact/', views.contact, name='contact'),
@@ -45,5 +51,6 @@ urlpatterns = [
     path('home/statistics/', views.statistics_view, name='statistics'),
     path('terms-and-conditions', views.terms, name='terms_and_conditions'),
     path('confidentiality-policy', views.confidentialitypolicy, name='confidentiality_policy'),
+
     # other URL patterns
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

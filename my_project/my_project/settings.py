@@ -30,6 +30,7 @@ SECRET_KEY = 'django-insecure-q-!s8_genwi+i1_n9r$oto=^z*vjj6e66mer7wmu(p%xa7x2x+
 DEBUG = True
 
 ALLOWED_HOSTS = []
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 LOGIN_URL = 'login/'
 SIGNUP_URL = 'signup/'
 
