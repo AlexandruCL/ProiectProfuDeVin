@@ -363,3 +363,6 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 
 def profile_view(request):
     return render(request, 'my_app/profile.html')
+
+def cookie_policy(request):
+    return render(request, 'my_app/cookies-policy.html')
