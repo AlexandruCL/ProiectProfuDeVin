@@ -201,7 +201,7 @@ def signup_view(request):
             login(request, user)
             return redirect(next_url)
         else:
-            print(form.errors)  # Print form errors to the console for debugging
+            messages.error(request, 'Invalid input. Please try again.', extra_tags='signup-error')
     else:
         form = CustomUserCreationForm()
     return render(request, 'my_app/signup.html', {'form': form, 'next': next_url})
@@ -366,3 +366,4 @@ def profile_view(request):
 
 def cookie_policy(request):
     return render(request, 'my_app/cookies-policy.html')
+
