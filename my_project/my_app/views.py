@@ -352,3 +352,14 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'my_app/password_reset_complete.html'
+
+# def wine_detail(request, wine_id):
+#     wine = get_object_or_404(Wines, ID=wine_id)
+#     return render(request, 'my_app/wine_detail.html', {'wine': wine})
+
+# def spirit_detail(request, spirit_id):
+#     spirit = get_object_or_404(Spirits, ID=spirit_id)
+#     return render(request, 'my_app/spirit_detail.html', {'spirit': spirit})
+
+def profile_view(request):
+    return render(request, 'my_app/profile.html')

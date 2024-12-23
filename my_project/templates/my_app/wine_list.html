@@ -86,10 +86,15 @@
         color: #721c24;
     }
     .filter-form {
-        display: flex;
-        justify-content: flex-start;
-        margin-bottom: 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease-in-out;
+        margin-top: 10px;
         margin-left: 20px;
+        margin-bottom: 5px;
+    }
+    .filter-form.show{
+        max-height: 5rem;
     }
     .filter-form select {
         margin-right: 10px;
@@ -116,7 +121,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
     }
     .search-form {
         display: flex;
@@ -167,6 +171,19 @@
             padding-top: 78px;
         }
     }
+    .toggle-button {
+        background-color: #6b1842;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 0.3rem;
+        margin-left: 20px;
+    }
+    .toggle-button:hover {
+        background-color: #4f0f2b;
+    }
 </style>
 <body>
     {% include 'my_app/header.html' %}
@@ -199,7 +216,8 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-        <form method="GET" class="filter-form">
+        <button class="toggle-button" onclick="toggleFilters()">Toggle Filters</button>
+        <form method="GET" class="filter-form" id="filter-form">
             <select name="year" onchange="this.form.submit()">
                 <option value="">All Years</option>
                 {% for year in year_choices %}
@@ -352,6 +370,12 @@
                 window.location.reload();
             }
         });
+    </script>
+    <script>
+        function toggleFilters() {
+            var filterForm = document.getElementById('filter-form');
+            filterForm.classList.toggle('show');
+        }
     </script>
 </body>
 {%  include 'my_app/footer.html' %}

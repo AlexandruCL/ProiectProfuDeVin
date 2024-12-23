@@ -164,10 +164,11 @@
                 <!-- Right Navigation Links -->
                 <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-mr-20">
                     {% if user.is_authenticated %}
-                    <a href="/home/profile" title="" class="headerlinks">
+                    <a href="{% url 'profile_view' %}" title="" class="headerlinks">
                         <span class="headerlinks">Welcome, {{ user.username }}</span>
                     </a>
                         {% if user.is_staff %}
+                            <a href="/admin" title="" class="headerlinks">Admin Page</a>
                             <a href="/orders/" title="" class="headerlinks"> Orders </a>
                         {% endif %}
                         <a href="{% url 'cart_view' %}" class="headerlinks cart-link"> 
