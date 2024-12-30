@@ -146,25 +146,27 @@
         background-color: #4f0f2b;
     }
     .description {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    cursor: pointer;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
     }
-    .addtocart-button{
-        padding: 0.2rem 0.6rem;
+    .description:hover .tooltip-text {
+        display: block;
+    }
+    .tooltip-text{
+        display: none;
+        position: absolute;
+        top:0;
+        left: 5.5rem;
         background-color: #6b1842;
         color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.25s;
-    }
-    .addtocart-button:hover {
-        background-color: #4f0f2b;
+        padding: 0.313rem;
+        border-radius: 0.313rem;
+        font-size: 0.75rem;
     }
     @media (min-width: 1900px){
         .content{
@@ -231,10 +233,60 @@
     .buttonfilter:hover::before {
     transform: translate3d(100%, 0, 0);
     }
-    
+    .buttonadd {
+    margin-top: 0.5rem;
+    position: relative;
+    width: 120px;
+    height: 40px;
+    background-color: #6b1842;
+    display: flex;
+    align-items: center;
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    }
+    .buttonadd::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -4px;
+    top: -1px;
+    margin: auto;
+    width: 128px;
+    height: 48px;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #3b0c24 0%, #b92f74 100% );
+    z-index: -10;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .buttonadd::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #3b0c24 0%, #b92f74 100% );
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+    }
+    .buttonadd:hover::after {
+    filter: blur(30px);
+    }
+    .buttonadd:hover::before {
+    transform: rotate(-180deg);
+    }
+    .buttonadd:active::before {
+    scale: 0.7;
+    }
 </style>
 <body>
     {% include 'my_app/header.html' %}
+    <main>
     <div class="content">
         {% if messages %}
         <div class="messages" id="message-box">
@@ -320,7 +372,10 @@
                             <p style="font-weight: 500;">Region: {{ wine.Region }}</p>
                         {% endif %}
                         <div class="description">
-                            <p style="font-weight: 500;">Description: {{ wine.Description }}</p>
+                            <p style="font-weight: 500;">Description: {{ wine.Description }}
+
+                                <span class="tooltip-text">CLICK FOR MORE</span>
+                            </p>
                         </div>
                         {% if wine.Qty > 1 %}
                             <p style="font-weight: 500;">Quantity available: {{ wine.Qty }} bottles</p>
@@ -338,7 +393,7 @@
                             {% csrf_token %}
                             <label for="quantity" style="font-weight: 500;">Quantity to order:</label>
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
-                            <button type="submit" class="addtocart-button" style="font-weight: 500;">Add to Cart</button>
+                            <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
                         </form>
                         {% else %}
                         <p style="font-weight: bold;">Login to add to cart</p>
@@ -356,18 +411,38 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const descriptions = document.querySelectorAll('.description');
+
             descriptions.forEach(description => {
-                description.style.webkitLineClamp = '3'; // Set initial value
+                const tooltip = description.querySelector('.tooltip-text');
+                let isTooltipVisible = false;
+
                 description.addEventListener('click', function() {
-                    if (this.style.webkitLineClamp === '3') {
-                        this.style.webkitLineClamp = 'unset';
+                    if (isTooltipVisible) {
+                        tooltip.style.display = 'none';
+                        description.style.webkitLineClamp = '4';
+                        description.style.overflow = 'hidden';
+                        isTooltipVisible = false;
                     } else {
-                        this.style.webkitLineClamp = '3';
+                        tooltip.style.display = 'none';
+                        description.style.webkitLineClamp = 'unset';
+                        description.style.overflow = 'visible';
+                        isTooltipVisible = true;
+                    }
+                });
+
+                description.addEventListener('mouseover', function() {
+                    if (!isTooltipVisible) {
+                        tooltip.style.display = 'block';
+                    }
+                });
+
+                description.addEventListener('mouseout', function() {
+                    if (!isTooltipVisible) {
+                        tooltip.style.display = 'none';
                     }
                 });
             });
         });
-
         document.getElementById('search-bar').addEventListener('input', function() {
             var filter = this.value.toLowerCase();
             var wineItems = document.querySelectorAll('.wine-item');
@@ -382,7 +457,7 @@
             });
         });
 
-        document.querySelectorAll('.addtocart-button').forEach(button => {
+        document.querySelectorAll('.buttonadd').forEach(button => {
             button.addEventListener('click', function(event) {
                 event.preventDefault();
                 const form = this.closest('form');
@@ -425,6 +500,7 @@
             filterForm.classList.toggle('show');
         }
     </script>
+    </main>
 </body>
 {%  include 'my_app/footer.html' %}
 </html>

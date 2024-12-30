@@ -128,6 +128,51 @@
         font-weight: 600;
         margin-right: 12rem;
     }
+    .btncheckout {
+    width: 200px;
+    height: 50px;
+    background: linear-gradient(to top, #6b1842, #8c2a5b, #a53c74);
+    color: #fff;
+    border-radius: 50px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    }
+
+    .btncheckout span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: top 0.5s;
+    }
+
+    .btncheckout-text-one {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    }
+
+    .btncheckout-text-two {
+    position: absolute;
+    width: 100%;
+    top: 150%;
+    left: 0;
+    transform: translateY(-50%);
+    }
+
+    .btncheckout:hover .btncheckout-text-one {
+    top: -100%;
+    }
+
+    .btncheckout:hover .btncheckout-text-two {
+    top: 50%;
+    }
+
 </style>
 <body>
     {% include 'my_app/header.html' %}
@@ -185,7 +230,10 @@
         <div class="checkout">
             {% if cart_items %}
                 <p class="total-value">Total: {{ total_value|floatformat:2 }} RON</p>
-                <a href="{% url 'checkout' %}" class="checkout-button">Proceed to Checkout</a>
+                <a href="{% url 'checkout' %}"><button class="btncheckout">
+                    <span class="btncheckout-text-one">Proceed to Checkout</span>
+                    <span class="btncheckout-text-two">Thank You!</span>
+                </button></a>
             {% endif %}
         </div>
     </div>

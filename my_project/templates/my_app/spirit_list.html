@@ -145,18 +145,6 @@
     .filter-form button:hover, .reset-button:hover {
         background-color: #4f0f2b;
     }
-    .addtocart-button{
-        padding: 0.2rem 0.6rem;
-        background-color: #6b1842;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.25s;
-    }
-    .addtocart-button:hover {
-        background-color: #4f0f2b;
-    }
     .toggle-button {
         background-color: #6b1842;
         color: white;
@@ -175,9 +163,108 @@
             padding-top: 78px;
         }
     }
+    .buttonfilter {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem 1.6rem;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    position: relative;
+    display: inline-block;
+    letter-spacing: 0.05rem;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 500px;
+    overflow: hidden;
+    background: #4f0f2b;
+    color: ghostwhite;
+    margin-left: 20px;
+    }
+    .buttonfilter span {
+    position: relative;
+    z-index: 10;
+    transition: color 0.4s;
+    }
+    .buttonfilter:hover span {
+    color: ghostwhite;
+    }
+    .buttonfilter::before,
+    .buttonfilter::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    }
+    .buttonfilter::before {
+    content: "";
+    background: #6b1842;
+    width: 120%;
+    left: -10%;
+    transform: skew(30deg);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+    }
+    .buttonfilter:hover::before {
+    transform: translate3d(100%, 0, 0);
+    }
+    .buttonadd {
+    margin-top: 0.5rem;
+    position: relative;
+    width: 120px;
+    height: 40px;
+    background-color: #6b1842;
+    display: flex;
+    align-items: center;
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    }
+    .buttonadd::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -4px;
+    top: -1px;
+    margin: auto;
+    width: 128px;
+    height: 48px;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #3b0c24 0%, #b92f74 100% );
+    z-index: -10;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .buttonadd::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #3b0c24 0%, #b92f74 100% );
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+    }
+    .buttonadd:hover::after {
+    filter: blur(30px);
+    }
+    .buttonadd:hover::before {
+    transform: rotate(-180deg);
+    }
+    .buttonadd:active::before {
+    scale: 0.7;
+    }
+
 </style>
 <body>
     {%  include 'my_app/header.html' %}
+    <main>
     <div class="content">
         {% if messages %}
         <div class="messages" id="message-box">
@@ -205,7 +292,7 @@
                 <button type="submit">Search</button>
             </form>
         </div>
-        <button class="toggle-button" onclick="toggleFilters()">Toggle Filters</button>
+        <button class="toggle-button buttonfilter" onclick="toggleFilters()"><span>Toggle Filters</span></button>
         <form method="GET" class="filter-form" id="filter-form">
             <select name="type" onchange="this.form.submit()">
                 <option value="">All Types</option>
@@ -258,7 +345,7 @@
                             {% csrf_token %}
                             <label for="quantity" style="font-weight: 500;">Quantity to order:</label>
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
-                            <button type="submit" class="addtocart-button" style="font-weight: 500;">Add to Cart</button>
+                            <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
                         </form>
                         {% else %}
                         <p style="font-weight: bold;">Login to add to cart</p>
@@ -302,7 +389,7 @@
             });
         });
 
-        document.querySelectorAll('.addtocart-button').forEach(button => {
+        document.querySelectorAll('.buttonadd').forEach(button => {
             button.addEventListener('click', function(event) {
                 event.preventDefault();
                 const form = this.closest('form');
@@ -345,6 +432,7 @@
             filterForm.classList.toggle('show');
         }
     </script>
+    </main>
 </body>
 {%  include 'my_app/footer.html' %}
 </html>
