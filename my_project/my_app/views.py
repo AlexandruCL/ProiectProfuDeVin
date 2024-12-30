@@ -17,6 +17,9 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth.views import PasswordResetDoneView
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib.auth.views import PasswordResetCompleteView
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
+import json
 
 def index(request):
     return redirect('home')
@@ -366,4 +369,34 @@ def profile_view(request):
 
 def cookie_policy(request):
     return render(request, 'my_app/cookies-policy.html')
+
+@require_POST
+@staff_member_required
+def edit_wine(request, wine_id):
+    if not request.user.is_staff:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+    wine = get_object_or_404(Wines, ID=wine_id)
+    data = json.loads(request.body)
+    wine.Name = data.get('name', wine.Name)
+    wine.Price = data.get('price', wine.Price)
+    wine.Qty = data.get('quantity', wine.Qty)
+    wine.save()
+
+    return JsonResponse({'status': 'success'})
+
+@require_POST
+@staff_member_required
+def edit_spirit(request, spirit_id):
+    if not request.user.is_staff:
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized'}, status=403)
+
+    spirit = get_object_or_404(Spirits, ID=spirit_id)
+    data = json.loads(request.body)
+    spirit.Name = data.get('name', spirit.Name)
+    spirit.Price = data.get('price', spirit.Price)
+    spirit.Qty = data.get('quantity', spirit.Qty)
+    spirit.save()
+
+    return JsonResponse({'status': 'success'})
 

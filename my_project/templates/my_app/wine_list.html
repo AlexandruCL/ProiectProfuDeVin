@@ -283,6 +283,57 @@
     .buttonadd:active::before {
     scale: 0.7;
     }
+
+    .buttonedit {
+    margin-top: 0.5rem;
+    position: relative;
+    width: 120px;
+    height: 40px;
+    background-color: #6b1842;
+    display: flex;
+    align-items: center;
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    padding: 12px;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    }
+    .buttonedit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -4px;
+    top: -1px;
+    margin: auto;
+    width: 128px;
+    height: 48px;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #3b0c24 0%, #b92f74 100% );
+    z-index: -10;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .buttonedit::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #3b0c24 0%, #b92f74 100% );
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+    }
+    .buttonedit:hover::after {
+    filter: blur(30px);
+    }
+    .buttonedit:hover::before {
+    transform: rotate(-180deg);
+    }
+    .buttonedit:active::before {
+    scale: 0.7;
+    }
 </style>
 <body>
     {% include 'my_app/header.html' %}
@@ -393,7 +444,12 @@
                             {% csrf_token %}
                             <label for="quantity" style="font-weight: 500;">Quantity to order:</label>
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
-                            <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
+                            <div style="display: flex; gap: 10px;">
+                                <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
+                                {% if user.is_staff %}
+                                    <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ wine.ID }}', '{{ wine.Name }}', '{{ wine.Price }}', '{{ wine.Qty }}')">Edit wine</button>
+                                {% endif %}
+                            </div>
                         </form>
                         {% else %}
                         <p style="font-weight: bold;">Login to add to cart</p>
@@ -501,6 +557,76 @@
         }
     </script>
     </main>
+    <div id="editWineModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-5 rounded-lg w-1/2">
+            <h2 class="text-xl font-bold mb-4">Edit Wine</h2>
+            <form id="editWineForm" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="wineId" name="wine_id">
+                <div class="mb-4">
+                    <label for="wineName" class="block text-sm font-medium text-gray-700">Name</label>
+                    <input type="text" id="wineName" name="name" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" style="height: 2.5rem;">
+                </div>
+                <div class="mb-4">
+                    <label for="winePrice" class="block text-sm font-medium text-gray-700">Price (RON)</label>
+                    <input type="number" id="winePrice" name="price" step="0.01" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" style="height: 2.5rem;">
+                </div>
+                <div class="mb-4">
+                    <label for="wineQty" class="block text-sm font-medium text-gray-700">Quantity</label>
+                    <input type="number" id="wineQty" name="quantity" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" style="height: 2.5rem;">
+                </div>
+                <div class="flex justify-end">
+                    <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function openEditModal(wineId, wineName, winePrice, wineQty) {
+            document.getElementById('wineId').value = wineId;
+            document.getElementById('wineName').value = wineName;
+            document.getElementById('winePrice').value = winePrice;
+            document.getElementById('wineQty').value = wineQty;
+            document.getElementById('editWineModal').classList.remove('hidden');
+        }
+    
+        document.getElementById('closeModal').addEventListener('click', function() {
+            document.getElementById('editWineModal').classList.add('hidden');
+        });
+    
+        document.getElementById('editWineForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const wineId = document.getElementById('wineId').value;
+            const wineName = document.getElementById('wineName').value;
+            const winePrice = document.getElementById('winePrice').value;
+            const wineQty = document.getElementById('wineQty').value;
+    
+            fetch(`/edit_wine/${wineId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    name: wineName,
+                    price: winePrice,
+                    quantity: wineQty
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    console.error('Failed to update wine:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 {%  include 'my_app/footer.html' %}
 </html>
