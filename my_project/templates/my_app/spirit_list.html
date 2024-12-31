@@ -380,10 +380,10 @@
                         {% endif %}
                         <p style="font-weight: 500;">Alcohol Level: {{ spirit.AlcLvl }}%</p>
                         {% if spirit.Qty > 1 %}
-                            <p style="font-weight: 500;">Quantity available: {{ spirit.Qty }} bottles</p>
+                            <p style="font-weight: 500;">Available: {{ spirit.Qty }} bottles</p>
                         {% else %}
                             {% if spirit.Qty == 1 %}
-                                <p style="font-weight: 500;">Quantity available: {{ spirit.Qty }} bottle</p>
+                                <p style="font-weight: 500;">Available: {{ spirit.Qty }} bottle</p>
                             {% endif %}
                         {% endif %}
                         {% if spirit.Qty == 0 %}

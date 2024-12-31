@@ -283,7 +283,6 @@
     .buttonadd:active::before {
     scale: 0.7;
     }
-
     .buttonedit {
     margin-top: 0.5rem;
     position: relative;
@@ -418,7 +417,7 @@
                         {% if wine.Grapes %}
                             <p style="font-weight: 500;">Grapes: {{ wine.Grapes }}</p>
                         {% endif %}
-                        <p style="font-weight: 500;">Country: {{ wine.Country }}</p>
+                        <p style="font-weight: 500;">Origin: {{ wine.Country }}</p>
                         {% if wine.Region %}
                             <p style="font-weight: 500;">Region: {{ wine.Region }}</p>
                         {% endif %}
@@ -429,10 +428,10 @@
                             </p>
                         </div>
                         {% if wine.Qty > 1 %}
-                            <p style="font-weight: 500;">Quantity available: {{ wine.Qty }} bottles</p>
+                            <p style="font-weight: 500;">Available: {{ wine.Qty }} bottles</p>
                         {% else %}
                             {% if wine.Qty == 1 %}
-                                <p style="font-weight: 500;">Quantity available: {{ wine.Qty }} bottle</p>
+                                <p style="font-weight: 500;">Available: {{ wine.Qty }} bottle</p>
                             {% endif %}
                         {% endif %}
                         {% if wine.Qty == 0 %}

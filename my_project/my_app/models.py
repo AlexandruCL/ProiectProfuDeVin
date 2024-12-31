@@ -31,8 +31,11 @@ class Spirits(models.Model):
         return f'{self.ID} | {self.Type} | {self.Name} | {self.Price} | {self.Qty}'
     
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Enforce unique constraint
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(default=timezone.now)
+    wines = models.ManyToManyField(Wines, through='CartItem', related_name='carts')
+    spirits = models.ManyToManyField(Spirits, through='CartItem', related_name='carts')
+
     def __str__(self):
         return f'Cart of: {self.user}'
 
@@ -58,11 +61,12 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=6, null=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, default='Pending')
-
+    wines = models.ManyToManyField(Wines, through='OrderItem', related_name='orders')
+    spirits = models.ManyToManyField(Spirits, through='OrderItem', related_name='orders')
 
     def __str__(self):
         return f'Order {self.id} by {self.user.username}'
-    
+
     def get_order_items(self):
         return OrderItem.objects.filter(order=self)
 
@@ -83,3 +87,4 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f'{self.name} | {self.quantity}'
+    
