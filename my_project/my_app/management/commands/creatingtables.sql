@@ -70,7 +70,8 @@ CREATE TABLE my_app_order (
     city VARCHAR2(100) NULL,
     county VARCHAR2(100) NOT NULL,
     postal_code VARCHAR2(6) NULL,
-    total_price NUMBER(10, 2) NOT NULL
+    total_price NUMBER(10, 2) NOT NULL,
+    status VARCHAR2(20) DEFAULT 'Pending' NOT NULL
 );
 
 -- Table: my_app_orderitem
