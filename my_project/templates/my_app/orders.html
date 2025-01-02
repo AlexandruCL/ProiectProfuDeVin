@@ -23,10 +23,10 @@
 <body>
     {% include 'my_app/header.html' %}
     <div class=" mx-auto content">
-        <h1 class="text-2xl font-bold mb-5">All Orders</h1>
+        <h1 class="text-2xl font-bold mb-5">All Orders ( to view it click on the order ID for each order )</h1>
         <table class="min-w-full bg-white">
             <thead>
-                <tr>
+                <tr class="bg-gray-400">
                     <th class="py-2 cursor-pointer" id="order-id-header">Order ID</th>
                     <th class="py-2">User</th>
                     <th class="py-2">First Name</th>
@@ -44,7 +44,7 @@
             </thead>
             <tbody id="orders-body">
                 {% for order in orders %}
-                <tr>
+                <tr class="hover:bg-gray-100">
                     <td class="border px-4 py-2 order-id cursor-pointer" data-order-id="{{ order.id }}">{{ order.id }}</td>
                     <td class="border px-4 py-2">{{ order.user.username }}</td>
                     <td class="border px-4 py-2">{{ order.first_name }}</td>
@@ -57,7 +57,7 @@
                     <td class="border px-4 py-2">{{ order.postal_code }}</td>
                     <td class="border px-4 py-2">{{ order.total_price }} RON</td>
                     <td class="border px-4 py-2">{{ order.created_at }}</td>
-                    <td class="border px-4 py-2 {% if order.status == 'Pending' %}text-red-500{% elif order.status == 'Done' %}text-green-500{% endif %}">{{ order.status }}</td>
+                    <td class="border px-4 py-2 {% if order.status == 'Pending' %}text-yellow-500{% elif order.status == 'Done' %}text-green-500{% endif %}">{{ order.status }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
