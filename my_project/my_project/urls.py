@@ -25,12 +25,15 @@ from django.contrib.auth.views import PasswordResetDoneView, PasswordResetConfir
 urlpatterns = [
     path('', views.index, name='index'),
     path('admin/', admin.site.urls),
+    path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('accounts/', include('django.contrib.auth.urls')),  # Include Django's auth URLs
     path('password_reset/', views.CustomPasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', views.CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', views.CustomPasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('profile', views.profile_view, name='profile_view'),
+    path('profile/update/', views.profile_update, name='profile_update'),
+    path('order-details/<int:order_id>/', views.order_details, name='order_details'),
     path('logout/', views.logout_view, name='logout_view'),
     path('home/', views.home, name='home'),
     path('home/contact/', views.contact, name='contact'),

@@ -10,6 +10,11 @@
         .body {
             overflow: hidden;
             background-image: url("{% static 'images/pozasignupfinal.jpg' %}");
+            background-image: image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
+            background-image: -webkit-image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
+            background-image: -moz-image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
+            background-image: -o-image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
+            background-image: -ms-image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;

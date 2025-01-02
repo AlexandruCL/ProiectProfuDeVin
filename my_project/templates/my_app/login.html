@@ -8,6 +8,11 @@
 <style>
     .body{
         background-image: url("{% static 'images/pozaloginfinal.jpg' %}");
+        background-image: image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+        background-image: -webkit-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+        background-image: -moz-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+        background-image: -o-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+        background-image: -ms-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
         margin-top: 80px;
         background-size: cover;
         background-repeat: no-repeat;

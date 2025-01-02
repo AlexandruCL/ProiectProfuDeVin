@@ -20,13 +20,16 @@ from django.contrib.auth.views import PasswordResetCompleteView
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 import json
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.contrib.auth.models import User
 
 def index(request):
     return redirect('home')
 
 def logout_view(request):
     next_url = request.GET.get('next', 'home')
-    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/' or next_url == '/orders/' or next_url == '/home/statistics/':
+    if next_url == '/home/cart/' or next_url == '/checkout/' or next_url == '/order_success/' or next_url == '/orders/' or next_url == '/home/statistics/' or next_url == '/admin_dashboard/' or next_url == '/profile':
         next_url = '/home/'
     logout(request)
     return redirect(next_url)
@@ -364,8 +367,68 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 #     spirit = get_object_or_404(Spirits, ID=spirit_id)
 #     return render(request, 'my_app/spirit_detail.html', {'spirit': spirit})
 
+@login_required
 def profile_view(request):
-    return render(request, 'my_app/profile.html')
+    user = request.user
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'my_app/profile.html', {'user': user , 'orders': orders})
+
+@login_required
+def profile_update(request):
+    if request.method == 'POST':
+        user = request.user
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+
+        # Check if the username already exists
+        if User.objects.filter(username=username).exclude(pk=user.pk).exists():
+            messages.error(request, 'Username already exists.')
+            return redirect('profile_view')
+
+        # Check if the email already exists
+        if User.objects.filter(email=email).exclude(pk=user.pk).exists():
+            messages.error(request, 'Email already exists.')
+            return redirect('profile_view')
+
+        # Validate email format
+        try:
+            validate_email(email)
+        except ValidationError:
+            messages.error(request, 'Invalid email format.')
+            return redirect('profile_view')
+
+        # Update user information
+        user.username = username
+        user.email = email
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('profile_view')
+
+    return redirect('profile_view')
+
+@login_required
+def order_details(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    items = order.items.all()
+    order_data = {
+        'id': order.id,
+        'created_at': order.created_at,
+        'total_price': order.total_price,
+        'status': order.status,
+        'items': [
+            {
+                'product_name': item.wine.Name if item.wine else item.spirit.Name,
+                'quantity': item.quantity,
+                'price': item.price,
+            } for item in items
+        ]
+    }
+    return JsonResponse(order_data)
 
 def cookie_policy(request):
     return render(request, 'my_app/cookies-policy.html')
@@ -400,3 +463,6 @@ def edit_spirit(request, spirit_id):
 
     return JsonResponse({'status': 'success'})
 
+@staff_member_required
+def admin_dashboard(request):
+    return render(request, 'my_app/admin_dashboard.html')

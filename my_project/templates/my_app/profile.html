@@ -3,41 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Profile Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            overflow: hidden; /* Hide the scrollbar */
-        }
         body {
-            overflow-y: scroll; /* Enable vertical scrolling */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f3f4f6, #ffffff);
+            color: #1a202c;
         }
-        body::-webkit-scrollbar {
-            display: none;  /* Chrome, Safari, and Opera */
-        }
-        .content {
-            display: flex;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            min-height: calc(100vh - 48px); /* Adjust based on header height */
-            padding-top: 60px; /* Add padding to avoid content being hidden behind the fixed header */
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body>
     {% include 'my_app/header.html' %}
-    <main>
-        <div class="content">
-            <h1 class="text-3xl font-bold text-center">O sa fie profile page</h1>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 mt-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-5">
+            <!-- Profile Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <div class="flex items-center mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold">{{ user.username }}</h1>
+                        <p class="text-sm text-gray-500">{{ user.email }}</p>
+                    </div>
+                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="{% if message.tags == 'error' %}bg-red-100 text-red-700{% else %}bg-green-100 text-green-700{% endif %} p-4 rounded mb-4">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <form action="{% url 'profile_update' %}" method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" value="{{ user.username }}" class="w-full mt-1 px-3 py-2 border rounded focus:ring focus:ring-indigo-300" required>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" name="email" value="{{ user.email }}" class="w-full mt-1 px-3 py-2 border rounded focus:ring focus:ring-indigo-300" required>
+                        <span id="email-error" class="text-red-500 text-xs hidden">Invalid email format</span>
+                    </div>
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" class="w-full mt-1 px-3 py-2 border rounded focus:ring focus:ring-indigo-300" required>
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="w-full mt-1 px-3 py-2 border rounded focus:ring focus:ring-indigo-300" required>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <a href="{% url 'password_reset' %}" class="text-indigo-600 hover:underline">Change Password</a>
+                        <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Update</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order History Section -->
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-bold mb-4">Order History <span class="text-sm text-gray-500"> ({{ orders|length }} orders)</span></h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border rounded-lg">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Order ID</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Date</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Total</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 text-sm">{{ order.id }}</td>
+                                <td class="px-6 py-4 text-sm">{{ order.created_at }}</td>
+                                <td class="px-6 py-4 text-sm">{{ order.total_price }} RON</td>
+                                <td class="px-6 py-4 text-sm">
+                                    {% if order.status == 'Pending' %}
+                                        <span class="text-yellow-500 font-bold">Pending</span>
+                                    {% elif order.status == 'Done' %}
+                                        <span class="text-green-500 font-bold">Done</span>
+                                    {% else %}
+                                        <span class="text-gray-500 font-bold">{{ order.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button onclick="openModal({{ order.id }})" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">View</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </main>
+
+    <!-- Modal -->
+    <div id="orderModal" class="modal flex">
+        <div class="modal-content">
+            <button class="text-red-500 float-right" onclick="closeModal()">&times;</button>
+            <h2 class="text-xl font-bold mb-4">Order Details</h2>
+            <div id="orderDetails"></div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(orderId) {
+            fetch(`/order-details/${orderId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    let orderDetails = document.getElementById('orderDetails');
+                    orderDetails.innerHTML = `
+                        <p><strong>Order ID:</strong> ${data.id}</p>
+                        <p><strong>Total:</strong> ${data.total_price} RON</p>
+                        <p><strong>Status:</strong> ${data.status}</p>
+                        <h3 class="text-lg font-semibold mt-4">Items</h3>
+                        <ul class="list-disc pl-5">
+                            ${data.items.map(item => `<li>${item.product_name} - ${item.quantity} x ${item.price} RON</li>`).join('')}
+                        </ul>
+                    `;
+                    document.getElementById('orderModal').style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error fetching order details:', error);
+                    alert('Failed to load order details. Please try again later.');
+                });
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            let modal = document.getElementById('orderModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+
     {% include 'my_app/footer.html' %}
 </body>
 </html>

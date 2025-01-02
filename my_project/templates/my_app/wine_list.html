@@ -456,7 +456,7 @@
                     </div>
                     {% if wine.image %}
                         <div>
-                            <img src="{{ wine.image.url }}" alt="{{ wine.Name }}" class="wine-image">
+                            <img src="{{ wine.image.url }}" alt="{{ wine.Name }}" class="wine-image" loading="lazy">
                         </div>
                     {% endif %}
                 </li>
