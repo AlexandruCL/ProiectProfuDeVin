@@ -9,19 +9,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
 </head>
 <style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden; /* Hide the scrollbar */
-    }
-    body {
-        overflow-y: scroll; /* Enable vertical scrolling */
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
-    }
-    body::-webkit-scrollbar {
-        display: none;  /* Safari and Chrome */
-    }
+        body::-webkit-scrollbar {
+            width: 8px;
+            background: #6b1842;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #ac1c64;
+            border-radius: 7px;
+        }
     body {
     font-family: Arial, sans-serif;
     margin: 0;

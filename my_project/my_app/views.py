@@ -23,6 +23,7 @@ import json
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 
 def index(request):
     return redirect('home')
@@ -371,8 +372,10 @@ class CustomPasswordResetCompleteView(PasswordResetCompleteView):
 def profile_view(request):
     user = request.user
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'my_app/profile.html', {'user': user , 'orders': orders})
-
+    storage = get_messages(request)
+    profile_messages = [message for message in storage if 'profile-' in message.tags]
+    return render(request, 'my_app/profile.html', {'user': user, 'orders': orders, 'profile_messages': profile_messages})
+    
 @login_required
 def profile_update(request):
     if request.method == 'POST':
@@ -384,19 +387,19 @@ def profile_update(request):
 
         # Check if the username already exists
         if User.objects.filter(username=username).exclude(pk=user.pk).exists():
-            messages.error(request, 'Username already exists.')
+            messages.error(request, 'Username already exists.', extra_tags='profile-error')
             return redirect('profile_view')
 
         # Check if the email already exists
         if User.objects.filter(email=email).exclude(pk=user.pk).exists():
-            messages.error(request, 'Email already exists.')
+            messages.error(request, 'Email already exists.', extra_tags='profile-error')
             return redirect('profile_view')
 
         # Validate email format
         try:
             validate_email(email)
         except ValidationError:
-            messages.error(request, 'Invalid email format.')
+            messages.error(request, 'Invalid email format.', extra_tags='profile-error')
             return redirect('profile_view')
 
         # Update user information
@@ -406,7 +409,7 @@ def profile_update(request):
         user.last_name = last_name
         user.save()
 
-        messages.success(request, 'Profile updated successfully.')
+        messages.success(request, 'Profile updated successfully.', extra_tags='profile-success')
         return redirect('profile_view')
 
     return redirect('profile_view')
