@@ -1,0 +1,13 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Hide the scrollbar */
+}
+body {
+    overflow-y: scroll; /* Enable vertical scrolling */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+body::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, and Opera */
+}

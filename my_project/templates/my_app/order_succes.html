@@ -1,27 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Order Success</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/order_succes.css' %}">
 </head>
-<style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden; 
-        background-color: #f0f3f8;
-    } 
-     body {
-        overflow-y: scroll; 
-        -ms-overflow-style: none;  
-        scrollbar-width: none;  
-    }
-    body::-webkit-scrollbar { 
-        display: none;  
-    }
-</style>
 <body>
     {% include 'my_app/header.html' %}
     {% load custom_filters %}

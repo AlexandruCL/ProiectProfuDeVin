@@ -1,0 +1,103 @@
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden; /* Hide the scrollbar */
+    }
+    body {
+        overflow-y: scroll; /* Enable vertical scrolling */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    body::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari, and Opera */
+    }
+    .header {
+        padding-top: 24px;
+        padding-bottom: 24px;
+        background-color: #6b1842;
+        border-radius: 0px 0px 5px 5px;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+    .headerlinks{
+        font-size: 1rem;
+        line-height: 1.5rem; 
+        font-weight: 500; 
+        color: #ffffff; 
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 300ms; 
+        transition-duration: 200ms; 
+    }
+    .headerlinks:hover{
+        color: #ac1c64;
+        text-decoration: underline;
+    }
+    .test{
+        padding-top: 60px;
+        font-size: 70px;
+    }
+    .headerloggedin{
+        font-size: 1rem;
+        line-height: 1.5rem; 
+        font-weight: 500; 
+        color: #ffffff; 
+    }
+    .content {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        min-height: calc(100vh - 48px); /* Adjust based on header height */
+        padding-top: 100px; /* Adjust based on header height */
+    }
+    .imagesize {
+        width: 430px;
+        height: 250px;
+        margin: 0;
+        padding: 0;
+        border: #6b1842;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 20px;
+        box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
+        position: relative;
+        transition: transform 0.25s ease-in-out;
+    }    
+    .imagesize:hover .text-overlay {
+        text-decoration: underline;
+    }
+    .imagesize.enlarge{
+        transform: scale(1.05);
+    }
+    .content2 {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 45px;
+        padding: 0;
+    }
+    .text-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 35px;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px #000000;
+    }
+
+    @media (min-width: 1900px){
+        .imagesize {
+            width: 500px;
+            height: 300px;
+        }
+        .text-overlay {
+            font-size: 40px;
+        }
+        .content{
+            padding-top : 150px;
+        }
+    }

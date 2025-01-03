@@ -1,0 +1,126 @@
+        .login-from-signup {
+            color: #546277;
+            transition: color 0.2s, text-decoration 0.25s;
+            display: inline;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .login-from-signup:hover {
+            color: #4f0f2b;
+            text-decoration: underline;
+        }
+        .title {
+            text-align: center;
+            margin: 2px auto 10px auto;
+            font-weight: bold;
+            color: #6b1842;
+            font-size: 35px;
+        }
+        .section {
+            padding: 1.563rem;
+            margin: auto;
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .title-container {
+            background-color: white;
+            opacity: 0.85;
+            border-radius: 10px;
+            padding: 1px 50px 1px 50px;
+            width: 100%;
+            display: flex;
+            text-align: center;
+        }
+        .midcontainer {
+            background-color: white;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            opacity: 0.85;
+        }
+        .submitbutton {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 12px 12px 12px 12px;
+            font-size: 16px;
+            line-height: 20px;
+            font-weight: 600;
+            color: white;
+            transition: background-color 0.2s;
+            background-color: #6b1842;
+            border-width: 1px;
+            border-color: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .submitbutton:hover {
+            background-color: #4f0f2b;
+        }
+        .label-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -110px; /* Use half of the width (220/2 = 110), to center it */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip-trigger:hover + .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        .terms:hover{
+            text-decoration: underline;
+        }
+        .custom-checkbox {
+        appearance: none;
+        width: 0.8rem;
+        height: 0.8rem;
+        border: 2px solid #555;
+        border-radius: 3px;
+        position: relative;
+        cursor: pointer;
+        }
+        .custom-checkbox:checked {
+        background-color: #6b1842;
+        border-color: #6b1842;
+        }
+        .custom-checkbox:checked::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: translate(-50%, -50%) rotate(45deg);
+        }
+        input:focus {
+            box-shadow: 0 0 15px #6b1842;
+            outline-color: #6b1842;
+            outline-offset: 0.25rem;
+            outline-style: inherit;
+        }
