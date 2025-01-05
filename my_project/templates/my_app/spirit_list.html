@@ -205,6 +205,7 @@
                 </div>
                 <div class="flex justify-end">
                     <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                    <button type="button" class="bg-red-500 text-white px-4 py-2 mr-2 rounded" style="font-weight: 500;" onclick="deleteSpirit()">Delete spirit</button>
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
                 </div>
             </form>
@@ -254,6 +255,30 @@
                 console.error('Error:', error);
             });
         });
+    </script>
+    <script>
+        function deleteSpirit() {
+            const spiritId = document.getElementById('spiritId').value;
+            fetch(`/edit_spirit/${spiritId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ action: 'delete' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    console.error('Failed to delete spirit:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     </script>
 </body>
 {%  include 'my_app/footer.html' %}

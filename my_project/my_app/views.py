@@ -444,6 +444,11 @@ def edit_wine(request, wine_id):
 
     wine = get_object_or_404(Wines, ID=wine_id)
     data = json.loads(request.body)
+
+    if data.get('action') == 'delete':
+        wine.delete()
+        return JsonResponse({'status': 'success', 'message': 'Wine deleted successfully'})
+    
     wine.Name = data.get('name', wine.Name)
     wine.Price = data.get('price', wine.Price)
     wine.Qty = data.get('quantity', wine.Qty)
@@ -459,6 +464,11 @@ def edit_spirit(request, spirit_id):
 
     spirit = get_object_or_404(Spirits, ID=spirit_id)
     data = json.loads(request.body)
+
+    if data.get('action') == 'delete':
+        spirit.delete()
+        return JsonResponse({'status': 'success', 'message': 'Spirit deleted successfully'})
+    
     spirit.Name = data.get('name', spirit.Name)
     spirit.Price = data.get('price', spirit.Price)
     spirit.Qty = data.get('quantity', spirit.Qty)
