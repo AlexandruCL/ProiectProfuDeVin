@@ -2,6 +2,7 @@
 <html>
 <head>
     {% load static %}
+    {% load custom_filters %}
     <title>Wine List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="{% static 'css/wine_list.css' %}" rel="stylesheet">
@@ -121,7 +122,7 @@
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
                             <div style="display: flex; gap: 10px;">
                                 <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
-                                {% if user.is_staff %}
+                                {% if user.is_superuser or user|has_group:"Product Populater"  %}
                                     <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ wine.ID }}', '{{ wine.Name }}', '{{ wine.Price }}', '{{ wine.Qty }}')">Edit wine</button>
                                 {% endif %}
                             </div>
@@ -233,7 +234,7 @@
     </script>
     </main>
     <div id="editWineModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-5 rounded-lg w-1/2">
+        <div class="bg-white p-5 rounded-lg w-1/2" id="editWineModalContent">
             <h2 class="text-xl font-bold mb-4">Edit Wine</h2>
             <form id="editWineForm" method="post">
                 {% csrf_token %}
@@ -302,6 +303,35 @@
                 console.error('Error:', error);
             });
         });
+    
+        document.getElementById('editWineModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    
+        function deleteWine() {
+            const wineId = document.getElementById('wineId').value;
+            fetch(`/edit_wine/${wineId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ action: 'delete' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    console.error('Failed to delete wine:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     </script>
     <script>
         function deleteWine() {

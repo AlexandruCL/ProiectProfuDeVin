@@ -2,6 +2,7 @@
 <html>
 <head>
     {% load static %}
+    {% load custom_filters %}
     <title>Spirit List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="{% static 'css/spirit_list.css' %}" rel="stylesheet">
@@ -94,7 +95,7 @@
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
                             <div style="display: flex; gap: 10px;">
                                 <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
-                                {% if user.is_staff %}
+                                {% if user.is_superuser or user|has_group:"Product Populater"  %}
                                     <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ spirit.ID }}', '{{ spirit.Name }}', '{{ spirit.Price }}', '{{ spirit.Qty }}')">Edit spirit</button>
                                 {% endif %}
                             </div>
@@ -186,7 +187,7 @@
     </script>
     </main>
     <div id="editSpiritModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-5 rounded-lg w-1/2">
+        <div class="bg-white p-5 rounded-lg w-1/2" id="editSpiritFormContainer">
             <h2 class="text-xl font-bold mb-4">Edit Spirit</h2>
             <form id="editSpiritForm" method="post">
                 {% csrf_token %}
@@ -206,7 +207,7 @@
                 <div class="flex justify-end">
                     <button type="button" id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
                     <button type="button" class="bg-red-500 text-white px-4 py-2 mr-2 rounded" style="font-weight: 500;" onclick="deleteSpirit()">Delete spirit</button>
-                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Save</button>
                 </div>
             </form>
         </div>
@@ -255,6 +256,35 @@
                 console.error('Error:', error);
             });
         });
+    
+        document.getElementById('editSpiritModal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    
+        function deleteSpirit() {
+            const spiritId = document.getElementById('spiritId').value;
+            fetch(`/edit_spirit/${spiritId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ action: 'delete' })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.reload();
+                } else {
+                    console.error('Failed to delete spirit:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     </script>
     <script>
         function deleteSpirit() {
@@ -279,6 +309,13 @@
                 console.error('Error:', error);
             });
         }
+    </script>
+    <script>
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    window.location.reload();
+                }
+            });
     </script>
 </body>
 {%  include 'my_app/footer.html' %}

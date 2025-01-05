@@ -24,6 +24,9 @@ from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
+from django.contrib.auth.decorators import user_passes_test
+from functools import wraps
+from django.http import HttpResponseForbidden
 
 def index(request):
     return redirect('home')
@@ -476,6 +479,16 @@ def edit_spirit(request, spirit_id):
 
     return JsonResponse({'status': 'success'})
 
-@staff_member_required
+def staff_or_group_required(group_name):
+    def decorator(view_func):
+        @wraps(view_func)
+        def _wrapped_view(request, *args, **kwargs):
+            if request.user.is_staff or request.user.groups.filter(name=group_name).exists():
+                return view_func(request, *args, **kwargs)
+            return HttpResponseForbidden("You do not have permission to access this page.")
+        return _wrapped_view
+    return decorator
+
+@staff_or_group_required('Product Populater')
 def admin_dashboard(request):
     return render(request, 'my_app/admin_dashboard.html')
