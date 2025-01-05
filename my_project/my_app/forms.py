@@ -115,12 +115,18 @@ class OrderForm(forms.ModelForm):
         if not county:
             raise forms.ValidationError("This field is required.")
         
+        if not county.isalpha():
+            raise forms.ValidationError("Ivalid county.")
+        
         return county
     def clean_city(self):
         city = self.cleaned_data.get("city")
         
         if not city:
             raise forms.ValidationError("This field is required.")
+        
+        if not city.isalpha():
+            raise forms.ValidationError("Ivalid city.")
         
         return city
     def clean_postal_code(self):
@@ -133,6 +139,9 @@ class OrderForm(forms.ModelForm):
             raise forms.ValidationError("Ivalid postal code.")
         
         if len(postal_code) > 6:
+            raise forms.ValidationError("Ivalid postal code.")
+        
+        if not postal_code.isnumeric():
             raise forms.ValidationError("Ivalid postal code.")
         
         return postal_code
@@ -149,12 +158,18 @@ class OrderForm(forms.ModelForm):
         if not last_name:
             raise forms.ValidationError("This field is required.")
         
+        if not last_name.isalpha():
+            raise forms.ValidationError("Ivalid last name.")
+        
         return last_name
     def clean_first_name(self):
         first_name = self.cleaned_data.get("first_name")
         
         if not first_name:
             raise forms.ValidationError("This field is required.")
+        
+        if not first_name.isalpha():
+            raise forms.ValidationError("Ivalid first name.")
         
         return first_name
     def clean_phone_number(self):
@@ -167,6 +182,9 @@ class OrderForm(forms.ModelForm):
             raise forms.ValidationError("Ivalid phone number.")
         
         if len(phone_number) > 10:
+            raise forms.ValidationError("Ivalid phone number.")
+        
+        if not phone_number.isnumeric():
             raise forms.ValidationError("Ivalid phone number.")
         
         return phone_number

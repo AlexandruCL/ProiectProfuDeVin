@@ -21,6 +21,7 @@ body::-webkit-scrollbar {
     box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
     border-radius: 0.5rem;
     z-index: 1000; /* Ensure it stays on top */
+    background-color: white;
 }
 .custom-input {
 padding: 0.75rem 1rem; /* Increase padding for height */
@@ -28,11 +29,12 @@ height: 2rem; /* Set a specific height */
 border-radius: 0.5rem; /* Round the corners */
 }
 .custom-container {
-max-width: auto; /* Adjust the max-width as needed */
-margin-left: 0.5rem;
-margin-right: 0.5rem;
-margin-bottom: 0.5rem;
-margin-top: 5rem;
+    max-width: auto; /* Adjust the max-width as needed */
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 5rem;
+    height: calc(100% - 3.2rem);
 }
 @media (min-width: 1900px){
     .sticky-container{
