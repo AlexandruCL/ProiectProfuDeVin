@@ -122,7 +122,7 @@
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
                             <div style="display: flex; gap: 10px;">
                                 <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
-                                {% if user.is_superuser or user|has_group:"Product Populater"  %}
+                                {% if user.is_superuser or user|has_group:"Product Population"  %}
                                     <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ wine.ID }}', '{{ wine.Name }}', '{{ wine.Price }}', '{{ wine.Qty }}')">Edit wine</button>
                                 {% endif %}
                             </div>

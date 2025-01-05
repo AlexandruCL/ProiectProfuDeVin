@@ -164,7 +164,7 @@
                     {% if user.is_authenticated %}
                     <a href="{% url 'profile_view' %}" title="" class="headerlinks">
                         <span class="headerlinks">Welcome, {{ user.username }}</span>
-                        {% if user.is_superuser or user|has_group:"Product Populater" %}
+                        {% if user.is_superuser or user|has_group:"Product Population" %}
                             <a href="{% url 'admin_dashboard' %}" title="" class="headerlinks"> Admin Dashboard </a>
                         {% endif %}
                     </a>

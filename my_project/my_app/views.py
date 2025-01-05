@@ -489,6 +489,6 @@ def staff_or_group_required(group_name):
         return _wrapped_view
     return decorator
 
-@staff_or_group_required('Product Populater')
+@staff_or_group_required('Product Population')
 def admin_dashboard(request):
     return render(request, 'my_app/admin_dashboard.html')

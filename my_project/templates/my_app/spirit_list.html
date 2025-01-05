@@ -95,7 +95,7 @@
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
                             <div style="display: flex; gap: 10px;">
                                 <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
-                                {% if user.is_superuser or user|has_group:"Product Populater"  %}
+                                {% if user.is_superuser or user|has_group:"Product Population"  %}
                                     <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ spirit.ID }}', '{{ spirit.Name }}', '{{ spirit.Price }}', '{{ spirit.Qty }}')">Edit spirit</button>
                                 {% endif %}
                             </div>
@@ -114,20 +114,7 @@
         </ul>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const descriptions = document.querySelectorAll('.description');
-            descriptions.forEach(description => {
-                description.style.webkitLineClamp = '3'; // Set initial value
-                description.addEventListener('click', function() {
-                    if (this.style.webkitLineClamp === '3') {
-                        this.style.webkitLineClamp = 'unset';
-                    } else {
-                        this.style.webkitLineClamp = '3';
-                    }
-                });
-            });
-        });
-
+        
         document.getElementById('search-bar').addEventListener('input', function() {
             var filter = this.value.toLowerCase();
             var spiritItems = document.querySelectorAll('.spirit-item');
