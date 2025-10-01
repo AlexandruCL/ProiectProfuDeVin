@@ -11,7 +11,18 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-from decouple import config
+from pathlib import Path
+
+try:
+    from decouple import config
+except ImportError:
+    # Fallback for environments where decouple is not available
+    import os
+    def config(key, default=None, cast=None):
+        value = os.environ.get(key, default)
+        if cast and value:
+            return cast(value)
+        return value
 
 #Session settings
 SESSION_COOKIE_AGE = 172800  # 2 days, adjust as needed
@@ -25,7 +36,7 @@ TEMPLATES_DIRS = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-fallback-key-change-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
