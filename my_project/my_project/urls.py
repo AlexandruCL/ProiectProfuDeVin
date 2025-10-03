@@ -58,6 +58,7 @@ urlpatterns = [
     path('terms-and-conditions', views.terms, name='terms_and_conditions'),
     path('confidentiality-policy', views.confidentialitypolicy, name='confidentiality_policy'),
     path('cookies-policy', views.cookie_policy, name='cookies_policy'),
+    path('accounts/', include('allauth.urls')),
 
     # other URL patterns
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

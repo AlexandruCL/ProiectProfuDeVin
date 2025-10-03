@@ -27,6 +27,8 @@ from django.contrib.messages import get_messages
 from django.contrib.auth.decorators import user_passes_test
 from functools import wraps
 from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect
+
 
 def index(request):
     return redirect('home')
@@ -204,6 +206,17 @@ def login_view(request):
 
 def signup_view(request):
     next_url = request.GET.get('next', 'home')
+    
+    # Check if social providers are configured
+    can_google = False
+    can_facebook = False
+    try:
+        from allauth.socialaccount.models import SocialApp
+        can_google = SocialApp.objects.filter(provider='google').exists()
+        can_facebook = SocialApp.objects.filter(provider='facebook').exists()
+    except Exception:
+        pass
+
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -214,7 +227,14 @@ def signup_view(request):
             messages.error(request, 'Invalid input. Please try again.', extra_tags='signup-error')
     else:
         form = CustomUserCreationForm()
-    return render(request, 'my_app/signup.html', {'form': form, 'next': next_url})
+
+    context = {
+        'form': form,
+        'next': next_url,
+        'can_google': can_google,
+        'can_facebook': can_facebook
+    }
+    return render(request, 'my_app/signup.html', context)
 
 @login_required
 def cart_view(request):
