@@ -22,6 +22,7 @@
             background-position: center;
             background-attachment: fixed;
         }
+
     </style>
 </head>
 <body class="body">
@@ -108,16 +109,16 @@
                                             id="password1"
                                             placeholder="Enter your password"
                                             value="{{ form.password1.value|default_if_none:'' }}"
-                                            class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md"
+                                            class="block w-full py-3 pl-10 pr-12 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md"
                                         />
-                                        <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-3-9a9 9 0 100 18 9 9 0 000-18z"
-                                                />
+                                        <button 
+                                            type="button" 
+                                            onclick="togglePasswordField('password1', 'eyeIcon1')" 
+                                            class="absolute inset-y-0 right-0 flex items-center pr-3 toggle-password"
+                                        >
+                                            <svg id="eyeIcon1" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
                                         </button>
                                     </div>
@@ -136,14 +137,29 @@
                                             name="password2"
                                             id="password2"
                                             placeholder="Confirm your password"
-                                            class="block w-full py-3 pl-10 pr-4 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md"
+                                            class="block w-full py-3 pl-10 pr-12 text-black placeholder-gray-500 transition-all duration-200 bg-white border border-gray-200 rounded-md"
                                         />
+                                        <button 
+                                            type="button" 
+                                            onclick="togglePasswordField('password2', 'eyeIcon2')" 
+                                            class="absolute inset-y-0 right-0 flex items-center pr-3 toggle-password"
+                                        >
+                                            <svg id="eyeIcon2" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                                 
                                 <div class="mt-4 md:mt-6">
-                                    <input type="checkbox" id="termsCheckbox" name="terms" class="custom-checkbox">
-                                    <label for="termsCheckbox">I agree to the <a href="{% url 'terms_and_conditions' %}" class="terms">Terms</a> and <a href="{% url 'confidentiality_policy' %}" class="terms">Privacy</a> policy</label>
+                                    <label class="custom-checkbox-container" for="termsCheckbox" id="termsLabel">
+                                        <input type="checkbox" id="termsCheckbox" name="terms" class="custom-checkbox">
+                                        <span class="checkbox-checkmark"></span>
+                                        <span class="checkbox-label">
+                                            I agree to the <a href="{% url 'terms_and_conditions' %}" class="terms">Terms</a> and <a href="{% url 'confidentiality_policy' %}" class="terms">Privacy</a> policy
+                                        </span>
+                                    </label>
                                 </div>
                                 <div>
                                     <button type="submit" class="submitbutton" id="signupButton">
@@ -179,21 +195,35 @@
         </div>
     </section>
     <script>
-        function togglePassword() {
-            var passwordInput = document.getElementById('password1');
-            var type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
+        function togglePasswordField(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                // Change to "eye-slash" icon
+                icon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                `;
+            } else {
+                input.type = 'password';
+                // Change back to "eye" icon
+                icon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                `;
+            }
         }
     </script>
     <script>
         document.getElementById('signupButton').addEventListener('click', function(event) {
             var termsCheckbox = document.getElementById('termsCheckbox');
-            var termsLabel = document.querySelector('label[for="termsCheckbox"]');
+            var termsLabel = document.getElementById('termsLabel');
             if (!termsCheckbox.checked) {
                 event.preventDefault(); // Prevent form submission
-                termsLabel.classList.add('text-red-500'); // Add the red text class
+                termsLabel.style.color = '#ef4444'; // Red color
             } else {
-                termsLabel.classList.remove('text-red-500'); // Remove the red text class if checked
+                termsLabel.style.color = ''; // Reset color
             }
         });
     </script>

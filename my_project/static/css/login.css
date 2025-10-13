@@ -102,3 +102,13 @@
             outline-offset: 0.25rem;
             outline-style: inherit;
         }
+
+    .toggle-password {
+        cursor: pointer;
+        color: #6b1842;
+        transition: color 0.3s ease;
+    }
+    
+    .toggle-password:hover {
+        color: #8c2a5b;
+    }

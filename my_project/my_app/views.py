@@ -402,14 +402,14 @@ def set_password_view(request):
         return redirect('profile_view')
     
     if request.method == 'POST':
-        form = SetPasswordForm(request.user, request.POST)
+        form = CustomSetPasswordForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
             messages.success(request, 'Password set successfully! You can now login with email and password.')
             return redirect('profile_view')
     else:
-        form = SetPasswordForm(request.user)
+        form = CustomSetPasswordForm(request.user)
     
     return render(request, 'my_app/set_password.html', {'form': form})
 
