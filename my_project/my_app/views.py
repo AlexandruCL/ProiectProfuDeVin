@@ -195,6 +195,16 @@ def contact(request):
 
 def login_view(request):
     next_url = request.GET.get('next', 'home')
+
+    can_google = False
+    can_facebook = False
+    try:
+        from allauth.socialaccount.models import SocialApp
+        can_google = SocialApp.objects.filter(provider='google').exists()
+        can_facebook = SocialApp.objects.filter(provider='facebook').exists()
+    except Exception:
+        pass
+
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -202,7 +212,7 @@ def login_view(request):
             return redirect(next_url)
     else:
         form = CustomAuthenticationForm()
-    return render(request, 'my_app/login.html', {'form': form, 'next': next_url})
+    return render(request, 'my_app/login.html', {'form': form, 'next': next_url, 'can_google': can_google, 'can_facebook': can_facebook})
 
 def signup_view(request):
     next_url = request.GET.get('next', 'home')
@@ -221,7 +231,7 @@ def signup_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect(next_url)
         else:
             messages.error(request, 'Invalid input. Please try again.', extra_tags='signup-error')

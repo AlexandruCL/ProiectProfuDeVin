@@ -41,8 +41,13 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-fallback-key-change-i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=lambda v: [s.strip() for s in v.split(',')])
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'  # Literally the word 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+DEFAULT_FROM_EMAIL = 'profudevin@outlook.com'  # You can still use this as sender
 LOGIN_URL = 'login/'
 SIGNUP_URL = 'signup/'
 

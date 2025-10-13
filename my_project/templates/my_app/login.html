@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     {% load static %}
+    {% load socialaccount %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Log In</title>
@@ -107,6 +108,26 @@
                                 <div>
                                     <button type="submit" class="buttonlogin" style="font-weight: 500;">Login</button>
                                 </div>
+
+                                                                </div>
+                                <!-- Social login buttons -->
+                                {% if can_google or can_facebook %}
+                                <div class="mt-4 text-center">
+                                    <p class="text-sm text-gray-600 mb-2">Or sign up with</p>
+                                    <div class="buttonlogin">
+                                        {% if can_google %}
+                                        <a href="{% provider_login_url 'google' process='signup' %}" class = "w-full">
+                                            Continue with Google
+                                        </a>
+                                        {% endif %}
+                                        {% if can_facebook %}
+                                        <a href="{% provider_login_url 'facebook' process='signup' %}" class = "w-full">
+                                            Continue with Facebook
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
     
                                 <div class="signup-from-login">
                                     <a href="{% url 'signup' %}">Don't have an account? <a href="{% url 'signup' %}">Create an account</a></a>
