@@ -28,6 +28,8 @@ from django.contrib.auth.decorators import user_passes_test
 from functools import wraps
 from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth import update_session_auth_hash
 
 
 def index(request):
@@ -393,6 +395,24 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'my_app/password_reset_complete.html'
 
+@login_required
+def set_password_view(request):
+    if request.user.has_usable_password():
+        messages.info(request, 'You already have a password set.')
+        return redirect('profile_view')
+    
+    if request.method == 'POST':
+        form = SetPasswordForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Password set successfully! You can now login with email and password.')
+            return redirect('profile_view')
+    else:
+        form = SetPasswordForm(request.user)
+    
+    return render(request, 'my_app/set_password.html', {'form': form})
+
 # def wine_detail(request, wine_id):
 #     wine = get_object_or_404(Wines, ID=wine_id)
 #     return render(request, 'my_app/wine_detail.html', {'wine': wine})
@@ -407,8 +427,17 @@ def profile_view(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
     storage = get_messages(request)
     profile_messages = [message for message in storage if 'profile-' in message.tags]
-    return render(request, 'my_app/profile.html', {'user': user, 'orders': orders, 'profile_messages': profile_messages})
     
+    # Check if user has a usable password
+    has_usable_password = user.has_usable_password()
+    
+    return render(request, 'my_app/profile.html', {
+        'user': user, 
+        'orders': orders, 
+        'profile_messages': profile_messages,
+        'has_usable_password': has_usable_password
+    })
+
 @login_required
 def profile_update(request):
     if request.method == 'POST':

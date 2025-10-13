@@ -136,6 +136,31 @@
     {% include 'my_app/header.html' %}
 
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 marginpage">
+        {% if not has_usable_password %}
+            <div class="bg-blue-50 border-l-4 border-blue-500 rounded-lg p-4 mb-6 shadow-sm">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <div class="ml-3 flex-1">
+                        <h3 class="text-sm font-bold text-blue-800 mb-1">You're using Google Sign-In</h3>
+                        <p class="text-sm text-blue-700 mb-3">
+                            You signed up with Google and currently can only login using the "Continue with Google" button. 
+                            Want to also enable email and password login?
+                        </p>
+                        <a href="{% url 'set_password' %}" 
+                        class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition duration-200 shadow-sm hover:shadow-md">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            Set Password
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-5">
             <!-- Profile Section -->
             <div class="bg-white rounded-lg shadow-md p-6 fixed-height">
