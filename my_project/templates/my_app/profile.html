@@ -253,7 +253,7 @@
                         <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" class="w-full mt-1 px-3 py-2 border rounded" required>
                     </div>
                     <div class="flex justify-between items-center">
-                        <a href="{% url 'password_reset' %}" class="pswdtext">Change Password</a>
+                        <a href="{% url 'logout_and_reset_password' %}" class="pswdtext">Change Password</a>
                         <span class="update"><button type="submit"><span>Update</span></button></span>
                     </div>
                 </form>

@@ -395,6 +395,11 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
 class CustomPasswordResetCompleteView(PasswordResetCompleteView):
     template_name = 'my_app/password_reset_complete.html'
 
+def logout_and_reset_password(request):
+    """Logout user and redirect to password reset page"""
+    logout(request)
+    return redirect('password_reset')
+
 @login_required
 def set_password_view(request):
     if request.user.has_usable_password():
