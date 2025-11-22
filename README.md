@@ -361,7 +361,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 👨‍💻 Author
 
-**Alexandru Cristea Laurențiu**
+**Laur-Alexandru Cristea**
 - GitHub: [@AlexandruCL](https://github.com/AlexandruCL)
 - Email: alex.cristea.laur2004@gmail.com
 
