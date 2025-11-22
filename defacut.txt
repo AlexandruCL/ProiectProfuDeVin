@@ -1,0 +1,10 @@
+wine list && spirit list
+	NEAPARAT BUTOANELE AICI 
+login && signup
+admin dashboard poate putin schimbat
+profile page poate il editez putin in layout
+un layout putin diferit la checkout parca nu mi place asa mult
+sa facem in pula mea pagina de home
+un layout la terms and cond si la conf policy + cookies pol
+view orders putin mai frumos trag pl in el
+
