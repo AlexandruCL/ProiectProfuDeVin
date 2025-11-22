@@ -365,6 +365,10 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - GitHub: [@AlexandruCL](https://github.com/AlexandruCL)
 - Email: alex.cristea.laur2004@gmail.com
 
+**Pop Patric**
+- GitHub: [@patric1304](https://github.com/patric1304)
+- Email: patric.3pop@gmail.com
+
 ## 🙏 Acknowledgments
 
 - Django Framework
