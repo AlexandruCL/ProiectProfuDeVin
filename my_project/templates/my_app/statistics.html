@@ -1,43 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistics</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden; /* Hide the scrollbar */
-        }
-        body {
-            overflow-y: scroll; /* Enable vertical scrolling */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        body::-webkit-scrollbar {
-            display: none;  /* Chrome, Safari, and Opera */
-        }
-        .chart-container {
-            width: 70rem;
-            height: 50rem;
-            margin: auto;
-            margin-top: 5rem;
-        }
-    </style>
-</head>
-<body>
-    {% include 'my_app/header.html' %}
-    <main>
-        <div class = "chart-container">
-            <canvas id="winesChart"></canvas>
-            <canvas id="spiritsChart"></canvas>
+{% extends 'my_app/base.html' %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block head_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block page_css %}
+<style>
+    .chart-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin: 0 auto;
+        max-width: 1100px;
+    }
+
+    .chart-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        padding: 1rem;
+        overflow: hidden;
+    }
+
+    .chart-card canvas {
+        width: 100% !important;
+        height: 320px !important;
+    }
+
+    @media (min-width: 1024px) {
+        .chart-card canvas { height: 420px !important; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div class="site-container">
+        <div class="chart-container">
+            <div class="chart-card">
+                <canvas id="winesChart"></canvas>
+            </div>
+            <div class="chart-card">
+                <canvas id="spiritsChart"></canvas>
+            </div>
         </div>
-    </main>
+    </div>
     <script>
         const winesData = {
         labels: [{% for wine in most_sold_wines %}"{{ wine.wine__Name|escapejs }}",{% endfor %}],
@@ -101,12 +110,4 @@
             configSpirits
         );
     </script>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

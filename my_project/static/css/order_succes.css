@@ -1,14 +1,12 @@
     html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden; 
-        background-color: #f0f3f8;
-    } 
-     body {
-        overflow-y: scroll; 
-        -ms-overflow-style: none;  
-        scrollbar-width: none;  
+    .custom-container {
+        width: min(900px, calc(100vw - 2rem));
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow-md);
+        background: rgba(255, 255, 255, 0.96);
     }
-    body::-webkit-scrollbar { 
-        display: none;  
+
+    @media (max-width: 640px) {
+        .custom-container { padding: 1rem !important; }
     }

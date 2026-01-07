@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-    {% load static %}
-    {% load socialaccount %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body_class %}auth-bg auth-signup{% endblock %}
+
+{% block page_css %}
     <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <style>
-        .body {
-            overflow: hidden;
-            background-image: url("{% static 'images/pozasignupfinal.jpg' %}");
+        body.auth-signup {
             background-image: image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
             background-image: -webkit-image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
             background-image: -moz-image-set(url("{% static 'images/pozasignupfinal.jpg' %}") 1x);
@@ -23,9 +24,13 @@
             background-attachment: fixed;
         }
 
+        .site-main {
+            padding-top: 0;
+        }
     </style>
-</head>
-<body class="body">
+{% endblock %}
+
+{% block content %}
     <section class="section">
         <div class="max-w-md mx-auto">
             <div class="title-container">
@@ -227,12 +232,4 @@
             }
         });
     </script>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

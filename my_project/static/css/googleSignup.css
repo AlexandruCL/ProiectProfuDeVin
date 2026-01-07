@@ -1,40 +1,32 @@
-.buttonComplete{
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem; 
-    padding-left: 1.5rem;
-    padding-right: 1.5rem; 
-    border-radius: 0.5rem; 
-    width: 100%; 
-    font-weight: 600; 
-    color: #ffffff; 
-    background-image: linear-gradient(to right, var(--tw-gradient-stops)); 
-    background-color: #6b1842; 
-    background-color: #841e51; 
-    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms; 
-    transition-duration: 200ms; 
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
+.buttonComplete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 0.95rem;
+    font-weight: 900;
+    color: #fff;
+    border: 1px solid rgba(107, 24, 66, 0.25);
+    background: linear-gradient(180deg, rgba(107, 24, 66, 0.92), rgba(79, 15, 43, 0.98));
+    transition: transform 0.15s, filter 0.15s;
+    box-shadow: var(--shadow-md);
 }
 
-.buttonComplete:hover{
-    background-color: #4e1431; 
-    background-color: #69143e; 
-    --transform-scale-x: 1.05;
-    --transform-scale-y: 1.05;
-    --transform: scaleX(var(--transform-scale-x)) scaleY(var(--transform-scale-y));
-    transform: var(--transform); 
+.buttonComplete:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.03);
 }
 
-.backToSignIn{
-    font-size: 0.875rem;
-    line-height: 1.25rem; 
-    color: #6b1842; 
-    transition-property: text-decoration, color;
-    transition-duration: 300ms;
+.backToSignIn {
+    font-size: 0.95rem;
+    line-height: 1.35;
+    color: rgba(107, 24, 66, 0.95);
+    font-weight: 900;
+    transition: text-decoration 0.2s, color 0.2s;
 }
 
-.backToSignIn:hover{
-    text-decoration: underline; 
-    color: #69143e; 
+.backToSignIn:hover {
+    text-decoration: underline;
+    color: rgba(79, 15, 43, 0.98);
 }

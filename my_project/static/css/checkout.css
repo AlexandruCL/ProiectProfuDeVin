@@ -1,156 +1,247 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    overflow: hidden; /* Hide the scrollbar */
-}
-body {
-    overflow-y: scroll; /* Enable vertical scrolling */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-    font-family: Arial, sans-serif;
-}
-body::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari, and Opera */
-}
 .sticky-container {
-    position: fixed;
-    top: 5rem;
-    right: 0.5rem;
-    width: 45rem; /* Adjust the width as needed */
-    padding: 20px;
-    box-shadow: 0 4px 8px #6b1842, 0 6px 20px #6b1850;
-    border-radius: 0.5rem;
-    z-index: 1000; /* Ensure it stays on top */
-    background-color: white;
+    position: sticky;
+    top: calc(var(--header-height) + 1rem);
+    width: auto;
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.96);
 }
 .custom-input {
-padding: 0.75rem 1rem; /* Increase padding for height */
-height: 2rem; /* Set a specific height */
-border-radius: 0.5rem; /* Round the corners */
+padding: 0.7rem 0.85rem;
+min-height: 2.75rem;
+border-radius: 0.85rem;
+border: 1px solid var(--border);
+background: rgba(255, 255, 255, 0.92);
+transition: box-shadow 0.15s, border-color 0.15s;
 }
 .custom-container {
-    max-width: auto; /* Adjust the max-width as needed */
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 0.5rem;
-    margin-top: 5rem;
-    height: calc(100% - 3.2rem);
+    margin-top: 0;
 }
 @media (min-width: 1900px){
     .sticky-container{
-        width: 55rem;
+        width: 100%;
     }
 }
-.button {
-    --white: #ffe7ff;
-    --bg: #6b1842;
-    --radius: 50px;
-    outline: none;
-    cursor: pointer;
-    border: 0;
-    position: relative;
-    border-radius: var(--radius);
-    background-color: var(--bg);
-    transition: all 0.2s ease;
-    box-shadow:
-        inset 0 0.2rem 0.6rem rgba(255, 231, 255, 0.3),
-        inset 0 -0.1rem 0.2rem rgba(107, 24, 66, 0.7),
-        inset 0 -0.3rem 0.6rem rgba(255, 231, 255, 0.5),
-        0 2rem 2rem rgba(107, 24, 66, 0.3),
-        0 0.5rem 0.5rem -0.4rem rgba(107, 24, 66, 0.8);
-    width: 100%; /* Set button width to 100% */
+/* Checkout page (scoped) */
+
+.checkout-card {
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    padding: 1rem;
+    margin: 0.5rem auto;
+    width: 100%;
 }
-.button .wrap {
-    font-size: 18px; /* Increase font size */
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.7);
-    padding: 10px 20px;
-    border-radius: inherit;
-    position: relative;
-    overflow: hidden;
+
+.checkout-head {
     display: flex;
-    justify-content: center; /* Center the text horizontally */
-    align-items: center; /* Center the text vertically */
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.08));
 }
-.button .wrap p span:nth-child(2) {
+
+.checkout-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.checkout-total {
+    font-weight: 800;
+}
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+@media (min-width: 1024px) {
+    .checkout-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.25rem;
+        align-items: start;
+    }
+}
+
+.checkout-subtitle {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.125rem;
+    font-weight: 800;
+}
+
+.checkout-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.checkout-item {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.checkout-item-media {
+    width: 36px;
+    height: px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.04);
+    display: grid;
+    place-items: center;
+}
+
+.checkout-item-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.checkout-item-name {
+    font-weight: 800;
+}
+
+.checkout-item-meta {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.checkout-item-total {
+    margin-top: 0.25rem;
+    font-weight: 800;
+}
+
+/* Sticky form: only on desktop to avoid weird mobile scrolling */
+.sticky-container {
+    align-self: start;
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, rgba(0, 0, 0, 0.08));
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    min-width: 0;
+}
+
+@media (min-width: 1024px) {
+    .sticky-container {
+        position: sticky;
+        top: calc(var(--header-height, 72px) + 1rem);
+    }
+}
+
+.checkout-form-fields {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.checkout-field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.checkout-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 0.5rem;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.custom-input:focus {
+    outline: none;
+    border-color: #6b1842;
+    box-shadow: 0 0 0 3px rgba(107, 24, 66, 0.15);
+}
+
+.placeholder-red::placeholder {
+    color: #c0392b;
+}
+
+/* Submit button */
+.button {
+    width: 100%;
+    border: none;
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+    background: #6b1842;
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: rgba(107, 24, 66, 0.88);
+    transition: all 0.2s;
+}
+
+.button:active {
+    transform: translateY(1px);
+}
+
+.wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrap p {
+    margin: 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Only show main label by default */
+.wrap p span:nth-child(1),
+.wrap p span:nth-child(2),
+.wrap p span:nth-child(5),
+.wrap p span:nth-child(6) {
     display: none;
 }
-.button:hover .wrap p span:nth-child(1) {
+
+.wrap p span:nth-child(4) {
     display: none;
 }
-.button:hover .wrap p span:nth-child(2) {
-    display: inline-block;
-}
-.button .wrap p span:nth-child(6) {
-    display: none;
-}
-.button:hover .wrap p span:nth-child(5) {
-    display: none;
-}
-.button:hover .wrap p span:nth-child(6) {
-    display: inline-block;
-}
-.button .wrap p span:nth-child(4) {
-    display: none;
-}
+
 .button:hover .wrap p span:nth-child(3) {
     display: none;
 }
+
 .button:hover .wrap p span:nth-child(4) {
-    display: inline-block;
+    display: inline;
 }
-.button .wrap p {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0;
-    transition: all 0.2s ease;
-    transform: translateY(2%);
-    mask-image: linear-gradient(to bottom, white 40%, transparent);
-}
-.button .wrap::before,
-.button .wrap::after {
-    content: "";
-    position: absolute;
-    transition: all 0.3s ease;
-}
-.button .wrap::before {
-    left: -15%;
-    right: -15%;
-    bottom: 25%;
-    top: -100%;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.12);
-}
-.button .wrap::after {
-    left: 6%;
-    right: 6%;
-    top: 12%;
-    bottom: 40%;
-    border-radius: 22px 22px 0 0;
-    box-shadow: inset 0 10px 8px -10px rgba(255, 255, 255, 0.8);
-    background: linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 0.3) 0%,
-        rgba(0, 0, 0, 0) 50%,
-        rgba(0, 0, 0, 0) 100%
-    );
-}
-.button:hover {
-    box-shadow:
-        inset 0 0.2rem 0.4rem rgba(255, 231, 255, 0.4),
-        inset 0 -0.1rem 0.2rem rgba(107, 24, 66, 0.7),
-        inset 0 -0.3rem 0.6rem rgba(255, 231, 255, 0.7),
-        0 2rem 2rem rgba(107, 24, 66, 0.3),
-        0 0.5rem 0.5rem -0.4rem rgba(107, 24, 66, 0.8);
-}
-.button:hover .wrap::before {
-    transform: translateY(-5%);
-}
-.button:hover .wrap::after {
-    opacity: 0.4;
-    transform: translateY(5%);
-}
+
 .button:hover .wrap p {
     transform: translateY(-4%);
 }

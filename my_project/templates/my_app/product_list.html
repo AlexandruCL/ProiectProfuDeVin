@@ -1,64 +1,55 @@
+{% extends 'my_app/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Product List</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="{% static 'css/product_list.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
-<style>
-    body{
-        background-image: url("{% static 'images/contact/contactbackground5.jpg' %}");
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
-</style>
-<body>
-    <!-- Header Component -->
-    {% include 'my_app/header.html' %}
 
-    <!-- Page Content -->
-    <div class="content">
-        <div class="imagesize">
-            <a href="{%url 'wine_list' %}">
-                <img src="{% static 'images/productlist/wine.jpg' %}" alt="Wines" class="imagesize" loading="lazy">
-                <div class="text-overlay">Wines</div>
-            </a>
-        </div>
-        <div class="content2">
+{% block title %}Product List{% endblock %}
+
+{% block body_class %}product-list-bg{% endblock %}
+
+{% block page_css %}
+    <link href="{% static 'css/product_list.css' %}" rel="stylesheet">
+    <style>
+        body.product-list-bg {
+            background-image: url("{% static 'images/contact/contactbackground5.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="site-container">
+        <div class="content">
             <div class="imagesize">
-                <a href="{%url 'spirit_list' %}">
-                    <img src="{% static 'images/productlist/spirits.jpg' %}" alt="Spirits" class="imagesize" loading="lazy">
-                    <div class="text-overlay">Spirits</div>
+                <a href="{% url 'wine_list' %}">
+                    <img src="{% static 'images/productlist/wine.jpg' %}" alt="Wines" class="imagesize" loading="lazy">
+                    <div class="text-overlay">Wines</div>
                 </a>
+            </div>
+            <div class="content2">
+                <div class="imagesize">
+                    <a href="{% url 'spirit_list' %}">
+                        <img src="{% static 'images/productlist/spirits.jpg' %}" alt="Spirits" class="imagesize" loading="lazy">
+                        <div class="text-overlay">Spirits</div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const images = document.querySelectorAll('.imagesize');
-    
             images.forEach(image => {
                 image.addEventListener('mouseover', function() {
                     image.classList.add('enlarge');
                 });
-    
                 image.addEventListener('mouseout', function() {
                     image.classList.remove('enlarge');
                 });
             });
         });
     </script>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-{% include 'my_app/footer.html' %}
-
-</html>
+{% endblock %}

@@ -1,24 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% extends 'my_app/base.html' %}
+
+{% block title %}Profile Page{% endblock %}
+
+{% block page_css %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Hide the scrollbar */
-        }
-        body {
-            overflow-y: scroll; /* Enable vertical scrolling */
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
-        }
-        body::-webkit-scrollbar {
-            display: none;  /* Chrome, Safari, and Opera */
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -181,10 +170,9 @@
             transform: scale(1.1);
         }
     </style>
-</head>
-<body>
-    {% include 'my_app/header.html' %}
+{% endblock %}
 
+{% block content %}
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-10 marginpage">
         {% if not has_usable_password %}
             <div class="set-password-notification rounded-lg p-6 mb-6 shadow-lg">
@@ -350,6 +338,4 @@
             }
         });
     </script>
-    {% include 'my_app/footer.html' %}
-</body>
-</html>
+{% endblock %}

@@ -1,25 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load static %}
-    <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="{% static 'css/cookies-policy.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
-<body>
-    {%  include 'my_app/header.html' %}
-    <main>
+{% extends 'my_app/base.html' %}
+{% load static %}
 
-    </main>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-{%  include 'my_app/footer.html' %}
-</html>
+{% block title %}Cookies Policy{% endblock %}
+
+{% block page_css %}
+    <link href="{% static 'css/cookies-policy.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="site-container">
+        <main>
+        </main>
+    </div>
+{% endblock %}

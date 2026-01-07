@@ -1,80 +1,21 @@
-<style>
-    body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-    }
-    main {
-        flex: 1;
-    }
-    .footer {
-        background-color: #6b1842;
-        color: white;
-        padding: 1rem 0;
-        text-align: center;
-        position: relative;
-        bottom: 0;
-        width: 100%;
-    }
-    .footer-link {
-        color: white;
-        text-decoration: none;
-    }
-    .footer-link:hover {
-        text-decoration: underline;
-    }
-    .pads{
-        padding-left: 0.7rem;
-        padding-right: 0.7rem;
-    }
-    @media(min-width: 1900px) {
-        .pads{
-            padding-left: 24.375rem;
-        }
-    }
-    .cookie-banner {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-color: #444;
-        color: #fff;
-        padding: 15px;
-        text-align: center;
-        z-index: 1000;
-        opacity: 99%;
-    }
-    .cookie-banner button {
-        background-color: #6b1842;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.25s;
-    }
-    .cookie-banner button:hover {
-        background-color: #4f0f2b;
-    }
-</style>
-<footer class="footer bg-gray-800 text-white py-4 mt-10">
-    <div class="">
-        <div>
-            <a href="{% url 'terms_and_conditions' %}" class="footer-link">Terms and Conditions</a>
-            <span class="mx-2">|</span>
-            <a href="{% url 'confidentiality_policy' %}" class="footer-link">Confidentiality Policy</a>
-            <span class="mx-2">|</span>
-            <a href="{% url 'cookies_policy' %}" class="footer-link">Cookies Policy</a>
-            <span class="mx-2">|</span>
-            <button onclick="withdrawConsent()" class="footer-link">Cookies Consent</button>
+<footer class="site-footer">
+    <div class="site-container" style="text-align: center;">
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; align-items: center;">
+            <a href="{% url 'terms_and_conditions' %}">Terms and Conditions</a>
+            <span aria-hidden="true">|</span>
+            <a href="{% url 'confidentiality_policy' %}">Confidentiality Policy</a>
+            <span aria-hidden="true">|</span>
+            <a href="{% url 'cookies_policy' %}">Cookies Policy</a>
+            <span aria-hidden="true">|</span>
+            <button type="button" onclick="withdrawConsent()">Cookies Consent</button>
         </div>
-        <div>
+        <div style="margin-top: 0.5rem;">
             <p class="text-sm">&copy; 2025 Profu De' Vin. All rights reserved.</p>
         </div>
     </div>
 </footer>
 <div class="cookie-banner" id="cookie-banner" style="display:none;">
-    This website uses cookies to ensure you get the best experience on our website. Check our <a href="{% url 'cookies_policy' %}" class="footer-link">Cookies Policy</a> for more information.
+    This website uses cookies to ensure you get the best experience on our website. Check our <a href="{% url 'cookies_policy' %}">Cookies Policy</a> for more information.
     <button onclick="acceptCookies()">Accept</button>
     <button onclick="declineCookies()">Decline</button>
 </div>

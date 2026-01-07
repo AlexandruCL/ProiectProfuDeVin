@@ -1,212 +1,145 @@
 {% load static %}
 {% load custom_filters %}
-<style>
-    .header {
-        padding-top: 1.5rem;
-        padding-bottom: 1.5rem;
-        background-color: #6b1842;
-        /* border-radius: 0px 0px 5px 5px; */
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
-        box-shadow: 0 0.25rem 0.125rem -0.063rem #4f0f2b;
-    }
-    .headerlinks{
-        font-size: 1rem;
-        line-height: 1.5rem; 
-        font-weight: 500; 
-        color: #ffffff; 
-        transition-property: all;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 300ms; 
-        transition-duration: 200ms; 
-        transition: transform 0.3s;
-    }
-    .headerlinks:hover{
-        transform: scale(1.2);
-        color: #ac1c64;
-        text-decoration: underline;
-    }
-    .headerloggedin{
-        font-size: 1rem;
-        line-height: 1.5rem; 
-        font-weight: 500; 
-        color: #ffffff; 
-    }
-    .links{
-        padding-left: 1rem;
-        padding-right: 1rem; 
-        max-width: 89.375rem; 
-    }
-    .imageheadersize{
-        width: auto;
-        height: 4rem;
-    }
-    .cartlogo{
-        width: 1.5rem;
-        height: 1.5rem;
-        transform: scale(2);
-    }
-    .cart-link .cartlogo {
-        width: 1.5rem;
-        height: 1.5rem;
-        background-image: url("{% static 'images/cartlogo/cartlogo2.png' %}");
-        background-size: cover;
-        display: block;
-        transition: transform 0.3s, background-image 0.3s;
-    }
-    .cart-count {
-        font-size: 0.6rem;
-        line-height: 1rem;
-        font-weight: 500;
-        color: #ffffff;
-        position: center;
-        transition: color 0.3s;
-    }
-    .cart-link:hover .cartlogo {
-        color: #ac1c64;
-        transform: scale(2.3);
-        background-image: url("{% static 'images/cartlogo/cartlogo_hover.png' %}");
-    }
-    .cart-link:hover .cart-count {
-        color: #ac1c64;
-    }
-    .custom-dialog {
-        position: absolute;
-        top: 100%;
-        left: 82%;
-        background-color: white;
-        border: 1px solid #ccc;
-        padding: 1rem;
-        font-size: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        z-index: 1001;
-        border-radius: 1rem;
-        margin-top: 0.5rem;
-    }
-    .custom-dialog.hidden {
-        display: none;
-    }
-    .custom-dialog p {
-        margin-bottom: 1rem;
-    }
-    .button-container {
-        display: flex;
-        justify-content: center;
-        gap: 0;
-    }
-    .custom-dialog button {
-        margin: 0;
-        padding: 0.1rem 0.5rem;
-        background-color: #6b1842;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.25s;
-    }
-    .custom-dialog button + button {
-        margin-left: 0.5rem;
-    }
-    .custom-dialog button:hover {
-        background-color: #4f0f2b;
-    }   
-    @media (min-width: 640px) {
-        .links{
-            padding-left: 8rem;
-            padding-right: 1.5rem; 
-        }
-        .imageheadersize{
-            width: auto;
-            height: 3.3rem;
-        }
-    }
-    @media (min-width: 1920px) { 
-        .links{
-            padding-left: 10rem;
-            padding-right: -1rem; 
-            max-width: 111.5rem;
-        }
-        .headerlinks{
-            font-size: 1.25rem;
-            line-height: 1.75rem; 
-        }
-        .imageheadersize{
-            width: auto;
-            height: 4.5rem;
-        }
-        .custom-dialog {
-            left: 85.5%;
-        }
-    }
-</style>
-    <!-- Header Component -->
-    <header class="header">
-        <div class="links">
-            <nav class="flex items-center justify-between relative">
-                <!-- Left Navigation Links -->
-                <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-ml-20">
-                    <a href="/home" title="" class="headerlinks"> Home </a>
-                    <a href="/home/contact" title="" class="headerlinks"> Contact </a>
-                    <a href="/home/product_list" title="" class="headerlinks"> Product List </a>
-                </div>
 
-                <!-- Center Logo -->
-                <div class="absolute left-1/2 transform -translate-x-1/2">
-                    <a href="/home">
-                        <img class="imageheadersize" src="{% static 'images/logo.png' %}" alt="Logo" />
-                    </a>
-                </div>
+<header class="site-header">
+    <div class="site-container site-container-fluid">
+        <nav class="site-header-inner" aria-label="Primary">
+            <div class="site-header-left" aria-label="Brand">
+                <a class="site-brand" href="/home" aria-label="Home">
+                    <img src="{% static 'images/logo.png' %}" alt="Profu De' Vin" />
+                    <span class="site-brand-text">Profu' De Vin</span>
+                </a>
+            </div>
 
-                <!-- Right Navigation Links -->
-                <div class="hidden lg:flex lg:items-center lg:space-x-10 lg:-mr-20">
+            <div class="site-header-center desktop-only" aria-label="Primary links">
+                <div class="site-navlinks">
+                    <a href="/home" class="site-link">Home</a>
+                    <a href="/home/product_list" class="site-link">Product List</a>
+                    <a href="/home/contact" class="site-link">Contact</a>
+
+                </div>
+            </div>
+
+            <div class="site-header-right" aria-label="Account and actions">
+                <div class="site-navlinks desktop-only">
                     {% if user.is_authenticated %}
-                    <a href="{% url 'profile_view' %}" title="" class="headerlinks">
-                        <span class="headerlinks">Welcome, {{ user.username }}</span>
+                        <a href="{% url 'profile_view' %}" class="site-link">Welcome, {{ user.username }}</a>
                         {% if user.is_superuser or user|has_group:"Product Population" %}
-                            <a href="{% url 'admin_dashboard' %}" title="" class="headerlinks"> Admin Dashboard </a>
+                            <a href="{% url 'admin_dashboard' %}" class="site-link">Admin Dashboard</a>
                         {% endif %}
-                    </a>
-                        <a href="{% url 'cart_view' %}" class="headerlinks cart-link"> 
-                            <span class="cartlogo"><span class="cart-count">{{ cart_item_count }}</span></span>
+                        <a href="{% url 'cart_view' %}" class="site-link site-cart" aria-label="Cart">
+                            <span class="site-cart-logo" aria-hidden="true"></span>
+                            <span class="site-cart-count cart-count">{{ cart_item_count }}</span>
                         </a>
-                        <a href="{% url 'logout_view' %}?next={{ request.path }}" title="" class="headerlinks" id="logout-link"> Log out </a>
+                        <a href="{% url 'logout_view' %}?next={{ request.path }}" class="site-link" id="logout-link">Log out</a>
                     {% else %}
-                        <a href="{% url 'login' %}?next={{ request.path }}" title="" class="headerlinks"> Log in </a>
-                        <a href="{% url 'signup' %}?next={{ request.path }}" title="" class="headerlinks"> Sign up </a>
+                        <a href="{% url 'login' %}?next={{ request.path }}" class="site-link">Log in</a>
+                        <a href="{% url 'signup' %}?next={{ request.path }}" class="site-link">Sign up</a>
                     {% endif %}
                 </div>
-            </nav>
-        </div>
-        <div id="custom-logout-dialog" class="custom-dialog hidden">
-            <p>Are you sure you want to log out?</p>
-            <div class="button-container">
-                <button id="confirm-logout">Yes</button>
-                <button id="cancel-logout">No</button>
+
+                <button class="site-mobile-button" type="button" id="mobile-menu-button" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open menu">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
             </div>
+        </nav>
+    </div>
+
+    <div id="mobile-menu" class="site-mobile-panel" aria-label="Mobile menu">
+        <a href="/home" class="site-link">Home</a>
+        <a href="/home/contact" class="site-link">Contact</a>
+        <a href="/home/product_list" class="site-link">Product List</a>
+
+        <hr style="border-color: rgba(255, 255, 255, 0.15); margin: 0.6rem 0;" />
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile_view' %}" class="site-link">Welcome, {{ user.username }}</a>
+            {% if user.is_superuser or user|has_group:"Product Population" %}
+                <a href="{% url 'admin_dashboard' %}" class="site-link">Admin Dashboard</a>
+            {% endif %}
+            <a href="{% url 'cart_view' %}" class="site-link">Cart ({{ cart_item_count }})</a>
+            <a href="{% url 'logout_view' %}?next={{ request.path }}" class="site-link" id="logout-link-mobile">Log out</a>
+        {% else %}
+            <a href="{% url 'login' %}?next={{ request.path }}" class="site-link">Log in</a>
+            <a href="{% url 'signup' %}?next={{ request.path }}" class="site-link">Sign up</a>
+        {% endif %}
+    </div>
+
+    <div id="custom-logout-dialog" class="site-dialog hidden" role="dialog" aria-modal="true" aria-label="Confirm logout">
+        <p style="margin: 0 0 0.75rem;">Are you sure you want to log out?</p>
+        <div class="site-dialog-actions">
+            <button id="confirm-logout" type="button">Yes</button>
+            <button id="cancel-logout" type="button">No</button>
         </div>
-    </header>
-   
-    <script>
-        document.getElementById('logout-link').addEventListener('click', function(event) {
+    </div>
+</header>
+
+<script>
+    (function() {
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const logoutLink = document.getElementById('logout-link');
+        const logoutLinkMobile = document.getElementById('logout-link-mobile');
+        const dialog = document.getElementById('custom-logout-dialog');
+        const confirmBtn = document.getElementById('confirm-logout');
+        const cancelBtn = document.getElementById('cancel-logout');
+
+        function toggleMobileMenu(force) {
+            const isOpen = typeof force === 'boolean' ? force : !mobileMenu.classList.contains('is-open');
+            mobileMenu.classList.toggle('is-open', isOpen);
+            menuButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+
+        if (menuButton && mobileMenu) {
+            menuButton.addEventListener('click', function() {
+                toggleMobileMenu();
+            });
+        }
+
+        function openLogoutDialog(event) {
             event.preventDefault();
-            document.getElementById('custom-logout-dialog').classList.remove('hidden');
-        });
-    
-        document.getElementById('confirm-logout').addEventListener('click', function() {
-            var logoutUrl = document.getElementById('logout-link').href;
-            window.location.href = logoutUrl;
-        });
-    
-        document.getElementById('cancel-logout').addEventListener('click', function() {
-            document.getElementById('custom-logout-dialog').classList.add('hidden');
-        });
-    
-        document.addEventListener('click', function(event) {
-            var dialog = document.getElementById('custom-logout-dialog');
-            if (!dialog.contains(event.target) && !document.getElementById('logout-link').contains(event.target)) {
+            dialog.classList.remove('hidden');
+            toggleMobileMenu(false);
+        }
+
+        if (logoutLink) logoutLink.addEventListener('click', openLogoutDialog);
+        if (logoutLinkMobile) logoutLinkMobile.addEventListener('click', openLogoutDialog);
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function() {
+                const href = (logoutLink || logoutLinkMobile).href;
+                window.location.href = href;
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function() {
                 dialog.classList.add('hidden');
+            });
+        }
+
+        document.addEventListener('click', function(event) {
+            if (mobileMenu && menuButton && mobileMenu.classList.contains('is-open')) {
+                const clickedMenu = mobileMenu.contains(event.target);
+                const clickedButton = menuButton.contains(event.target);
+                if (!clickedMenu && !clickedButton) {
+                    toggleMobileMenu(false);
+                }
+            }
+
+            if (dialog && !dialog.classList.contains('hidden')) {
+                const clickedDialog = dialog.contains(event.target);
+                const clickedLogoutDesktop = logoutLink && logoutLink.contains(event.target);
+                const clickedLogoutMobile = logoutLinkMobile && logoutLinkMobile.contains(event.target);
+
+                if (!clickedDialog && !clickedLogoutDesktop && !clickedLogoutMobile) {
+                    dialog.classList.add('hidden');
+                }
             }
         });
-    </script>
+    })();
+</script>

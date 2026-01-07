@@ -1,54 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load static %}
-    <title>Contact</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% extends 'my_app/base.html' %}
+{% load static %}
+
+{% block title %}Contact{% endblock %}
+
+{% block body_class %}contact-bg{% endblock %}
+
+{% block page_css %}
     <link href="{% static 'css/contact.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
-<style>
-    html, body {
-        height: 100%;
-        margin: 0;
-        overflow: hidden; /* Hide the scrollbar */
-        background-image: url("{% static 'images/contact/contactbackground4.jpg' %}");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
-    }
-</style>
-<body>
-    {% include 'my_app/header.html' %}
-    <main>
-    <!-- Page Content -->
-    <div class="content">
-        <div class="locationtext">
-            <p class="py-1">Location</p>
-            <div class="imagesize">
-                <a target="_blank" href="https://www.google.com/maps/place/Profu%E2%80%99+de+Vin/@46.1701967,21.3145664,1162m/data=!3m1!1e3!4m6!3m5!1s0x4745997f80e7b9b3:0x7e8ac4a3a8c21bde!8m2!3d46.1698067!4d21.3155628!16s%2Fg%2F11wr3m7rf5?hl=en&entry=ttu&g_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D">
-                    <img src="{% static 'images/location/locationfinal.png' %}" alt="Location" class="imagesize" loading="lazy">
+    <style>
+        body.contact-bg {
+            background-image: url("{% static 'images/contact/contactbackground4.jpg' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="site-container">
+        <div class="content">
+            <div class="locationtext">
+                <p class="py-1">Location</p>
+            </div>
+
+            <div class="contact-grid">
+                <a class="imagesize" target="_blank" rel="noopener noreferrer" aria-label="Open location in Google Maps" href="https://www.google.com/maps/place/Profu%E2%80%99+de+Vin/@46.1701967,21.3145664,1162m/data=!3m1!1e3!4m6!3m5!1s0x4745997f80e7b9b3:0x7e8ac4a3a8c21bde!8m2!3d46.1698067!4d21.3155628!16s%2Fg%2F11wr3m7rf5?hl=en&entry=ttu&g_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D">
+                    <img src="{% static 'images/location/locationfinal.png' %}" alt="Location" loading="lazy">
                 </a>
+
+                <div class="working-hours">
+                    <p>Working Hours</p>
+                    <p>Monday - Saturday: 10:00 - 21:00</p>
+                    <p>Sunday: Closed</p>
+                </div>
             </div>
         </div>
-        <div class="working-hours">
-            <p>Working Hours</p>
-            <p>Monday - Saturday: 10:00 - 21:00</p>
-            <p>Sunday: Closed</p>
+        <div class="social-links-container">
+            <a href="https://www.instagram.com/profudevin/?hl=ro" target="_blank" rel="noopener noreferrer" class="social-links" aria-label="Open Instagram">
+                <img src="{% static 'images/contact/instagram.png' %}" alt="Instagram" class="social-icon" loading="lazy">
+                <span class="bounce-text">Instagram</span>
+            </a>
+            <a href="https://www.facebook.com/profile.php?id=61560956272852" target="_blank" rel="noopener noreferrer" class="social-links" aria-label="Open Facebook">
+                <img src="{% static 'images/contact/facebook.png' %}" alt="Facebook" class="social-icon" loading="lazy">
+                <span class="bounce-text">Facebook</span>
+            </a>
         </div>
     </div>
-    <div class="social-links-container">
-        <a href="https://www.instagram.com/profudevin/?hl=ro" target="_blank" class="social-links">
-            <img src="{% static 'images/contact/instagram.png' %}" alt="Instagram" class="social-icon" loading="lazy">
-            <span class="bounce-text">Instagram</span>
-        </a>
-        <a href="https://www.facebook.com/profile.php?id=61560956272852" target="_blank" class="social-links">
-            <img src="{% static 'images/contact/facebook.png' %}" alt="Facebook" class="social-icon" loading="lazy">
-            <span class="bounce-text">Facebook</span>
-        </a>
-    </div>
-    </main>
+{% endblock %}
+
+{% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const socialLinks = document.querySelectorAll('.social-links');
@@ -66,7 +67,6 @@
             });
 
             const images = document.querySelectorAll('.imagesize');
-
             images.forEach(image => {
                 image.addEventListener('mouseover', function() {
                     image.classList.add('enlarge');
@@ -78,12 +78,4 @@
             });
         });
     </script>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

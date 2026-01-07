@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Cart{% endblock %}
+
+{% block page_css %}
     <link href="{% static 'css/cart.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
-<body>
-    {% include 'my_app/header.html' %}
-    {% load custom_filters %}
-    <main>
+{% endblock %}
+
+{% block content %}
+    <div class="site-container">
     <div class="content">
         <h1>Your Cart</h1>
         <ul class="cart-items">
@@ -69,14 +65,5 @@
             {% endif %}
         </div>
     </div>
-    </main>
-    {% include 'my_app/footer.html' %}
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-</html>
+    </div>
+{% endblock %}

@@ -1,29 +1,37 @@
-<!DOCTYPE html>
-<head>
-    {% load static %}
-    {% load socialaccount %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Log In</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
-</head>
-<style>
-    .body{
-        background-image: url("{% static 'static/images/pozaloginfinal.jpg' %}");
-        background-image: image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
-        background-image: -webkit-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
-        background-image: -moz-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
-        background-image: -o-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
-        background-image: -ms-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
-        margin-top: 80px;
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-attachment: fixed;
-    }
-</style>
-<body class="body">
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}Log In{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body_class %}auth-bg auth-login{% endblock %}
+
+{% block page_css %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <style>
+        body.auth-login {
+            background-image: image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+            background-image: -webkit-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+            background-image: -moz-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+            background-image: -o-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+            background-image: -ms-image-set(url("{% static 'images/pozaloginfinal.jpg' %}") 1x);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Auth pages don't use the fixed header; remove its spacing */
+        .site-main {
+            padding-top: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
     <section class="section">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="welcombackcontainer">
@@ -139,13 +147,6 @@
         </div>
     </section>
     <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-    <script>
         function togglePassword() {
             const input = document.getElementById('password');
             const icon = document.getElementById('eyeIcon');
@@ -166,5 +167,4 @@
             }
         }
     </script>
-</body>
-</html>
+{% endblock %}

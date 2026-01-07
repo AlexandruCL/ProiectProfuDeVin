@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load static %}
-    {% load custom_filters %}
-    <title>Wine List</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="{% static 'css/wine_list.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% load custom_filters %}
 
-{% include 'my_app/header.html' %}
-<body>
-    
-    <main>
+{% block title %}Wine List{% endblock %}
+
+{% block page_css %}
+    <link href="{% static 'css/wine_list.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="site-container site-container-fluid">
     <div class="content">
         {% if messages %}
         <div class="messages" id="message-box">
@@ -120,7 +116,7 @@
                             {% csrf_token %}
                             <label for="quantity" style="font-weight: 500;">Quantity to order:</label>
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
-                            <div style="display: flex; gap: 10px;">
+                            <div style="display: flex; gap: 10px; margin-top: 0.5rem;">
                                 <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
                                 {% if user.is_superuser or user|has_group:"Product Population"  %}
                                     <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ wine.ID }}', '{{ wine.Name }}', '{{ wine.Price }}', '{{ wine.Qty }}')">Edit wine</button>
@@ -140,6 +136,11 @@
             {% endfor %}
         </ul>
     </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const descriptions = document.querySelectorAll('.description');
@@ -175,6 +176,7 @@
                 });
             });
         });
+
         document.getElementById('search-bar').addEventListener('input', function() {
             var filter = this.value.toLowerCase();
             var wineItems = document.querySelectorAll('.wine-item');
@@ -218,21 +220,14 @@
                 .catch(error => console.error('Error:', error));
             });
         });
-    </script>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-    <script>
+
         function toggleFilters() {
             var filterForm = document.getElementById('filter-form');
             filterForm.classList.toggle('show');
         }
+
+        window.toggleFilters = toggleFilters;
     </script>
-    </main>
     <div id="editWineModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-5 rounded-lg w-1/2" id="editWineModalContent">
             <h2 class="text-xl font-bold mb-4">Edit Wine</h2>
@@ -357,6 +352,8 @@
             });
         }
     </script>
+{% endblock %}
+
 </body>
 {%  include 'my_app/footer.html' %}
 </html>

@@ -1,37 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orders</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+{% extends 'my_app/base.html' %}
+
+{% block title %}Orders{% endblock %}
+
+{% block page_css %}
 <style>
     .modal-content {
-        max-height: 80vh; /* Set the maximum height of the modal content */
-        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: 80vh;
+        overflow-y: auto;
     }
-    .content{
-        margin-top: 5rem;
-    }
+
     table td {
-        word-wrap: break-word; /* Rupe textul la sfârșitul cuvintelor, dacă este necesar */
-        white-space: normal;   /* Permite textului să fie pe mai multe linii */
-        max-width: 17rem;      /* Setează o lățime maximă pentru celulă (ajustabilă) */
+        word-wrap: break-word;
+        white-space: normal;
+        max-width: 17rem;
     }
+
+    .orders-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+    }
+
     body::-webkit-scrollbar {
-            width: 8px;
-            background: #6b1842;
+        width: 8px;
+        background: var(--brand);
     }
+
     body::-webkit-scrollbar-thumb {
-        background-color: #ac1c64;
+        background-color: var(--brand-accent);
         border-radius: 7px;
     }
 </style>
-<body>
-    {% include 'my_app/header.html' %}
-    <div class=" mx-auto content">
-        <h1 class="text-2xl font-bold mb-5">All Orders ( to view it click on the order ID for each order, you can sort by OrderID, Total Price or Status, just click on them )</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="site-container site-container-fluid">
+        <div class="site-card padded" style="margin-bottom: 1rem;">
+            <h1 class="text-2xl font-bold">All Orders ( to view it click on the order ID for each order, you can sort by OrderID, Total Price or Status, just click on them )</h1>
+        </div>
+
+        <div class="orders-table-wrap">
         <table class="min-w-full bg-white">
             <thead>
                 <tr class="bg-gray-400">
@@ -70,6 +81,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
     <div id="orderModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden" style="margin-top:2rem">
         <div class="bg-white p-5 rounded-lg w-1/2 modal-content">
@@ -560,5 +572,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

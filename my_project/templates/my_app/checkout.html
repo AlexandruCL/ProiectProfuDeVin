@@ -1,130 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="{% static 'css/checkout.css' %}" rel="stylesheet">
-</head>
-<style>
-    .custom-input:focus {
-        box-shadow: 0 0 15px #6b1842;
-        outline-color: #6b1842;
-        outline-offset: 0.25rem;
-        outline-style: inherit;
-    }
-    .placeholder-red::placeholder{
-    color: red;
-    }
-</style>
-<body class="bg-gray-100">
-    {% include 'my_app/header.html' %}
-    <main>
-    {% load custom_filters %}
-    <div class="custom-container mt-10 p-6 bg-white shadow-md rounded-lg" >
-        <h1 class="text-2xl font-bold mb-5">Checkout</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6" style="min-height: 28.2rem;">
-            <div>
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold">Order Summary</h2>
-                    <p class="text-xl font-semibold">Total: {{ total_value|floatformat:2 }} RON</p>
-                </div>
-                <ul class="divide-y divide-gray-200">
-                    {% for item in cart_items %}
-                        <li class="py-4 flex">
-                            <div class="flex-shrink-0">
-                                {% if item.wine and item.wine.image %}
-                                    <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" style="max-width: 2rem;">
-                                {% elif item.spirit and item.spirit.image %}
-                                    <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}" class="h-20 w-20 rounded-md">
-                                {% endif %}
-                            </div>
-                            <div class="ml-4 flex-1 flex flex-col justify-between">
-                                <div>
-                                    <h3 class="text-lg font-medium text-gray-900">
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block body_class %}{% endblock %}
+
+{% block page_css %}
+    <link href="{% static 'css/checkout.css' %}?v=20260107" rel="stylesheet">
+    <style>
+        .custom-input:focus {
+            box-shadow: 0 0 15px #6b1842;
+            outline-color: #6b1842;
+            outline-offset: 0.25rem;
+            outline-style: inherit;
+        }
+        .placeholder-red::placeholder {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="site-container site-container-fluid">
+        <div class="checkout-card">
+            <div class="checkout-head">
+                <h1 class="checkout-title">Checkout</h1>
+                <div class="checkout-total">Total: {{ total_value|floatformat:2 }} RON</div>
+            </div>
+
+            <div class="checkout-grid">
+                <section class="checkout-summary" aria-label="Order summary">
+                    <h2 class="checkout-subtitle">Order Summary</h2>
+
+                    <ul class="checkout-items">
+                        {% for item in cart_items %}
+                            <li class="checkout-item">
+                                <div class="checkout-item-media">
+                                    {% if item.wine and item.wine.image %}
+                                        <img src="{{ item.wine.image.url }}" alt="{{ item.wine.Name }}" class="checkout-item-img">
+                                    {% elif item.spirit and item.spirit.image %}
+                                        <img src="{{ item.spirit.image.url }}" alt="{{ item.spirit.Name }}" class="checkout-item-img">
+                                    {% endif %}
+                                </div>
+
+                                <div class="checkout-item-body">
+                                    <div class="checkout-item-name">
                                         {% if item.wine %}
                                             {{ item.wine.Name }}
                                         {% else %}
                                             {{ item.spirit.Name }}
                                         {% endif %}
-                                    </h3>
-                                    <p class="mt-1 text-sm text-gray-500">Quantity: {{ item.quantity }}</p>
-                                    {% if item.quantity > 1 %}
-                                        <p class="mt-1 text-sm text-gray-500">Price: {{ item.price|floatformat:2 }} RON each</p>
-                                    {% else %}
-                                        <p class="mt-1 text-sm text-gray-500">Price: {{ item.price|floatformat:2 }} RON</p>
-                                    {% endif %}
-                                    <div class="mt-1 text-sm font-medium text-gray-900">
-                                        Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON
                                     </div>
+                                    <div class="checkout-item-meta">Quantity: {{ item.quantity }}</div>
+                                    {% if item.quantity > 1 %}
+                                        <div class="checkout-item-meta">Price: {{ item.price|floatformat:2 }} RON each</div>
+                                    {% else %}
+                                        <div class="checkout-item-meta">Price: {{ item.price|floatformat:2 }} RON</div>
+                                    {% endif %}
+                                    <div class="checkout-item-total">Total: {{ item.price|floatformat:2|multiply:item.quantity }} RON</div>
                                 </div>
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="sticky-container">
-                <h2 class="text-xl font-semibold mb-4">Shipping Information</h2>
-                <form method="post" class="space-y-4">
-                    {% csrf_token %}
-                    <div class="flex items-center">
-                        <label for="id_first_name" class="block text-sm font-medium text-gray-700 w-1/6">First Name</label>
-                        <input type="text" name="first_name" id="id_first_name" class="mt-1 block w-4/5 shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.first_name.errors %} placeholder-red {% endif %}" value="{% if form.first_name.errors %}{{ ''}}{% else %}{{ form.first_name.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.first_name.errors %}{{ form.first_name.errors.0 }}{% endif %}">
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_last_name" class="block text-sm font-medium text-gray-700 w-1/5">Last Name</label>
-                        <input type="text" name="last_name" id="id_last_name" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 custom-input {% if form.last_name.errors %} placeholder-red {% endif %}" value="{% if form.last_name.errors %}{{ '' }}{% else %}{{ form.last_name.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.last_name.errors %}{{ form.last_name.errors.0 }}{% endif %}">
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_email" class="block text-sm font-medium text-gray-700 w-1/5">Email</label>
-                        <input type="text" name="email" id="id_email" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.email.errors %} placeholder-red {% endif %}" value="{% if form.email.errors %}{{ '' }}{% else %}{{ form.email.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.email.errors %}{{ form.email.errors.0 }}{% endif %}">
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_phone_number" class="block text-sm font-medium text-gray-700 w-1/5">Phone Number</label>
-                        <input type="text" name="phone_number" id="id_phone_number" maxlength="10" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.phone_number.errors %} placeholder-red {% endif %}" value="{% if form.phone_number.errors %}{{ '' }}{% else %}{{ form.phone_number.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.phone_number.errors %}{{ form.phone_number.errors.0 }}{% endif %}">
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_address" class="block text-sm font-medium text-gray-700 w-1/5">Address</label>
-                        <input type="text" name="address" id="id_address" class="mt-1  w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.address.errors %} placeholder-red {% endif %}" value="{% if form.address.errors %}{{ '' }}{% else %}{{ form.address.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.address.errors %}{{ form.address.errors.0 }}{% else %} Add all information about the address, including Nr. , Bl. Nr. , Floor Nr. , Ap. Nr. {% endif %}" >
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_city" class="block text-sm font-medium text-gray-700 w-1/5">City</label>
-                        <input type="text" name="city" id="id_city" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.city.errors %} placeholder-red {% endif %}" value="{% if form.city.errors %}{{ '' }}{% else %}{{ form.city.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.city.errors %}{{ form.city.errors.0 }}{% endif %}">
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_county" class="block text-sm font-medium text-gray-700 w-1/5">County</label>
-                        <input type="text" name="county" id="id_county" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.county.errors %} placeholder-red {% endif %}" value="{% if form.county.errors %}{{ '' }}{% else %}{{ form.county.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.county.errors %}{{ form.county.errors.0 }}{% endif %}">
-                    </div>
-                    <div class="flex items-center">
-                        <label for="id_postal_code" class="block text-sm font-medium text-gray-700 w-1/5">Postal Code</label>
-                        <input type="text" name="postal_code" id="id_postal_code" maxlength="6" class="mt-1 block w-4/5 w-full shadow-sm sm:text-sm border-gray-300 rounded-md custom-input {% if form.postal_code.errors %} placeholder-red {% endif %}" value="{% if form.postal_code.errors %}{{ '' }}{% else %}{{ form.postal_code.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.postal_code.errors %}{{ form.postal_code.errors.0 }}{% endif %}">
-                    </div>
-                    <button class="button">
-                        <div class="wrap">
-                          <p>
-                            <span>✧</span>
-                            <span>✦</span>
-                            <span>Place Order</span>
-                            <span>Thank you for your order!</span>
-                            <span>✧</span>
-                            <span>✦</span>
-                          </p>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <aside class="sticky-container checkout-form" aria-label="Shipping information">
+                    <h2 class="checkout-subtitle">Shipping Information</h2>
+                    <form method="post" class="checkout-form-fields">
+                        {% csrf_token %}
+
+                        <div class="checkout-field">
+                            <label for="id_first_name" class="checkout-label">First Name</label>
+                            <input type="text" name="first_name" id="id_first_name" class="custom-input {% if form.first_name.errors %} placeholder-red {% endif %}" value="{% if form.first_name.errors %}{{ ''}}{% else %}{{ form.first_name.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.first_name.errors %}{{ form.first_name.errors.0 }}{% endif %}">
                         </div>
-                      </button>
-                </form>
+
+                        <div class="checkout-field">
+                            <label for="id_last_name" class="checkout-label">Last Name</label>
+                            <input type="text" name="last_name" id="id_last_name" class="custom-input {% if form.last_name.errors %} placeholder-red {% endif %}" value="{% if form.last_name.errors %}{{ '' }}{% else %}{{ form.last_name.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.last_name.errors %}{{ form.last_name.errors.0 }}{% endif %}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="id_email" class="checkout-label">Email</label>
+                            <input type="email" name="email" id="id_email" class="custom-input {% if form.email.errors %} placeholder-red {% endif %}" value="{% if form.email.errors %}{{ '' }}{% else %}{{ form.email.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.email.errors %}{{ form.email.errors.0 }}{% endif %}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="id_phone_number" class="checkout-label">Phone Number</label>
+                            <input type="text" name="phone_number" id="id_phone_number" maxlength="10" class="custom-input {% if form.phone_number.errors %} placeholder-red {% endif %}" value="{% if form.phone_number.errors %}{{ '' }}{% else %}{{ form.phone_number.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.phone_number.errors %}{{ form.phone_number.errors.0 }}{% endif %}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="id_address" class="checkout-label">Address</label>
+                            <input type="text" name="address" id="id_address" class="custom-input {% if form.address.errors %} placeholder-red {% endif %}" value="{% if form.address.errors %}{{ '' }}{% else %}{{ form.address.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.address.errors %}{{ form.address.errors.0 }}{% else %} Add all information about the address, including Nr. , Bl. Nr. , Floor Nr. , Ap. Nr. {% endif %}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="id_city" class="checkout-label">City</label>
+                            <input type="text" name="city" id="id_city" class="custom-input {% if form.city.errors %} placeholder-red {% endif %}" value="{% if form.city.errors %}{{ '' }}{% else %}{{ form.city.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.city.errors %}{{ form.city.errors.0 }}{% endif %}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="id_county" class="checkout-label">County</label>
+                            <input type="text" name="county" id="id_county" class="custom-input {% if form.county.errors %} placeholder-red {% endif %}" value="{% if form.county.errors %}{{ '' }}{% else %}{{ form.county.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.county.errors %}{{ form.county.errors.0 }}{% endif %}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="id_postal_code" class="checkout-label">Postal Code</label>
+                            <input type="text" name="postal_code" id="id_postal_code" maxlength="6" class="custom-input {% if form.postal_code.errors %} placeholder-red {% endif %}" value="{% if form.postal_code.errors %}{{ '' }}{% else %}{{ form.postal_code.value|default_if_none:'' }}{% endif %}" placeholder="{% if form.postal_code.errors %}{{ form.postal_code.errors.0 }}{% endif %}">
+                        </div>
+
+                        <button class="button" type="submit">
+                            <div class="wrap">
+                                <p>
+                                    <span>✧</span>
+                                    <span>✦</span>
+                                    <span>Place Order</span>
+                                    <span>Thank you for your order!</span>
+                                    <span>✧</span>
+                                    <span>✦</span>
+                                </p>
+                            </div>
+                        </button>
+                    </form>
+                </aside>
             </div>
         </div>
     </div>
-    </main>
-    {% include 'my_app/footer.html' %}
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-</body>
-</html>
+{% endblock %}

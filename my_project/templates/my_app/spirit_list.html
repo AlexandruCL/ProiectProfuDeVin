@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    {% load static %}
-    {% load custom_filters %}
-    <title>Spirit List</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="{% static 'css/spirit_list.css' %}" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.10.2/dist/cdn.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.10.2/dist/cdn.min.js" defer></script>
-</head>
+{% extends 'my_app/base.html' %}
+{% load static %}
+{% load custom_filters %}
 
-<body>
-    {%  include 'my_app/header.html' %}
-    <main>
+{% block title %}Spirit List{% endblock %}
+
+{% block page_css %}
+    <link href="{% static 'css/spirit_list.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="site-container site-container-fluid">
     <div class="content">
         {% if messages %}
         <div class="messages" id="message-box">
@@ -93,7 +90,7 @@
                             {% csrf_token %}
                             <label for="quantity" style="font-weight: 500;">Quantity to order:</label>
                             <input type="number" id="quantity" name="quantity" min="1" value="1" class="small-input text-center">
-                            <div style="display: flex; gap: 10px;">
+                            <div style="display: flex; gap: 10px; margin-top: 0.5rem;">
                                 <button type="submit" class="buttonadd" style="font-weight: 500;">Add to Cart</button>
                                 {% if user.is_superuser or user|has_group:"Product Population"  %}
                                     <button type="button" class="buttonedit" style="font-weight: 500;" onclick="openEditModal('{{ spirit.ID }}', '{{ spirit.Name }}', '{{ spirit.Price }}', '{{ spirit.Qty }}')">Edit spirit</button>
@@ -113,12 +110,16 @@
             {% endfor %}
         </ul>
     </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
     <script>
-        
         document.getElementById('search-bar').addEventListener('input', function() {
             var filter = this.value.toLowerCase();
             var spiritItems = document.querySelectorAll('.spirit-item');
-        
+
             spiritItems.forEach(function(item) {
                 var spiritName = item.querySelector('h2').textContent.toLowerCase();
                 if (spiritName.includes(filter)) {
@@ -158,21 +159,14 @@
                 .catch(error => console.error('Error:', error));
             });
         });
-    </script>
-    <script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-    </script>
-    <script>
+
         function toggleFilters() {
             const filterForm = document.getElementById('filter-form');
             filterForm.classList.toggle('show');
         }
+
+        window.toggleFilters = toggleFilters;
     </script>
-    </main>
     <div id="editSpiritModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
         <div class="bg-white p-5 rounded-lg w-1/2" id="editSpiritFormContainer">
             <h2 class="text-xl font-bold mb-4">Edit Spirit</h2>
@@ -304,6 +298,8 @@
                 }
             });
     </script>
+{% endblock %}
+
 </body>
 {%  include 'my_app/footer.html' %}
 </html>
