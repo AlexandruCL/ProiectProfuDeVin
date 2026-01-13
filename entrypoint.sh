@@ -39,5 +39,14 @@ else
 	echo "CREATE_SUPERUSER not enabled; skipping"
 fi
 
+# Optional: push repo-bundled media to Supabase Storage
+if [ "${UPLOAD_MEDIA}" = "1" ] || [ "${UPLOAD_MEDIA}" = "true" ] || [ "${UPLOAD_MEDIA}" = "TRUE" ]; then
+	echo "UPLOAD_MEDIA enabled: uploading /app/media to configured storage"
+	python manage.py upload_media --source /app/media --skip-existing
+	echo "Media upload completed"
+else
+	echo "UPLOAD_MEDIA not enabled; skipping"
+fi
+
 # Start Gunicorn
 exec gunicorn my_project.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers ${WEB_CONCURRENCY:-2}

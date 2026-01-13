@@ -202,6 +202,31 @@ STORAGES = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Optional: Supabase Storage for media (recommended for Render)
+SUPABASE_STORAGE_ENABLED = config('SUPABASE_STORAGE_ENABLED', default=False, cast=bool)
+if SUPABASE_STORAGE_ENABLED:
+    SUPABASE_PROJECT_REF = config('SUPABASE_PROJECT_REF', default='')
+    SUPABASE_STORAGE_BUCKET = config('SUPABASE_STORAGE_BUCKET', default='')
+    if not SUPABASE_PROJECT_REF or not SUPABASE_STORAGE_BUCKET:
+        raise RuntimeError('SUPABASE_PROJECT_REF and SUPABASE_STORAGE_BUCKET must be set when SUPABASE_STORAGE_ENABLED is true')
+
+    AWS_ACCESS_KEY_ID = config('SUPABASE_S3_ACCESS_KEY_ID', default='')
+    AWS_SECRET_ACCESS_KEY = config('SUPABASE_S3_SECRET_ACCESS_KEY', default='')
+    if not AWS_ACCESS_KEY_ID or not AWS_SECRET_ACCESS_KEY:
+        raise RuntimeError('SUPABASE_S3_ACCESS_KEY_ID and SUPABASE_S3_SECRET_ACCESS_KEY must be set when SUPABASE_STORAGE_ENABLED is true')
+
+    AWS_STORAGE_BUCKET_NAME = SUPABASE_STORAGE_BUCKET
+    AWS_S3_ENDPOINT_URL = f"https://{SUPABASE_PROJECT_REF}.supabase.co/storage/v1/s3"
+    AWS_S3_REGION_NAME = config('SUPABASE_S3_REGION', default='us-east-1')
+    AWS_S3_ADDRESSING_STYLE = 'path'
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_DEFAULT_ACL = None
+    AWS_QUERYSTRING_AUTH = False
+
+    STORAGES['default'] = {
+        'BACKEND': 'my_app.storage_backends.SupabaseMediaStorage',
+    }
+
 # Render / reverse-proxy HTTPS settings
 if RENDER_EXTERNAL_HOSTNAME:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
