@@ -70,6 +70,11 @@ if RENDER_EXTERNAL_HOSTNAME:
     if origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(origin)
 
+# Media serving
+# Note: Django serving media through urls.py is not ideal for large-scale production,
+# but it's a simple way to serve repo-bundled images on Render.
+SERVE_MEDIA = config('SERVE_MEDIA', default=bool(RENDER_EXTERNAL_HOSTNAME) or DEBUG, cast=bool)
+
 # Application definition
 
 INSTALLED_APPS = [
