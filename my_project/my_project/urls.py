@@ -63,4 +63,7 @@ urlpatterns = [
     path('profile/set-password/', views.set_password_view, name='set_password'),
 
     # other URL patterns
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

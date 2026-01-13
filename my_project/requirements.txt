@@ -1,3 +1,10 @@
 Django==5.2.7
 pandas==2.3.3
+openpyxl==3.1.5
+Pillow==10.4.0
 python-decouple==3.8
+django-allauth==0.63.6
+dj-database-url==2.3.0
+psycopg2-binary==2.9.9
+whitenoise==6.8.2
+gunicorn==22.0.0
